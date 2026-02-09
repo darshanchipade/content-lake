@@ -9,7 +9,7 @@ type StageHeroProps = {
 
 export function StageHero({ title, description, eyebrow, actionsSlot }: StageHeroProps) {
   return (
-    <section className="border-b border-slate-200 bg-[#f7f9fb]">
+    <section className="border-b border-slate-200 bg-background">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 py-10">
         {eyebrow && (
           <span className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">

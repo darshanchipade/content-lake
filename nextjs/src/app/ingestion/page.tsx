@@ -84,8 +84,8 @@ const statusStyles: Record<
   },
   success: {
     label: "Accepted",
-    className: "bg-emerald-50 text-emerald-700",
-    dot: "bg-emerald-500",
+    className: "bg-primary-soft text-primary",
+    dot: "bg-primary",
   },
   error: {
     label: "Error",
@@ -120,7 +120,7 @@ const getFileLabel = (fileName: string) => {
       return { label: "PDF", style: "bg-rose-100 text-rose-700" };
     case "xls":
     case "xlsx":
-      return { label: "XLS", style: "bg-emerald-100 text-emerald-700" };
+      return { label: "XLS", style: "bg-primary-soft text-primary" };
     case "doc":
     case "docx":
       return { label: "DOC", style: "bg-sky-100 text-sky-700" };
@@ -151,10 +151,10 @@ const FeedbackPill = ({ feedback }: { feedback: ApiFeedback }) => {
   const className = clsx(
     "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold",
     feedback.state === "success"
-      ? "bg-emerald-50 text-emerald-700"
+      ? "bg-primary-soft text-primary"
       : feedback.state === "error"
         ? "bg-rose-50 text-rose-700"
-        : "bg-indigo-50 text-indigo-600",
+        : "bg-primary-soft text-primary",
   );
 
   const Icon =
@@ -1057,12 +1057,12 @@ export default function IngestionPage() {
                   disabled={tab.disabled}
                   onClick={() => !tab.disabled && setActiveTab(tab.id)}
                   className={clsx(
-                    "rounded-2xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/50",
+                    "rounded-2xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
                     tab.disabled
                       ? "border-dashed border-slate-200 text-slate-400"
                       : activeTab === tab.id
-                        ? "border-slate-900 bg-slate-900/[0.04] shadow-[0_18px_35px_rgba(15,23,42,0.12)]"
-                        : "border-slate-200 hover:border-slate-900/40",
+                        ? "border-primary bg-primary-soft shadow-[0_18px_35px_rgba(22,163,74,0.12)]"
+                        : "border-slate-200 hover:border-primary/40",
                   )}
                 >
                   <div className="flex items-center gap-3">
@@ -1072,7 +1072,7 @@ export default function IngestionPage() {
                         tab.disabled
                           ? "text-slate-300"
                           : activeTab === tab.id
-                            ? "text-slate-900"
+                            ? "text-primary"
                             : "text-slate-700",
                       )}
                     />
@@ -1104,11 +1104,11 @@ export default function IngestionPage() {
                   }}
                   className="flex cursor-pointer flex-col items-center gap-4"
                 >
-                  <ArrowUpTrayIcon className="size-10 text-slate-900" />
+                  <ArrowUpTrayIcon className="size-10 text-primary" />
                   <div>
                     <p className="text-sm font-semibold text-slate-900">
                       Drag a JSON file here or{" "}
-                      <span className="underline decoration-slate-900/40">browse</span>
+                      <span className="underline decoration-primary/40">browse</span>
                     </p>
                     <p className="text-xs text-slate-500">
                       Single-file uploads only. Max 50 MB.
@@ -1134,7 +1134,7 @@ export default function IngestionPage() {
             {activeTab === "api" && (
               <div className="mt-6 space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <ServerStackIcon className="size-5 text-slate-900" />
+                  <ServerStackIcon className="size-5 text-primary" />
                   POST /api/ingest-json-payload
                 </div>
                 <textarea
@@ -1150,7 +1150,7 @@ export default function IngestionPage() {
                   }}
                   rows={6}
                   placeholder='Paste JSON payload. Example: { "product": { "name": "Vision Pro" } }'
-                  className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-inner focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-inner focus:border-primary focus:outline-none"
                 />
                 <FeedbackPill feedback={apiFeedback} />
               </div>
@@ -1159,14 +1159,14 @@ export default function IngestionPage() {
             {activeTab === "s3" && (
               <div className="mt-6 space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <CloudArrowUpIcon className="size-5 text-slate-900" />
+                  <CloudArrowUpIcon className="size-5 text-primary" />
                   GET /api/extract-cleanse-enrich-and-store
                 </div>
                 <input
                   value={s3Uri}
                   onChange={(event) => setS3Uri(event.target.value)}
                   placeholder="s3://my-bucket/path/to/file.json"
-                  className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-inner focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-inner focus:border-primary focus:outline-none"
                 />
                 <p className="text-xs text-slate-500">
                   Accepts s3://bucket/key or classpath:relative/path references that the Spring Boot service can access.
@@ -1238,7 +1238,7 @@ export default function IngestionPage() {
                           onClick={() => handleDownloadUpload(upload)}
                           disabled={downloading}
                           className={clsx(
-                            "rounded-full p-1 text-slate-900 transition hover:bg-slate-900/10",
+                            "rounded-full p-1 text-primary transition hover:bg-primary/10",
                             downloading && "cursor-wait opacity-60",
                           )}
                           title="Download payload"
@@ -1249,7 +1249,7 @@ export default function IngestionPage() {
                         <button
                           type="button"
                           onClick={() => handleDeleteUpload(upload.id)}
-                          className="rounded-full p-1 text-slate-900 transition hover:bg-slate-900/10"
+                          className="rounded-full p-1 text-primary transition hover:bg-primary/10"
                           title="Delete entry"
                           aria-label="Delete entry"
                         >
@@ -1294,7 +1294,7 @@ export default function IngestionPage() {
                 placeholder="Search fields..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none"
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-primary focus:bg-white focus:outline-none"
               />
             </div>
             <div className="mt-4 max-h-[420px] overflow-y-auto pr-2">
@@ -1330,8 +1330,8 @@ export default function IngestionPage() {
               onClick={handleExtractData}
               disabled={extracting}
               className={clsx(
-                "mt-4 w-full rounded-full bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-black",
-                extracting && "cursor-not-allowed opacity-60 hover:bg-slate-900",
+                "mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-white transition hover:bg-accent",
+                extracting && "cursor-not-allowed opacity-60 hover:bg-primary",
               )}
             >
               {extracting ? (
