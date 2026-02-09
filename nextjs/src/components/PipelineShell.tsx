@@ -28,8 +28,12 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
     <div className="flex min-h-screen bg-background text-slate-900">
       <aside className="sticky top-0 hidden h-screen w-72 flex-col border-r border-slate-200 bg-white/90 px-6 py-8 shadow-[20px_0_45px_rgba(22,163,74,0.06)] backdrop-blur lg:flex">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-2xl text-white shadow-[0_15px_40px_rgba(22,163,74,0.3)]">
-            
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl overflow-hidden shadow-[0_15px_40px_rgba(22,163,74,0.3)]">
+            <img
+              src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
+              alt="Logo"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div className="leading-tight">
             <p className="text-[0.80rem] font-semibold uppercase tracking-[0.80em] text-slate-900">

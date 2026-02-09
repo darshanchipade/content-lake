@@ -2146,13 +2146,13 @@ const normalized = source.trim().toUpperCase();
                                                  {element.sentiment.label}
                                                </p>
                                                {element.sentiment.score !== undefined && (
-                                                 <p className="text-xs text-emerald-800">
+                                                 <p className="text-xs text-accent">
                                                    Score: {Math.round(element.sentiment.score * 100) / 100}
                                                  </p>
                                                )}
                                              </>
                                            ) : (
-                                             <p className="text-sm text-emerald-800/80">
+                                             <p className="text-sm text-accent/80">
                                                Sentiment analytics will appear after enrichment completes.
                                              </p>
                                            )}
