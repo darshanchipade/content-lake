@@ -51,17 +51,17 @@ type ApiFeedback = {
 
 const uploadTabs = [
   {
-    id: "s3" as const,
-    title: "Amazon S3 / Cloud",
-    description: "Ingest directly from s3:// or classpath URIs.",
-    icon: CloudArrowUpIcon,
-    disabled: false,
-  },
-  {
     id: "local" as const,
     title: "Local Upload",
     description: "Upload files directly from your device.",
     icon: ArrowUpTrayIcon,
+    disabled: false,
+  },
+  {
+    id: "s3" as const,
+    title: "Amazon S3",
+    description: "Ingest directly from cloud storage.",
+    icon: CloudArrowUpIcon,
     disabled: false,
   },
   {
@@ -120,7 +120,7 @@ const getFileLabel = (fileName: string) => {
       return { label: "PDF", style: "bg-rose-100 text-rose-700" };
     case "xls":
     case "xlsx":
-      return { label: "XLS", style: "bg-primary-soft text-primary" };
+      return { label: "XLS", style: "bg-emerald-100 text-emerald-700" };
     case "doc":
     case "docx":
       return { label: "DOC", style: "bg-sky-100 text-sky-700" };
@@ -1026,326 +1026,193 @@ export default function IngestionPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <StageHero
-        title="Ingestion"
-        description="Upload local JSON files, paste API payloads, or reference cloud storage to kick off the pipeline."
-      />
+      <div className="p-8 max-w-[1600px] mx-auto">
+        <h1 className="text-2xl font-bold mb-8">Ingestion</h1>
 
-      <main className="mx-auto grid max-w-6xl gap-6 px-6 py-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-        <section className="space-y-6">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-slate-400">
-                  Ingestion
-                </p>
-                <h2 className="mt-1 text-xl font-semibold text-slate-900">
-                  Upload Files
-                </h2>
-                <p className="text-sm text-slate-500">
-                  Drag and drop JSON, paste payloads, or point at S3/classpath URIs.
-                </p>
+        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
+          <section className="space-y-8">
+            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                 <h2 className="text-lg font-bold">Select Source</h2>
+                 <FeedbackPill feedback={extractFeedback} />
               </div>
-              <FeedbackPill feedback={extractFeedback} />
-            </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {uploadTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  disabled={tab.disabled}
-                  onClick={() => !tab.disabled && setActiveTab(tab.id)}
-                  className={clsx(
-                    "rounded-2xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
-                    tab.disabled
-                      ? "border-dashed border-slate-200 text-slate-400"
-                      : activeTab === tab.id
-                        ? "border-primary bg-primary-soft shadow-[0_18px_35px_rgba(22,163,74,0.12)]"
-                        : "border-slate-200 hover:border-primary/40",
-                  )}
-                >
-                  <div className="flex items-center gap-3">
-                    <tab.icon
-                      className={clsx(
-                        "size-5 transition-colors",
-                        tab.disabled
-                          ? "text-slate-300"
-                          : activeTab === tab.id
-                            ? "text-primary"
-                            : "text-slate-700",
-                      )}
-                    />
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">
-                        {tab.title}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {tab.description}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {activeTab === "local" && (
-              <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-                <label
-                  htmlFor="file-upload"
-                  onDragOver={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                  }}
-                  onDrop={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    handleLocalFileSelection(event.dataTransfer.files);
-                  }}
-                  className="flex cursor-pointer flex-col items-center gap-4"
-                >
-                  <ArrowUpTrayIcon className="size-10 text-primary" />
-                  <div>
-                    <p className="text-sm font-semibold text-slate-900">
-                      Drag a JSON file here or{" "}
-                      <span className="underline decoration-primary/40">browse</span>
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      Single-file uploads only. Max 50 MB.
-                    </p>
-                    {localFile && (
-                      <p className="mt-1 text-xs text-slate-500">
-                        Selected: <span className="font-semibold text-slate-800">{localFile.name}</span>
-                      </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {uploadTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={clsx(
+                      "flex flex-col items-center gap-4 p-6 rounded-2xl border transition-all text-center",
+                      activeTab === tab.id
+                        ? "border-primary bg-primary-soft/30 shadow-sm"
+                        : "border-gray-100 hover:border-gray-200 bg-gray-50/50"
                     )}
+                  >
+                    <tab.icon className={clsx("size-8", activeTab === tab.id ? "text-primary" : "text-gray-400")} />
+                    <div>
+                      <p className="font-bold text-sm">{tab.title}</p>
+                      <p className="text-xs text-gray-500 mt-1">{tab.description}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {activeTab === "local" && (
+                <div
+                  className="mt-8 border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center hover:border-primary/50 transition-colors cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <ArrowUpTrayIcon className="size-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-sm font-semibold text-gray-900">
+                    Click to upload or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">JSON files up to 50MB</p>
+                  {localFile && (
+                    <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 bg-primary-soft text-primary rounded-full text-xs font-bold">
+                       <DocumentTextIcon className="size-4" />
+                       {localFile.name}
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept=".json"
+                    onChange={(e) => handleLocalFileSelection(e.target.files)}
+                  />
+                </div>
+              )}
+
+              {activeTab === "api" && (
+                <div className="mt-8 space-y-4">
+                  <div className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-2">
+                    <ServerStackIcon className="size-5 text-primary" />
+                    API Endpoint
+                  </div>
+                  <textarea
+                    rows={10}
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder='Paste JSON payload. Example: { "product": { "name": "Vision Pro" } }'
+                    value={apiPayload}
+                    onChange={(e) => {
+                      setApiPayload(e.target.value);
+                      const parsed = safeJsonParse(e.target.value);
+                      if (parsed) {
+                        seedPreviewTree("API payload", parsed);
+                        setApiFeedback({ state: "idle" });
+                        ensurePendingApiUpload(e.target.value.length);
+                      }
+                    }}
+                  />
+                  <FeedbackPill feedback={apiFeedback} />
+                </div>
+              )}
+
+              {activeTab === "s3" && (
+                <div className="mt-8 space-y-4">
+                  <div className="flex items-center gap-2 text-sm font-bold text-gray-900 mb-2">
+                     <CloudArrowUpIcon className="size-5 text-primary" />
+                     Amazon S3
                   </div>
                   <input
-                    id="file-upload"
-                    ref={fileInputRef}
-                    type="file"
-                    className="sr-only"
-                    accept=".json,application/json"
-                    onChange={(event) => handleLocalFileSelection(event.target.files)}
+                    type="text"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="s3://my-bucket/path/to/file.json"
+                    value={s3Uri}
+                    onChange={(e) => setS3Uri(e.target.value)}
                   />
-                </label>
-              </div>
-            )}
-
-            {activeTab === "api" && (
-              <div className="mt-6 space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <ServerStackIcon className="size-5 text-primary" />
-                  POST /api/ingest-json-payload
-                </div>
-                <textarea
-                  value={apiPayload}
-                  onChange={(event) => {
-                    setApiPayload(event.target.value);
-                    const parsed = safeJsonParse(event.target.value);
-                    if (parsed) {
-                      seedPreviewTree("API payload", parsed);
-                      setApiFeedback({ state: "idle" });
-                      ensurePendingApiUpload(event.target.value.length);
-                    }
-                  }}
-                  rows={6}
-                  placeholder='Paste JSON payload. Example: { "product": { "name": "Vision Pro" } }'
-                className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-inner focus:border-primary focus:outline-none"
-                />
-                <FeedbackPill feedback={apiFeedback} />
-              </div>
-            )}
-
-            {activeTab === "s3" && (
-              <div className="mt-6 space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <CloudArrowUpIcon className="size-5 text-primary" />
-                  GET /api/extract-cleanse-enrich-and-store
-                </div>
-                <input
-                  value={s3Uri}
-                  onChange={(event) => setS3Uri(event.target.value)}
-                  placeholder="s3://my-bucket/path/to/file.json"
-                  className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 shadow-inner focus:border-primary focus:outline-none"
-                />
-                <p className="text-xs text-slate-500">
-                  Accepts s3://bucket/key or classpath:relative/path references that the Spring Boot service can access.
-                </p>
-                <FeedbackPill feedback={s3Feedback} />
-              </div>
-            )}
-          </div>
-
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-lg font-semibold text-slate-900">Upload History</h3>
-              <div className="relative w-full max-w-xs">
-                <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-2.5 size-4 text-slate-400" />
-                <input
-                  type="search"
-                  placeholder="Search coming soon"
-                  className="w-full cursor-not-allowed rounded-full border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-400"
-                  disabled
-                />
-              </div>
-            </div>
-
-            <div className="mt-4 space-y-4">
-              {uploads.length === 0 && (
-                <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
-                  No uploads yet. Drop a JSON file to start the pipeline.
+                  <p className="text-xs text-gray-500">
+                    Accepts s3://bucket/key or classpath:relative/path references.
+                  </p>
+                  <FeedbackPill feedback={s3Feedback} />
                 </div>
               )}
-              {uploads.map((upload) => {
-                const status = statusStyles[upload.status];
-                const downloading = downloadInFlight === upload.id;
-                return (
-                  <div
-                    key={upload.id}
-                    className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-2xl bg-white p-2 shadow-sm">
-                        <DocumentTextIcon className="size-5 text-slate-500" />
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+              <h2 className="text-lg font-bold mb-6">Upload History</h2>
+              <div className="space-y-3">
+                {uploads.length === 0 ? (
+                  <p className="text-sm text-gray-400 text-center py-8">No history found</p>
+                ) : (
+                  uploads.map((upload) => (
+                    <div key={upload.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                      <div className="flex items-center gap-3">
+                        <DocumentTextIcon className="size-5 text-gray-400" />
+                        <div>
+                          <p className="text-sm font-semibold">{upload.name}</p>
+                          <p className="text-xs text-gray-500">{new Date(upload.createdAt).toLocaleDateString()}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">
-                          {upload.name}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {new Date(upload.createdAt).toLocaleString()} • {upload.source}
-                        </p>
+                      <div className="flex items-center gap-3">
+                         <div className={clsx("px-3 py-1 rounded-full text-[10px] font-bold uppercase", statusStyles[upload.status].className)}>
+                           {upload.status}
+                         </div>
+                         <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleDownloadUpload(upload)}
+                              disabled={downloadInFlight === upload.id}
+                              className="p-1 hover:bg-white rounded transition-colors"
+                            >
+                              <ArrowDownTrayIcon className="size-4 text-gray-400" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteUpload(upload.id)}
+                              className="p-1 hover:bg-white rounded transition-colors"
+                            >
+                              <TrashIcon className="size-4 text-gray-400" />
+                            </button>
+                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      {upload.cleansedId && (
-                        <code className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-inner">
-                          {upload.cleansedId}
-                        </code>
-                      )}
-                      <span
-                        className={clsx(
-                          "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold",
-                          status.className,
-                        )}
-                      >
-                        <span className={clsx("size-2 rounded-full", status.dot)} />
-                        {status.label}
-                      </span>
-                      <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          onClick={() => handleDownloadUpload(upload)}
-                          disabled={downloading}
-                          className={clsx(
-                            "rounded-full p-1 text-primary transition hover:bg-primary/10",
-                            downloading && "cursor-wait opacity-60",
-                          )}
-                          title="Download payload"
-                          aria-label="Download payload"
-                        >
-                          <ArrowDownTrayIcon className="size-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteUpload(upload.id)}
-                          className="rounded-full p-1 text-primary transition hover:bg-primary/10"
-                          title="Delete entry"
-                          aria-label="Delete entry"
-                        >
-                          <TrashIcon className="size-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+                  ))
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-400">
-                Preview
-              </p>
-              <h3 className="text-lg font-semibold text-slate-900">
-                Select Items
-              </h3>
-              <p className="text-xs text-slate-500">Preview is read-only. All fields will be sent forward.</p>
-            </div>
-            <span className="text-sm font-semibold text-slate-600">
-              {previewLeaves.length} fields
-            </span>
-          </div>
-          <div className="mt-4 flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5">
-            <InboxStackIcon className="size-4 text-slate-500" />
-            <span className="text-xs font-semibold text-slate-600">
-              {previewLabel}
-            </span>
-          </div>
-
-          <div className="mt-4">
-            <div className="relative">
-              <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-2.5 size-4 text-slate-400" />
-              <input
-                type="search"
-                placeholder="Search fields..."
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-primary focus:bg-white focus:outline-none"
-              />
-            </div>
-            <div className="mt-4 max-h-[420px] overflow-y-auto pr-2">
-              {filteredTree.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
-                  Upload a JSON payload to view its structure.
+          <aside className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm flex flex-col h-[700px] sticky top-24">
+            <h2 className="text-lg font-bold mb-6">Preview Structure</h2>
+            <div className="flex-1 overflow-y-auto custom-scrollbar">
+              {treeNodes.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4">
+                  <InboxStackIcon className="size-12 opacity-20" />
+                  <p className="text-sm">Select a file to preview its structure</p>
                 </div>
               ) : (
-                <div className="space-y-3">{renderTree(filteredTree)}</div>
+                <div className="space-y-1">
+                  {renderTree(treeNodes)}
+                </div>
               )}
             </div>
-          </div>
 
-          <div className="mt-6 rounded-2xl bg-slate-50 p-4">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
-              <span className="font-semibold text-slate-800">Fields:</span>
-              {previewLeaves.slice(0, 6).map((leaf) => (
-                <span
-                  key={leaf.id}
-                  className="rounded-full bg-white px-3 py-1 font-semibold shadow-sm"
-                >
-                  {leaf.label}
-                </span>
-              ))}
-              {previewLeaves.length > 6 && (
-                <span className="rounded-full bg-white px-3 py-1 font-semibold shadow-sm">
-                  +{previewLeaves.length - 6} more
-                </span>
-              )}
+            <div className="mt-8 space-y-4">
+               <div className="flex items-center justify-between text-xs text-gray-400 font-bold uppercase tracking-wider">
+                  <span>Fields detected</span>
+                  <span>{previewLeaves.length}</span>
+               </div>
+               <button
+                 type="button"
+                 onClick={handleExtractData}
+                 disabled={extracting || (!localFile && activeTab === "local")}
+                 className="w-full btn-primary h-12 flex items-center justify-center gap-2"
+               >
+                 {extracting ? (
+                   <ArrowPathIcon className="size-5 animate-spin" />
+                 ) : (
+                   <>
+                     Extract Data
+                     <ChevronRightIcon className="size-5" />
+                   </>
+                 )}
+               </button>
             </div>
-            <button
-              type="button"
-              onClick={handleExtractData}
-              disabled={extracting}
-              className={clsx(
-                "mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-white transition hover:bg-accent",
-                extracting && "cursor-not-allowed opacity-60 hover:bg-primary",
-              )}
-            >
-              {extracting ? (
-                <span className="inline-flex items-center justify-center gap-2">
-                  <ArrowPathIcon className="size-4 animate-spin" />
-                  Extracting…
-                </span>
-              ) : (
-                "Extract Data"
-              )}
-            </button>
-          </div>
-        </section>
-      </main>
+          </aside>
+        </div>
+      </div>
     </PipelineShell>
   );
 }

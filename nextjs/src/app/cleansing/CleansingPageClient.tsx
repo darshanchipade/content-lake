@@ -13,6 +13,15 @@ import { StageHero } from "@/components/StageHero";
 import { pickLocale, pickPageId } from "@/lib/metadata";
 import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
 
+const formatBytes = (bytes: number) => {
+  if (!Number.isFinite(bytes)) return "—";
+  if (bytes === 0) return "0 B";
+  const units = ["B", "KB", "MB", "GB"];
+  const index = Math.floor(Math.log(bytes) / Math.log(1024));
+  const value = bytes / Math.pow(1024, index);
+  return `${value.toFixed(value > 9 || index === 0 ? 0 : 1)} ${units[index]}`;
+};
+
 const RULES = [
   {
     title: "Whitespace normalization",
@@ -189,9 +198,9 @@ const FeedbackPill = ({ feedback }: { feedback: Feedback }) => {
   if (feedback.state === "idle") return null;
   const base =
     feedback.state === "loading"
-      ? "bg-primary-soft text-primary"
+      ? "bg-indigo-50 text-indigo-600"
       : feedback.state === "success"
-        ? "bg-primary-soft text-primary"
+        ? "bg-emerald-50 text-emerald-700"
         : "bg-rose-50 text-rose-700";
 
   return (
@@ -414,24 +423,23 @@ export default function CleansingPageClient() {
 
   if (!context) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6 py-16">
-        <div className="max-w-lg rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-          <p className="text-xs uppercase tracking-wide text-slate-400">Cleansing</p>
-          <h1 className="mt-2 text-2xl font-semibold text-slate-900">
-            {error ?? "Cleansed context not found"}
-          </h1>
-          <p className="mt-3 text-sm text-slate-500">
-            Provide a valid `id` query parameter or trigger the pipeline again.
-          </p>
-          <button
-            type="button"
-            onClick={() => router.push("/extraction")}
-            className="mt-6 rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white"
-          >
-            Back to Extraction
-          </button>
+      <PipelineShell currentStep="cleansing" showTracker={false}>
+        <div className="flex h-[calc(100vh-64px)] items-center justify-center bg-gray-50/50 p-8">
+          <div className="max-w-md w-full rounded-2xl border border-gray-200 bg-white p-10 text-center shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900">{error ?? "Cleansed context not found"}</h2>
+            <p className="mt-4 text-sm text-gray-500">
+              Provide a valid `id` query parameter or trigger the pipeline again.
+            </p>
+            <button
+              type="button"
+              onClick={() => router.push("/extraction")}
+              className="mt-8 btn-primary w-full"
+            >
+              Back to Extraction
+            </button>
+          </div>
         </div>
-      </div>
+      </PipelineShell>
     );
   }
 
@@ -449,78 +457,81 @@ export default function CleansingPageClient() {
         actionsSlot={<FeedbackPill feedback={enrichmentFeedback} />}
       />
 
-      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-400">Status</p>
-              <h2 className="text-lg font-semibold text-slate-900">
-                {context.status ?? "Pending"}
-              </h2>
-            </div>
-            <div className="text-xs text-slate-500">
-              <p>Uploaded</p>
-              <p className="font-semibold text-slate-800">
-                {new Date(context.metadata.uploadedAt).toLocaleString()}
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-400">
-                Cleansed ID
-              </dt>
-              <dd className="text-sm font-semibold text-slate-900">
-                {context.metadata.cleansedId ?? "—"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-400">Source</dt>
-              <dd className="text-sm font-semibold text-slate-900">{sourceLabel}</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-400">Source identifier</dt>
-              <dd className="text-sm font-semibold text-slate-900 break-all">
-                {sourceIdentifier}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-400">Locale</dt>
-              <dd className="text-sm font-semibold text-slate-900">
-                {context.metadata.locale ?? "—"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-400">Page ID</dt>
-              <dd className="text-sm font-semibold text-slate-900">
-                {context.metadata.pageId ?? "—"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-400">Cache status</dt>
-              <dd className="text-sm font-semibold text-slate-900">
-                {context.fallbackReason === "quota" ? "Partial snapshot" : "Complete snapshot"}
-              </dd>
-            </div>
-          </div>
+        <main className="flex flex-col gap-8">
+        {/* File Metadata */}
+        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+           <div className="flex items-center justify-between mb-8">
+              <h2 className="text-lg font-bold">File Metadata</h2>
+              <button
+                type="button"
+                onClick={() => {
+                  clearCleansedContext();
+                  router.push("/ingestion");
+                }}
+                className="text-xs font-bold text-primary hover:underline"
+              >
+                Start Over
+              </button>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-12">
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
+                <p className="text-sm font-bold text-gray-900">{context.metadata.name}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
+                <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Type</p>
+                <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Identifier</p>
+                <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</p>
+                <p className="text-sm font-bold text-gray-900">{context.metadata.cleansedId ?? "—"}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
+                <p className="text-sm font-bold text-gray-900">
+                  {new Date(context.metadata.uploadedAt).toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
+                <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
+                <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                <p className="text-sm font-bold text-gray-900">{context.status ?? "Pending"}</p>
+              </div>
+           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
             <div>
-              <p className="text-xs uppercase tracking-wide text-slate-400">Items</p>
-              <h2 className="text-lg font-semibold text-slate-900">
+              <p className="text-xs uppercase tracking-wide text-gray-400">Items</p>
+              <h2 className="text-lg font-bold text-gray-900">
                 Original vs Cleansed values
               </h2>
             </div>
           </div>
 
           {itemsLoading ? (
-            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 py-10 text-center text-sm text-slate-600">
+            <div className="rounded-2xl border border-gray-100 bg-gray-50 py-10 text-center text-sm text-gray-400">
               Fetching latest cleansed rows…
             </div>
           ) : itemsError ? (
-            <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
               <p className="font-semibold">Unable to load cleansed items.</p>
               <p className="mt-1">{itemsError}</p>
               <button
@@ -532,33 +543,33 @@ export default function CleansingPageClient() {
               </button>
             </div>
           ) : items.length === 0 ? (
-            <div className="mt-4 rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
+            <div className="rounded-2xl border border-dashed border-gray-200 py-10 text-center text-sm text-gray-400">
               No cleansed items available yet.
             </div>
           ) : (
-            <div className="mt-4 rounded-2xl border border-slate-100">
-              <div className="max-h-[480px] overflow-y-auto">
+            <div className="rounded-2xl border border-gray-100 overflow-hidden">
+              <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
               <table className="w-full text-left text-sm">
-                <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500 sticky top-0">
                   <tr>
-                    <th className="px-4 py-3 font-semibold">Field</th>
-                    <th className="px-4 py-3 font-semibold">Original value</th>
-                    <th className="px-4 py-3 font-semibold">Cleansed value</th>
+                    <th className="px-6 py-4 font-bold">Field</th>
+                    <th className="px-6 py-4 font-bold">Original value</th>
+                    <th className="px-6 py-4 font-bold">Cleansed value</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 bg-white">
+                <tbody className="divide-y divide-gray-100 bg-white">
                   {items.map((row, index) => (
                     <tr key={row.id ?? `${row.field ?? "row"}-${index}`}>
-                      <td className="px-4 py-3 align-top font-semibold text-slate-900">
+                      <td className="px-6 py-4 align-top font-bold text-gray-900">
                         {row.field}
                       </td>
-                      <td className="px-4 py-3 align-top text-slate-700">
-                        <pre className="whitespace-pre-wrap text-xs">
+                      <td className="px-6 py-4 align-top text-gray-600">
+                        <pre className="whitespace-pre-wrap text-xs font-mono">
                           {row.original ?? "—"}
                         </pre>
                       </td>
-                      <td className="px-4 py-3 align-top text-slate-700">
-                        <pre className="whitespace-pre-wrap text-xs">
+                      <td className="px-6 py-4 align-top text-gray-600 font-bold">
+                        <pre className="whitespace-pre-wrap text-xs font-mono">
                           {row.cleansed ?? "—"}
                         </pre>
                       </td>
@@ -571,41 +582,41 @@ export default function CleansingPageClient() {
           )}
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-3">
+        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+          <div className="flex flex-col gap-4 mb-6">
             <div>
-              <p className="text-xs uppercase tracking-wide text-slate-400">Applied rules</p>
-              <h2 className="text-lg font-semibold text-slate-900">
+              <p className="text-xs uppercase tracking-wide text-gray-400">Applied rules</p>
+              <h2 className="text-lg font-bold text-gray-900">
                 Cleansing heuristics snapshot
               </h2>
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              {RULES.map((rule) => (
-                <div
-                  key={rule.title}
-                  className="rounded-2xl border border-slate-100 bg-slate-50 p-4 shadow-inner"
-                >
-                  <p className="text-sm font-semibold text-slate-900">{rule.title}</p>
-                  <p className="mt-1 text-xs text-slate-600">{rule.description}</p>
-                </div>
-              ))}
-            </div>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {RULES.map((rule) => (
+              <div
+                key={rule.title}
+                className="rounded-xl border border-gray-100 bg-gray-50/50 p-4"
+              >
+                <p className="text-sm font-bold text-gray-900">{rule.title}</p>
+                <p className="mt-1 text-xs text-gray-500 leading-relaxed">{rule.description}</p>
+              </div>
+            ))}
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-wide text-slate-400">Next steps</p>
-              <h2 className="text-lg font-semibold text-slate-900">
+              <p className="text-xs uppercase tracking-wide text-gray-400">Next steps</p>
+              <h2 className="text-lg font-bold text-gray-900">
                 Ready to send for enrichment?
               </h2>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={() => router.push("/extraction")}
-                className="rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700"
+                className="px-6 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
               >
                 Back to Extraction
               </button>
@@ -613,20 +624,11 @@ export default function CleansingPageClient() {
                 type="button"
                 onClick={handleSendToEnrichment}
                 disabled={enrichmentFeedback.state === "loading"}
-                className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+                className="btn-primary"
               >
                 {enrichmentFeedback.state === "loading"
-                  ? "Sending to Enrichment…"
+                  ? "Sending..."
                   : "Send to Enrichment"}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  clearCleansedContext();
-                  router.push("/ingestion");
-                }}
-                className="rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700">
-                Start Over
               </button>
             </div>
           </div>

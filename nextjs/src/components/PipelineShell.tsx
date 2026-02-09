@@ -1,13 +1,16 @@
 import {
-  ArrowPathRoundedSquareIcon,
   ArrowTrendingUpIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
   CloudArrowUpIcon,
   HomeModernIcon,
   MagnifyingGlassIcon,
+  Squares2X2Icon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
-import type { ComponentType, ReactNode, SVGProps } from "react";
+import { usePathname } from "next/navigation";
+import type { ReactNode, ComponentType, SVGProps } from "react";
 import { PipelineTracker, type StepId } from "@/components/PipelineTracker";
 
 type PipelineShellProps = {
@@ -24,73 +27,82 @@ const workspaceLinks = [
 ];
 
 export function PipelineShell({ currentStep, showTracker = true, children }: PipelineShellProps) {
+  const pathname = usePathname();
+
   return (
-    <div className="flex min-h-screen bg-background text-slate-900">
-      <aside className="sticky top-0 hidden h-screen w-72 flex-col border-r border-slate-200 bg-white/90 px-6 py-8 shadow-[20px_0_45px_rgba(22,163,74,0.06)] backdrop-blur lg:flex">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl overflow-hidden shadow-[0_15px_40px_rgba(22,163,74,0.3)]">
-            <img
-              src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
-              alt="Logo"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div className="leading-tight">
-            <p className="text-[0.80rem] font-semibold uppercase tracking-[0.80em] text-slate-900">
-              Content
-            </p>
-            <p className="text-lg font-semibold text-slate-900">Lake</p>
-          </div>
+    <div className="flex min-h-screen bg-[#f9fafb] text-gray-900 font-sans">
+      {/* Sidebar */}
+      <aside className="fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-100 flex flex-col z-40">
+        <div className="p-8 flex items-center gap-4">
+           <img
+             src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
+             alt="CX Studios Logo"
+             className="h-12 w-auto"
+           />
         </div>
 
-        <nav className="mt-10 flex flex-1 flex-col gap-8 text-sm">
-          <NavSection title="Workspace" links={workspaceLinks} />
+        <nav className="flex-1 px-6 py-4 space-y-10 overflow-y-auto">
+          <div>
+            <h3 className="px-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6">Workspace</h3>
+            <div className="space-y-4">
+              {workspaceLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={clsx(
+                    "flex items-center gap-4 px-2 py-2 rounded-lg text-sm font-bold transition-all",
+                    pathname === link.href ? "text-primary" : "text-gray-500 hover:text-gray-900"
+                  )}
+                >
+                  <link.icon className={clsx("size-5", pathname === link.href ? "text-primary" : "text-gray-400")} />
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
         </nav>
 
-        <div className="space-y-4 text-xs text-slate-500">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <p className="font-semibold uppercase tracking-[0.2em] text-slate-400">Storage</p>
-            <div className="mt-3 flex items-end justify-between">
-              <p className="text-3xl font-semibold text-slate-900">82%</p>
-              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.25em]">
-                Used
-              </span>
-            </div>
-            <div className="mt-3 h-2 rounded-full bg-white">
-              <span className="block h-full rounded-full bg-primary" style={{ width: "82%" }} />
-            </div>
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-slate-400">
-              Need help?
-            </p>
-            <p className="mt-1 text-sm text-slate-900">Talk with a pipeline specialist.</p>
-            <button className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-primary px-3 py-2 text-xs font-semibold tracking-wide text-primary transition hover:bg-primary hover:text-white">
-              <ArrowPathRoundedSquareIcon className="size-4" />
-              Contact Support
-            </button>
-          </div>
+        <div className="p-4 border-t border-gray-50 bg-gray-50/30">
+           <div className="flex items-center gap-3">
+              <div className="size-10 rounded-full bg-gray-900 flex items-center justify-center text-white font-bold text-sm">
+                 N
+              </div>
+              <div className="flex-1 min-w-0">
+                 <p className="text-sm font-bold truncate">Taylor</p>
+                 <p className="text-[10px] text-gray-500 truncate">Data Analyst</p>
+              </div>
+           </div>
         </div>
       </aside>
 
-      <div className="flex-1">
-        <div className="flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-4 text-sm font-semibold text-slate-900 shadow-sm lg:hidden">
-          <div className="flex items-center gap-2">
-            <span>Content Lake</span>
-            <span className="text-[0.65rem] uppercase tracking-[0.35em] text-slate-400">· Workflow</span>
-          </div>
-          <span>{currentStep}</span>
-        </div>
-        <div className="relative">
-          {showTracker && (
-            <div className="sticky top-0 z-30 border-b border-slate-200 bg-background/90 backdrop-blur">
-              <div className="mx-auto max-w-6xl px-6 py-6">
-                <PipelineTracker current={currentStep} />
+      {/* Main Content */}
+      <div className="pl-72 flex-1 flex flex-col">
+        {/* Top Header */}
+        <header className="h-16 border-b border-gray-100 bg-white sticky top-0 z-30 flex items-center px-8 justify-between">
+           <div className="flex items-center gap-4 text-sm">
+              <Squares2X2Icon className="size-5 text-gray-400" />
+              <div className="flex items-center gap-2 text-gray-400">
+                 <span>Workspaces</span>
+                 <ChevronRightIcon className="size-3" />
+                 <span>Delta</span>
+                 <ChevronRightIcon className="size-3" />
+                 <span className="text-gray-900 font-semibold">Product</span>
               </div>
+           </div>
+        </header>
+
+        {/* Pipeline Stepper */}
+        {showTracker && (
+          <div className="bg-white border-b border-gray-100 px-8 py-10">
+            <div className="max-w-[1200px] mx-auto">
+              <PipelineTracker current={currentStep} />
             </div>
-          )}
-          <div>{children}</div>
-        </div>
+          </div>
+        )}
+
+        <main className="flex-1">
+          {children}
+        </main>
       </div>
     </div>
   );
@@ -111,9 +123,9 @@ function NavSection({ title, links }: { title: string; links: NavLink[] }) {
           <Link
             key={link.href}
             href={link.href}
-            className="group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold text-slate-500 transition hover:text-primary"
+            className="flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold text-slate-500 transition hover:text-slate-900"
           >
-            <link.icon className="size-4 text-slate-600 group-hover:text-primary" />
+            <link.icon className="size-4 text-slate-900" />
             {link.label}
           </Link>
         ))}

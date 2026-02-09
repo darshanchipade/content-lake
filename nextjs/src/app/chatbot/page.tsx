@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { PipelineShell } from "@/components/PipelineShell";
-import { StageHero } from "@/components/StageHero";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -118,16 +117,14 @@ export default function ChatbotPage() {
 
   return (
     <PipelineShell currentStep="ingestion" showTracker={false}>
-      <StageHero
-        title="Chatbot"
-        description="Ask natural-language questions about your content. Responses stream from the Spring Boot ChatBotController."
-      />
+      <div className="p-8 max-w-4xl mx-auto">
+        <div className="mb-8"><h1 className="text-2xl font-bold">Chatbot</h1></div>
 
-      <main className="mx-auto w-full max-w-4xl px-6 py-10">
-        <div className="flex flex-col gap-4 rounded-[16px] bg-[#f9f9f9] px-4 py-6 md:px-8">
+      <main className="mx-auto w-full">
+        <div className="flex flex-col gap-4 card px-4 py-6 md:px-8">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-[#111215]">Chatbot</h2>
-            <a href="/search" className="text-sm font-semibold text-[#2180f9] hover:underline">
+            <h2 className="text-2xl font-semibold text-gray-900">Chatbot</h2>
+            <a href="/search" className="text-sm font-semibold text-primary hover:underline">
               Back to Search
             </a>
           </div>
@@ -162,6 +159,7 @@ export default function ChatbotPage() {
           </div>
         </div>
       </main>
+      </div>
     </PipelineShell>
   );
 }
