@@ -5,6 +5,8 @@ import {
   BeakerIcon,
   DocumentMagnifyingGlassIcon,
   SparklesIcon,
+  CircleStackIcon,
+  CheckIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import type { ComponentType, SVGProps } from "react";
@@ -26,20 +28,22 @@ const STEPS: StepMeta[] = [
 
 const statusStyles = {
   done: {
-    circle: "border-primary bg-primary text-white shadow-[0_8px_20px_rgba(22,163,74,0.25)]",
-    label: "text-primary",
+    circle: "border-primary bg-primary text-white",
+    label: "text-gray-900",
     connector: "bg-primary",
+    iconColor: "text-white",
   },
   current: {
-    circle:
-      "border-primary bg-primary text-white shadow-[0_8px_20px_rgba(22,163,74,0.25)] scale-105",
-    label: "text-primary",
-    connector: "bg-primary",
+    circle: "border-primary bg-primary text-white ring-4 ring-primary-soft",
+    label: "text-gray-900 font-bold",
+    connector: "bg-gray-100",
+    iconColor: "text-white",
   },
   upcoming: {
-    circle: "border-slate-200 bg-white text-slate-400",
-    label: "text-slate-400",
-    connector: "bg-slate-200",
+    circle: "border-gray-100 bg-white text-gray-300",
+    label: "text-gray-400",
+    connector: "bg-gray-100",
+    iconColor: "text-gray-300",
   },
 };
 
@@ -50,66 +54,59 @@ export function PipelineTracker({ current }: { current: StepId }) {
   );
 
   return (
-    <nav className="w-full text-xs">
-      <div className="rounded-[28px] border border-slate-200 bg-white px-6 py-5 shadow-[0_20px_50px_rgba(22,163,74,0.08)]">
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-400">
-            <span>Pipeline</span>
-            <span>
-              Step {Math.min(currentIndex + 1, STEPS.length)} of {STEPS.length}
-            </span>
-          </div>
-          <div className="flex flex-col gap-6 md:flex-row md:items-center">
-            {STEPS.map((step, index) => {
-              const status =
-                index < currentIndex
-                  ? "done"
-                  : index === currentIndex
-                    ? "current"
-                    : "upcoming";
-              const styles = statusStyles[status as keyof typeof statusStyles];
-              const Icon = step.icon;
-              const connectorActive = index < currentIndex;
+    <nav className="w-full">
+      <div className="flex items-center justify-between gap-2">
+        {STEPS.map((step, index) => {
+          const status =
+            index < currentIndex
+              ? "done"
+              : index === currentIndex
+                ? "current"
+                : "upcoming";
+          const isUpcoming = index > currentIndex;
+          const styles = statusStyles[status as keyof typeof statusStyles];
+          const Icon = step.icon;
 
-              return (
+          return (
+            <div
+              key={step.id}
+              className={clsx(
+                "flex items-center gap-4",
+                index < STEPS.length - 1 && "flex-1"
+              )}
+            >
+              <div className="flex flex-col items-center gap-3 relative">
                 <div
-                  key={step.id}
                   className={clsx(
-                    "flex items-center gap-4 md:flex-1",
-                    index === STEPS.length - 1 && "md:flex-initial",
+                    "flex size-14 items-center justify-center rounded-full border-2 transition-all duration-200 relative",
+                    styles.circle
                   )}
                 >
-                  <div className="flex flex-col items-center gap-3 text-center">
-                    <div
-                      className={clsx(
-                        "flex size-14 items-center justify-center rounded-full border-2 transition-transform duration-200",
-                        styles.circle,
-                      )}
-                    >
-                      <Icon className="size-5" />
-                    </div>
-                    <span className={clsx("text-[0.7rem] font-semibold", styles.label)}>
-                      {step.label}
-                    </span>
-                  </div>
-                  {index < STEPS.length - 1 && (
-                    <div className="hidden flex-1 md:block">
-                      <div className="relative h-[2px] w-full rounded-full bg-slate-200">
-                        <span
-                          className={clsx(
-                            "absolute inset-y-0 left-0 rounded-full transition-all duration-300",
-                            connectorActive && styles.connector,
-                          )}
-                          style={{ width: connectorActive ? "100%" : "0%" }}
-                        />
-                      </div>
-                    </div>
+                  <Icon className={clsx("size-6", styles.iconColor)} />
+                  {status === "done" && (
+                     <div className="absolute -right-1 -bottom-1 bg-white rounded-full p-0.5 border border-primary">
+                        <CheckIcon className="size-3 text-primary stroke-[3px]" />
+                     </div>
+                  )}
+                  {status === "current" && (
+                     <div className="absolute -right-1 -bottom-1 bg-white rounded-full p-0.5 border border-primary">
+                        <div className="size-3 flex items-center justify-center">
+                           <div className="size-1.5 bg-primary rounded-full animate-pulse" />
+                        </div>
+                     </div>
                   )}
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                <span className={clsx("text-xs whitespace-nowrap", styles.label)}>
+                  {step.label}
+                </span>
+              </div>
+
+              {index < STEPS.length - 1 && (
+                <div className="flex-1 h-px bg-gray-100" />
+              )}
+            </div>
+          );
+        })}
       </div>
     </nav>
   );

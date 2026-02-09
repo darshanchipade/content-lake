@@ -10,9 +10,17 @@
    type EnrichmentContext,
  } from "@/lib/extraction-context";
  import { PipelineShell } from "@/components/PipelineShell";
- import { StageHero } from "@/components/StageHero";
  import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
  import { pickLocale, pickPageId } from "@/lib/metadata";
+
+ const formatBytes = (bytes: number) => {
+   if (!Number.isFinite(bytes)) return "—";
+   if (bytes === 0) return "0 B";
+   const units = ["B", "KB", "MB", "GB"];
+   const index = Math.floor(Math.log(bytes) / Math.log(1024));
+   const value = bytes / Math.pow(1024, index);
+   return `${value.toFixed(value > 9 || index === 0 ? 0 : 1)} ${units[index]}`;
+ };
 
  type Feedback = {
    state: "idle" | "loading" | "success" | "error";
@@ -1514,24 +1522,23 @@ const normalized = source.trim().toUpperCase();
 
              if (!context) {
                return (
-                 <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6 py-20">
-                   <div className="max-w-xl rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-                     <p className="text-xs uppercase tracking-wide text-slate-400">Enrichment</p>
-                     <h1 className="mt-2 text-2xl font-semibold text-slate-900">
-                       {error ?? "Enrichment data not found"}
-                     </h1>
-                     <p className="mt-4 text-sm text-slate-500">
-                       Trigger enrichment from the cleansing screen to review progress here.
-                     </p>
-                     <button
-                       type="button"
-                       onClick={() => router.push("/cleansing")}
-                       className="mt-6 rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white"
-                     >
-                       Back to Cleansing
-                     </button>
+                 <PipelineShell currentStep="enrichment" showTracker={false}>
+                   <div className="flex h-[calc(100vh-64px)] items-center justify-center bg-gray-50/50 p-8">
+                     <div className="max-w-md w-full rounded-2xl border border-gray-200 bg-white p-10 text-center shadow-sm">
+                       <h2 className="text-xl font-bold text-gray-900">{error ?? "Enrichment data not found"}</h2>
+                       <p className="mt-4 text-sm text-gray-500">
+                         Trigger enrichment from the cleansing screen to review progress here.
+                       </p>
+                       <button
+                         type="button"
+                         onClick={() => router.push("/cleansing")}
+                         className="mt-8 btn-primary w-full"
+                       >
+                         Back to Cleansing
+                       </button>
+                     </div>
                    </div>
-                 </div>
+                 </PipelineShell>
                );
              }
 
@@ -1543,132 +1550,124 @@ const normalized = source.trim().toUpperCase();
 
              return (
                <PipelineShell currentStep="enrichment">
-                 <StageHero
-                   title="Enrichment"
-                   description={`Monitor enrichment for ${context.metadata.name}`}
-                   actionsSlot={
-                     statusFeedback.state !== "idle" ? (
-                       <div
-                         className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
-                           statusFeedback.state === "loading"
-                             ? "bg-primary-soft text-primary"
-                             : statusFeedback.state === "success"
-                               ? "bg-primary-soft text-primary"
-                               : "bg-rose-50 text-rose-700"
-                         }`}
-                       >
-                         {statusFeedback.message ??
-                           (statusFeedback.state === "loading"
-                             ? "Refreshing status…"
-                             : statusFeedback.state === "success"
-                               ? "Status updated."
-                               : "Unable to refresh status.")}
-                       </div>
-                     ) : null
-                   }
-                 />
+                 <div className="p-8 max-w-6xl mx-auto">
+                   <div className="mb-8"><h1 className="text-2xl font-bold">Enrichment</h1></div>
 
-                 <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
-                   <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                   <main className="flex flex-col gap-8">
+                   {/* File Metadata */}
+                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                      <div className="flex items-center justify-between mb-8">
+                         <h2 className="text-lg font-bold">File Metadata</h2>
+                         <button
+                           type="button"
+                           onClick={() => {
+                             clearEnrichmentContext();
+                             router.push("/ingestion");
+                           }}
+                           className="text-xs font-bold text-primary hover:underline"
+                         >
+                           Start Over
+                         </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-12">
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
+                           <p className="text-sm font-bold text-gray-900">{context.metadata.name}</p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
+                           <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Type</p>
+                           <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Identifier</p>
+                           <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</p>
+                           <p className="text-sm font-bold text-gray-900">{context.metadata.cleansedId ?? "—"}</p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Started At</p>
+                           <p className="text-sm font-bold text-gray-900">
+                             {new Date(context.startedAt).toLocaleString()}
+                           </p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
+                           <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
+                           <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
+                         </div>
+                         <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Current Status</p>
+                           <p className="text-sm font-bold text-gray-900">{STATUS_LABELS[currentStatus] ?? currentStatus}</p>
+                         </div>
+                      </div>
+                   </section>
+
+                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-8">
                        <div>
-                         <p className="text-xs uppercase tracking-wide text-slate-400">Current status</p>
-                         <div className={`mt-2 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ${statusMeta.background} ${statusMeta.className}`}>
+                         <p className="text-xs uppercase tracking-wide text-gray-400">Status</p>
+                         <div className={`mt-2 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${statusMeta.background} ${statusMeta.className}`}>
                            <span className={`h-2 w-2 rounded-full ${statusMeta.dot}`} />
                            {STATUS_LABELS[currentStatus] ?? currentStatus}
                          </div>
                        </div>
                        <div className="w-full max-w-md">
-                         <p className="text-xs uppercase tracking-wide text-slate-400">
+                         <p className="text-xs uppercase tracking-wide text-gray-400">
                            Pipeline progress
                          </p>
-                         <div className="mt-2 h-2 rounded-full bg-slate-100">
+                         <div className="mt-2 h-2 rounded-full bg-gray-100">
                            <div
                              className="h-full rounded-full bg-primary transition-all"
                              style={{ width: `${progress}%` }}
                            />
                          </div>
-                         <p className="mt-1 text-xs text-slate-500">{Math.round(progress)}% complete</p>
+                         <p className="mt-1 text-xs text-gray-500 font-bold">{Math.round(progress)}% complete</p>
                        </div>
                        <button
                          type="button"
                          onClick={handleRefreshStatus}
-                         className="rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
+                         className="px-6 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
                        >
                          Refresh Status
                        </button>
                      </div>
-                     <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                       <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                         <p className="text-xs uppercase tracking-wide text-slate-400">Total fields tagged</p>
-                         <p className="mt-2 text-2xl font-semibold text-slate-900">
+                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                       <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-6">
+                         <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Total fields tagged</p>
+                         <p className="mt-2 text-2xl font-bold text-gray-900">
                          {totalFieldsTagged ?? "—"}
                                         </p>
                                         {totalFieldsBreakdown ? (
-                                          <p className="text-xs text-slate-500">{totalFieldsBreakdown}</p>
+                                          <p className="text-xs text-gray-500 font-bold mt-1">{totalFieldsBreakdown}</p>
                                         ) : null}
                                       </div>
-                                      <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Readability improved</p>
-                                        <p className="mt-2 text-2xl font-semibold text-slate-900">
+                                      <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-6">
+                                        <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Readability improved</p>
+                                        <p className="mt-2 text-2xl font-bold text-gray-900">
                                           {readabilityDisplay ?? "—"}
                                         </p>
                                       </div>
-                                      <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Errors found</p>
-                                        <p className="mt-2 text-2xl font-semibold text-slate-900">{errorsDisplay ?? "—"}</p>
-                                      </div>
-                                    </div>
-                                    <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Cleansed ID</p>
-                                        <p className="text-sm font-semibold text-slate-900">
-                                          {context.metadata.cleansedId ?? "—"}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Source</p>
-                                        <p className="text-sm font-semibold text-slate-900">{sourceLabel}</p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">
-                                          Source identifier
-                                        </p>
-                                        <p className="text-sm font-semibold text-slate-900 break-all">{sourceIdentifier}</p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Started at</p>
-                                        <p className="text-sm font-semibold text-slate-900">
-                                          {new Date(context.startedAt).toLocaleString()}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Last update</p>
-                                        <p className="text-sm font-semibold text-slate-900">
-                                          {new Date(
-                                            statusHistory[statusHistory.length - 1]?.timestamp ?? context.startedAt,
-                                          ).toLocaleString()}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Locale</p>
-                                        <p className="text-sm font-semibold text-slate-900">
-                                          {context.metadata.locale ?? "—"}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Page ID</p>
-                                        <p className="text-sm font-semibold text-slate-900">
-                                          {context.metadata.pageId ?? "—"}
-                                        </p>
+                                      <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-6">
+                                        <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Errors found</p>
+                                        <p className="mt-2 text-2xl font-bold text-gray-900">{errorsDisplay ?? "—"}</p>
                                       </div>
                                     </div>
                                   </section>
 
-                                  <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                                    <p className="text-xs uppercase tracking-wide text-slate-400">Status timeline</p>
-                                    <h2 className="text-lg font-semibold text-slate-900">Pipeline events</h2>
-                                    <div className="mt-4 space-y-4 border-l border-slate-200 pl-6">
+                                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                     <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Status timeline</p>
+                                     <h2 className="text-lg font-bold text-gray-900">Pipeline events</h2>
+                                     <div className="mt-6 space-y-4 border-l border-gray-100 pl-6">
                                       {statusHistory.map((entry) => {
                                         const meta = STATUS_COLORS[entry.status] ?? {
                                           className: "text-slate-700",
@@ -1691,12 +1690,12 @@ const normalized = source.trim().toUpperCase();
                                     </div>
                                   </section>
 
-                                  <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                                      <div>
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Insights</p>
-                                        <h2 className="text-lg font-semibold text-slate-900">AI summary preview</h2>
-                                      </div>
+                                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+                                       <div>
+                                         <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Insights</p>
+                                         <h2 className="text-lg font-bold text-gray-900">AI summary preview</h2>
+                                       </div>
                                       <span className="text-xs text-slate-500">
                                         Review, edit, save, or regenerate enrichment insights and metadata.
                                       </span>
@@ -1718,9 +1717,9 @@ const normalized = source.trim().toUpperCase();
                                         </button>
                                       </div>
                                     ) : enrichmentResult?.elements.length ? (
-                                      <div className="mt-6 rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                                        <p className="text-xs uppercase tracking-wide text-slate-400">Enriched sections</p>
-                                        <div className="mt-3 max-h-[480px] space-y-3 overflow-y-auto pr-2">
+                                      <div className="mt-6 rounded-2xl border border-gray-100 bg-gray-50/50 p-6">
+                                        <p className="text-xs uppercase tracking-wide text-gray-400 font-bold mb-4">Enriched sections</p>
+                                        <div className="max-h-[600px] space-y-3 overflow-y-auto pr-2 custom-scrollbar">
                                           {groupedElements.map((group) => {
                                             const isExpanded = expandedGroups.has(group.id);
                                             return (
@@ -2307,28 +2306,21 @@ const normalized = source.trim().toUpperCase();
                                                                       )}
                                                                     </section>
 
-                                                                    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                                                                      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                                                                    <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                                                      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                                                         <div>
-                                                                          <p className="text-xs uppercase tracking-wide text-slate-400">Next steps</p>
-                                                                          <h2 className="text-lg font-semibold text-slate-900">
+                                                                          <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Next steps</p>
+                                                                          <h2 className="text-lg font-bold text-gray-900">
                                                                             Wrap up or keep monitoring
                                                                           </h2>
                                                                         </div>
-                                                                        <div className="flex flex-wrap gap-2">
+                                                                        <div className="flex flex-wrap gap-3">
                                                                           <button
                                                                             type="button"
                                                                             onClick={() => router.push("/cleansing")}
-                                                                            className="rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700"
+                                                                            className="px-6 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
                                                                           >
                                                                             Back to Cleansing
-                                                                          </button>
-                                                                          <button
-                                                                            type="button"
-                                                                            onClick={handleRefreshStatus}
-                                                                            className="rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700"
-                                                                          >
-                                                                            Refresh Status
                                                                           </button>
                                                                           <button
                                                                             type="button"
@@ -2336,13 +2328,14 @@ const normalized = source.trim().toUpperCase();
                                                                               clearEnrichmentContext();
                                                                               router.push("/ingestion");
                                                                             }}
-                                                                            className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white">
+                                                                            className="btn-primary">
                                                                             Finish Session
                                                                           </button>
                                                                         </div>
                                                                       </div>
                                                                     </section>
                                                                   </main>
-                                                                </PipelineShell>
+                 </div>
+               </PipelineShell>
                                                               );
                                                             }

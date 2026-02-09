@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from "react";
-import { StageHero } from "@/components/StageHero";
 import { PipelineShell } from "@/components/PipelineShell";
 import {
   SearchInterface,
@@ -217,14 +216,12 @@ export default function SearchPage() {
 
   return (
     <PipelineShell currentStep="ingestion" showTracker={false}>
-      <StageHero
-        title="Search Finder"
-        description="Explore Content Lake with AI-powered refinements fed by the Spring Boot search controller."
-      />
+      <div className="p-8 max-w-5xl mx-auto">
+        <div className="mb-8"><h1 className="text-2xl font-bold">Search</h1></div>
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
-        <div className="rounded-[24px] border border-slate-200 bg-[#f9f9f9] px-6 py-12 shadow-sm md:px-16">
-          <div className="flex justify-end gap-4 text-sm font-semibold text-[#2180f9]">
+      <main className="mx-auto">
+        <div className="card px-6 py-12 md:px-16">
+          <div className="flex justify-end gap-4 text-sm font-semibold text-primary">
             <a href="/ingestion" className="hover:underline">
               Upload JSON
             </a>
@@ -272,6 +269,7 @@ export default function SearchPage() {
           </div>
         </div>
       </main>
+      </div>
     </PipelineShell>
   );
 }
