@@ -25,10 +25,10 @@ const workspaceLinks = [
 
 export function PipelineShell({ currentStep, showTracker = true, children }: PipelineShellProps) {
   return (
-    <div className="flex min-h-screen bg-[#f7f9fb] text-slate-900">
-      <aside className="sticky top-0 hidden h-screen w-72 flex-col border-r border-slate-200 bg-white/90 px-6 py-8 shadow-[20px_0_45px_rgba(15,23,42,0.06)] backdrop-blur lg:flex">
+    <div className="flex min-h-screen bg-background text-slate-900">
+      <aside className="sticky top-0 hidden h-screen w-72 flex-col border-r border-slate-200 bg-white/90 px-6 py-8 shadow-[20px_0_45px_rgba(22,163,74,0.06)] backdrop-blur lg:flex">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-2xl text-white shadow-[0_15px_40px_rgba(15,23,42,0.3)]">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-2xl text-white shadow-[0_15px_40px_rgba(22,163,74,0.3)]">
             
           </div>
           <div className="leading-tight">
@@ -53,7 +53,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
               </span>
             </div>
             <div className="mt-3 h-2 rounded-full bg-white">
-              <span className="block h-full rounded-full bg-slate-900" style={{ width: "82%" }} />
+              <span className="block h-full rounded-full bg-primary" style={{ width: "82%" }} />
             </div>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
@@ -61,7 +61,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
               Need help?
             </p>
             <p className="mt-1 text-sm text-slate-900">Talk with a pipeline specialist.</p>
-            <button className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-900 px-3 py-2 text-xs font-semibold tracking-wide text-slate-900 transition hover:bg-slate-900 hover:text-white">
+            <button className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-primary px-3 py-2 text-xs font-semibold tracking-wide text-primary transition hover:bg-primary hover:text-white">
               <ArrowPathRoundedSquareIcon className="size-4" />
               Contact Support
             </button>
@@ -79,7 +79,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
         </div>
         <div className="relative">
           {showTracker && (
-            <div className="sticky top-0 z-30 border-b border-slate-200 bg-[#f7f9fb]/90 backdrop-blur">
+            <div className="sticky top-0 z-30 border-b border-slate-200 bg-background/90 backdrop-blur">
               <div className="mx-auto max-w-6xl px-6 py-6">
                 <PipelineTracker current={currentStep} />
               </div>
@@ -107,9 +107,9 @@ function NavSection({ title, links }: { title: string; links: NavLink[] }) {
           <Link
             key={link.href}
             href={link.href}
-            className="flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold text-slate-500 transition hover:text-slate-900"
+            className="group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold text-slate-500 transition hover:text-primary"
           >
-            <link.icon className="size-4 text-slate-900" />
+            <link.icon className="size-4 text-slate-600 group-hover:text-primary" />
             {link.label}
           </Link>
         ))}

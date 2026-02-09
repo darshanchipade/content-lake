@@ -189,9 +189,9 @@ const FeedbackPill = ({ feedback }: { feedback: Feedback }) => {
   if (feedback.state === "idle") return null;
   const base =
     feedback.state === "loading"
-      ? "bg-indigo-50 text-indigo-600"
+      ? "bg-primary-soft text-primary"
       : feedback.state === "success"
-        ? "bg-emerald-50 text-emerald-700"
+        ? "bg-primary-soft text-primary"
         : "bg-rose-50 text-rose-700";
 
   return (
@@ -426,7 +426,7 @@ export default function CleansingPageClient() {
           <button
             type="button"
             onClick={() => router.push("/extraction")}
-            className="mt-6 rounded-full bg-slate-900 px-6 py-2 text-sm font-semibold text-white"
+            className="mt-6 rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white"
           >
             Back to Extraction
           </button>
@@ -613,7 +613,7 @@ export default function CleansingPageClient() {
                 type="button"
                 onClick={handleSendToEnrichment}
                 disabled={enrichmentFeedback.state === "loading"}
-                className="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {enrichmentFeedback.state === "loading"
                   ? "Sending to Enrichment…"

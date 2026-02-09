@@ -58,10 +58,10 @@ const FeedbackPill = ({ feedback }: { feedback: Feedback }) => {
   const className = clsx(
     "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold",
     feedback.state === "success"
-      ? "bg-emerald-50 text-emerald-700"
+      ? "bg-primary-soft text-primary"
       : feedback.state === "error"
         ? "bg-rose-50 text-rose-700"
-        : "bg-indigo-50 text-indigo-600",
+        : "bg-primary-soft text-primary",
   );
   const Icon =
     feedback.state === "loading"
@@ -416,7 +416,7 @@ export default function ExtractionPage() {
             }}
             className={clsx(
               "flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left",
-              selected ? "bg-indigo-50 text-indigo-700" : "text-slate-700",
+              selected ? "bg-primary-soft text-primary" : "text-slate-700",
             )}
           >
             {hasChildren ? (
@@ -541,7 +541,7 @@ export default function ExtractionPage() {
           <button
             type="button"
             onClick={() => router.push("/ingestion")}
-            className="mt-6 rounded-full bg-slate-900 px-6 py-2 text-sm font-semibold text-white"
+            className="mt-6 rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white"
           >
             Back to Ingestion
           </button>
@@ -582,7 +582,7 @@ export default function ExtractionPage() {
                 onClick={sendToCleansing}
                 disabled={sending}
                 className={clsx(
-                  "inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white",
+                  "inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white",
                   sending && "cursor-not-allowed opacity-60",
                 )}
               >
@@ -607,7 +607,7 @@ export default function ExtractionPage() {
                   placeholder="Search fields..."
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-primary focus:bg-white focus:outline-none"
                 />
               </div>
               <div className="mt-4 max-h-[420px] space-y-3 overflow-y-auto pr-2">
@@ -684,7 +684,7 @@ export default function ExtractionPage() {
                 clearExtractionContext();
                 router.push("/ingestion");
               }}
-              className="text-xs font-semibold text-indigo-600"
+              className="text-xs font-semibold text-primary"
             >
               Start over
             </button>

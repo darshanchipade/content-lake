@@ -112,9 +112,9 @@
 
  const STATUS_COLORS: Record<string, { className: string; dot: string; background: string }> = {
    ENRICHMENT_TRIGGERED: {
-     className: "text-indigo-700",
-     dot: "bg-indigo-400",
-     background: "bg-indigo-50",
+     className: "text-primary",
+     dot: "bg-primary",
+     background: "bg-primary-soft",
    },
    WAITING_FOR_RESULTS: {
      className: "text-amber-700",
@@ -127,9 +127,9 @@
      background: "bg-sky-50",
    },
    ENRICHMENT_COMPLETE: {
-     className: "text-emerald-700",
-     dot: "bg-emerald-500",
-     background: "bg-emerald-50",
+     className: "text-primary",
+     dot: "bg-primary",
+     background: "bg-primary-soft",
    },
    PARTIALLY_ENRICHED: {
      className: "text-sky-700",
@@ -1526,7 +1526,7 @@ const normalized = source.trim().toUpperCase();
                      <button
                        type="button"
                        onClick={() => router.push("/cleansing")}
-                       className="mt-6 rounded-full bg-slate-900 px-6 py-2 text-sm font-semibold text-white"
+                       className="mt-6 rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white"
                      >
                        Back to Cleansing
                      </button>
@@ -1551,9 +1551,9 @@ const normalized = source.trim().toUpperCase();
                        <div
                          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
                            statusFeedback.state === "loading"
-                             ? "bg-indigo-50 text-indigo-600"
+                             ? "bg-primary-soft text-primary"
                              : statusFeedback.state === "success"
-                               ? "bg-emerald-50 text-emerald-700"
+                               ? "bg-primary-soft text-primary"
                                : "bg-rose-50 text-rose-700"
                          }`}
                        >
@@ -1584,7 +1584,7 @@ const normalized = source.trim().toUpperCase();
                          </p>
                          <div className="mt-2 h-2 rounded-full bg-slate-100">
                            <div
-                             className="h-full rounded-full bg-indigo-500 transition-all"
+                             className="h-full rounded-full bg-primary transition-all"
                              style={{ width: `${progress}%` }}
                            />
                          </div>
@@ -1593,7 +1593,7 @@ const normalized = source.trim().toUpperCase();
                        <button
                          type="button"
                          onClick={handleRefreshStatus}
-                         className="rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700"
+                         className="rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
                        >
                          Refresh Status
                        </button>
@@ -1854,7 +1854,7 @@ const normalized = source.trim().toUpperCase();
                                                    type="button"
                                                    onClick={() => handleSaveInsights(element)}
                                                    disabled={insightsBusy}
-                                                   className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"
+                                                   className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white"
                                                  >
                                                    {editState.isSavingInsights ? "Saving…" : "Save"}
                                                  </button>
@@ -1886,7 +1886,7 @@ const normalized = source.trim().toUpperCase();
                                                    ])
                                                  }
                                                  disabled={insightsBusy}
-                                                 className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700"
+                                                 className="rounded-full border border-primary-soft bg-primary-soft px-3 py-1 text-xs font-semibold text-primary"
                                                >
                                                  {editState.isGeneratingInsights
                                                    ? "Generating…"
@@ -1907,7 +1907,7 @@ const normalized = source.trim().toUpperCase();
                                                    handleGenerateFields(element, ["summary"])
                                                  }
                                                  disabled={insightsBusy}
-                                                 className="rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700"
+                                                 className="rounded-full border border-primary-soft bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary"
                                                >
                                                  Generate
                                                </button>
@@ -1933,7 +1933,7 @@ const normalized = source.trim().toUpperCase();
                                                      handleGenerateFields(element, ["classification"])
                                                    }
                                                    disabled={insightsBusy}
-                                                   className="rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700"
+                                                   className="rounded-full border border-primary-soft bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary"
                                                  >
                                                    Generate
                                                  </button>
@@ -2008,7 +2008,7 @@ const normalized = source.trim().toUpperCase();
                                                    type="button"
                                                    onClick={() => handleSaveMetadata(element)}
                                                    disabled={metadataBusy}
-                                                   className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"
+                                                   className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white"
                                                  >
                                                    {editState.isSavingMetadata ? "Saving…" : "Save"}
                                                  </button>
@@ -2035,7 +2035,7 @@ const normalized = source.trim().toUpperCase();
                                                    handleGenerateFields(element, ["keywords", "tags"])
                                                  }
                                                  disabled={metadataBusy}
-                                                 className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700"
+                                                 className="rounded-full border border-primary-soft bg-primary-soft px-3 py-1 text-xs font-semibold text-primary"
                                                >
                                                  {editState.isGeneratingMetadata
                                                    ? "Generating…"
@@ -2057,7 +2057,7 @@ const normalized = source.trim().toUpperCase();
                                                      handleGenerateFields(element, ["keywords"])
                                                    }
                                                    disabled={metadataBusy}
-                                                   className="rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700"
+                                                   className="rounded-full border border-primary-soft bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary"
                                                  >
                                                    Generate
                                                  </button>
@@ -2085,7 +2085,7 @@ const normalized = source.trim().toUpperCase();
                                                      handleGenerateFields(element, ["tags"])
                                                    }
                                                    disabled={metadataBusy}
-                                                   className="rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700"
+                                                   className="rounded-full border border-primary-soft bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary"
                                                  >
                                                    Generate
                                                  </button>
@@ -2139,10 +2139,10 @@ const normalized = source.trim().toUpperCase();
                                          <p className="text-xs uppercase tracking-wide text-slate-400">
                                            Tone & sentiment
                                          </p>
-                                         <div className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                                         <div className="mt-4 rounded-2xl border border-primary-soft bg-primary-soft p-4">
                                            {element.sentiment ? (
                                              <>
-                                               <p className="text-sm font-semibold text-emerald-700">
+                                               <p className="text-sm font-semibold text-primary">
                                                  {element.sentiment.label}
                                                </p>
                                                {element.sentiment.score !== undefined && (
@@ -2220,7 +2220,7 @@ const normalized = source.trim().toUpperCase();
                                                                                                               </div>
                                                                                                               <div className="flex items-center gap-2">
                                                                                                                 {index === 0 ? (
-                                                                                                                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                                                                                                                  <span className="rounded-full bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary">
                                                                                                                     Current
                                                                                                                   </span>
                                                                                                                 ) : (
@@ -2233,7 +2233,7 @@ const normalized = source.trim().toUpperCase();
                                                                                                                       restoringRevisionId === revision.id ||
                                                                                                                       !revision.id
                                                                                                                     }
-                                                                                                                    className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"
+                                                                                                                    className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white"
                                                                                                                   >
                                                                                                                     {restoringRevisionId === revision.id
                                                                                                                       ? "Restoring…"
@@ -2242,7 +2242,7 @@ const normalized = source.trim().toUpperCase();
                                                                                                                 )}
                                                                                                                 {revision.id &&
                                                                                                                   revision.id === latestAiRevisionId && (
-                                                                                                                    <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700">
+                                                                                                                    <span className="rounded-full bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary">
                                                                                                                       Latest AI
                                                                                                                     </span>
                                                                                                                   )}
@@ -2336,7 +2336,7 @@ const normalized = source.trim().toUpperCase();
                                                                               clearEnrichmentContext();
                                                                               router.push("/ingestion");
                                                                             }}
-                                                                            className="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white">
+                                                                            className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white">
                                                                             Finish Session
                                                                           </button>
                                                                         </div>

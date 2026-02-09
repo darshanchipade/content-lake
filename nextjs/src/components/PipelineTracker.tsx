@@ -26,15 +26,15 @@ const STEPS: StepMeta[] = [
 
 const statusStyles = {
   done: {
-    circle: "border-slate-900 bg-slate-900 text-white shadow-[0_8px_20px_rgba(15,23,42,0.25)]",
-    label: "text-slate-900",
-    connector: "bg-slate-900",
+    circle: "border-primary bg-primary text-white shadow-[0_8px_20px_rgba(22,163,74,0.25)]",
+    label: "text-primary",
+    connector: "bg-primary",
   },
   current: {
     circle:
-      "border-slate-900 bg-slate-900 text-white shadow-[0_8px_20px_rgba(15,23,42,0.25)] scale-105",
-    label: "text-slate-900",
-    connector: "bg-slate-900",
+      "border-primary bg-primary text-white shadow-[0_8px_20px_rgba(22,163,74,0.25)] scale-105",
+    label: "text-primary",
+    connector: "bg-primary",
   },
   upcoming: {
     circle: "border-slate-200 bg-white text-slate-400",
@@ -51,7 +51,7 @@ export function PipelineTracker({ current }: { current: StepId }) {
 
   return (
     <nav className="w-full text-xs">
-      <div className="rounded-[28px] border border-slate-200 bg-white px-6 py-5 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+      <div className="rounded-[28px] border border-slate-200 bg-white px-6 py-5 shadow-[0_20px_50px_rgba(22,163,74,0.08)]">
         <div className="flex flex-col gap-6">
           <div className="flex items-center justify-between text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-400">
             <span>Pipeline</span>

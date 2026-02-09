@@ -31,7 +31,7 @@ function MessageBubble({ role, content }: ChatMessage) {
   return (
     <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`${isUser ? "bg-blue-600 text-white" : "bg-white text-[#111215]"} max-w-[80%] rounded-2xl px-4 py-3 shadow`}
+        className={`${isUser ? "bg-primary text-white" : "bg-white text-[#111215]"} max-w-[80%] rounded-2xl px-4 py-3 shadow`}
       >
         {isJson ? (
           <div className="flex flex-col gap-2">
@@ -155,7 +155,7 @@ export default function ChatbotPage() {
               type="button"
               onClick={() => void send()}
               disabled={isLoading}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent disabled:opacity-50"
             >
               Send
             </button>
