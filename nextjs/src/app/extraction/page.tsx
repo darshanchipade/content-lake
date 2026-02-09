@@ -505,7 +505,7 @@ export default function ExtractionPage() {
       });
 
       if (response.ok) {
-        const idToPass = storageResult?.id ?? context.metadata.cleansedId ?? payload.body?.cleansedId;
+        const idToPass = context.metadata.cleansedId ?? payload.body?.cleansedId;
         if (idToPass) {
           router.push(`/cleansing?id=${encodeURIComponent(idToPass)}`);
         } else {

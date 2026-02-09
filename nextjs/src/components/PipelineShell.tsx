@@ -10,7 +10,7 @@ import {
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import type { ReactNode, ComponentType, SVGProps } from "react";
 import { PipelineTracker, type StepId } from "@/components/PipelineTracker";
 
 type PipelineShellProps = {
