@@ -24,8 +24,8 @@ const statusStyles = {
   },
   success: {
     label: "Accepted",
-    className: "bg-emerald-50 text-emerald-700",
-    dot: "bg-emerald-500",
+    className: "bg-primary-soft text-primary",
+    dot: "bg-primary",
   },
   error: {
     label: "Error",
@@ -169,7 +169,7 @@ export default function UploadActivityPage() {
                   className={clsx(
                     "rounded-2xl border px-4 py-3 transition",
                     isActive
-                      ? "border-slate-900 bg-slate-900/[0.04] shadow-[0_18px_35px_rgba(15,23,42,0.08)]"
+                      ? "border-primary bg-primary/[0.04] shadow-[0_18px_35px_rgba(22,163,74,0.08)]"
                       : "border-slate-100 bg-slate-50 hover:border-slate-300",
                   )}
                 >
@@ -207,7 +207,7 @@ export default function UploadActivityPage() {
                       onClick={() => handleDownloadUpload(upload)}
                       disabled={downloading}
                       className={clsx(
-                        "inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold text-slate-900 transition hover:bg-slate-900/10",
+                        "inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold text-slate-900 transition hover:bg-primary/10",
                         downloading && "cursor-wait opacity-60",
                       )}
                     >
@@ -217,7 +217,7 @@ export default function UploadActivityPage() {
                     <button
                       type="button"
                       onClick={() => handleDeleteUpload(upload.id)}
-                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold text-slate-900 transition hover:bg-slate-900/10"
+                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold text-slate-900 transition hover:bg-primary/10"
                     >
                       <TrashIcon className="size-4" />
                       Delete
