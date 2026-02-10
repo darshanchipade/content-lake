@@ -638,9 +638,9 @@ export default function ExtractionPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 h-[calc(100vh-250px)] min-h-[600px]">
           {/* File Structure */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[700px]">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
             <div className="p-6 border-b border-gray-100">
               <h2 className="text-lg font-bold mb-4">File Structure</h2>
 
@@ -659,8 +659,8 @@ export default function ExtractionPage() {
               </div>
             </div>
 
-            <div className="p-6 flex-1 flex flex-col">
-              <div className="relative mb-6">
+            <div className="p-6 flex-1 flex flex-col min-h-0">
+              <div className="relative mb-6 flex-shrink-0">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                 <input
                   type="text"
@@ -671,21 +671,23 @@ export default function ExtractionPage() {
                 />
               </div>
 
-              <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                {snapshotLoading && context?.snapshotId && (
-                  <div className="py-10 text-center text-sm text-gray-400">Loading structure...</div>
-                )}
-                {filteredTree.length === 0 ? (
-                  <div className="py-10 text-center text-sm text-gray-400">No structure available</div>
-                ) : (
-                  renderTree(filteredTree)
-                )}
+              <div className="flex-1 overflow-auto pr-2 custom-scrollbar min-h-0">
+                <div className="min-w-max pb-4">
+                  {snapshotLoading && context?.snapshotId && (
+                    <div className="py-10 text-center text-sm text-gray-400">Loading structure...</div>
+                  )}
+                  {filteredTree.length === 0 ? (
+                    <div className="py-10 text-center text-sm text-gray-400">No structure available</div>
+                  ) : (
+                    renderTree(filteredTree)
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Data Preview */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[700px]">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
               <h2 className="text-lg font-bold">Data Preview</h2>
 
@@ -711,7 +713,7 @@ export default function ExtractionPage() {
               </div>
             </div>
 
-            <div className="p-6 bg-gray-50 flex-1 flex flex-col overflow-hidden">
+            <div className="p-6 bg-gray-50 flex-1 flex flex-col overflow-hidden min-h-0">
               <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-4">
                 <span>{context.metadata.name}</span>
                 {activeNode && (
@@ -722,7 +724,7 @@ export default function ExtractionPage() {
                 )}
               </div>
 
-              <div className="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden text-sm">
+              <div className="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden text-sm min-h-0">
                 <div className="h-full overflow-y-auto custom-scrollbar">
                   {previewMode === "raw" ? (
                     <div className="p-6 font-mono">
@@ -856,17 +858,20 @@ export default function ExtractionPage() {
       </div>
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          width: 8px;
+          height: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #e5e7eb;
+          background: #f9fafb;
           border-radius: 10px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        .custom-scrollbar::-webkit-scrollbar-thumb {
           background: #d1d5db;
+          border-radius: 10px;
+          border: 2px solid #f9fafb;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #9ca3af;
         }
       `}</style>
     </PipelineShell>
