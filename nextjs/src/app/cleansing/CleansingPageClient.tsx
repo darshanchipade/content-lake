@@ -11,7 +11,7 @@ import {
 import { PipelineShell } from "@/components/PipelineShell";
 import { pickLocale, pickPageId } from "@/lib/metadata";
 import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
-import { formatBytes } from "@/lib/format";
+import { formatBytes } from "../../lib/format";
 
 const RULES = [
   {

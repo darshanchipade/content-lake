@@ -12,7 +12,7 @@
  import { PipelineShell } from "@/components/PipelineShell";
  import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
  import { pickLocale, pickPageId } from "@/lib/metadata";
- import { formatBytes } from "@/lib/format";
+ import { formatBytes } from "../../lib/format";
 
  type Feedback = {
    state: "idle" | "loading" | "success" | "error";

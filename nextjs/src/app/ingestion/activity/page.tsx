@@ -14,6 +14,7 @@ import {
   writeUploadHistory,
   type UploadHistoryItem,
 } from "@/lib/upload-history";
+import { formatBytes } from "../../../lib/format";
 
 const statusStyles = {
   uploading: {
@@ -35,15 +36,6 @@ const statusStyles = {
   UploadHistoryItem["status"],
   { label: string; className: string; dot: string }
 >;
-
-const formatBytes = (bytes: number) => {
-  if (!Number.isFinite(bytes)) return "—";
-  if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB"];
-  const index = Math.floor(Math.log(bytes) / Math.log(1024));
-  const value = bytes / Math.pow(1024, index);
-  return `${value.toFixed(value > 9 || index === 0 ? 0 : 1)} ${units[index]}`;
-};
 
 export default function UploadActivityPage() {
   const [uploads, setUploads] = useState<UploadHistoryItem[]>([]);

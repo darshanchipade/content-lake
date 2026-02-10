@@ -27,7 +27,7 @@ import type { ExtractionSnapshot } from "@/lib/extraction-snapshot";
 import { readClientSnapshot } from "@/lib/client/snapshot-store";
 import { PipelineShell } from "@/components/PipelineShell";
 import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
-import { formatBytes } from "@/lib/format";
+import { formatBytes } from "../../lib/format";
 
 const safeJsonParse = (value: string | undefined) => {
   if (!value) return null;
