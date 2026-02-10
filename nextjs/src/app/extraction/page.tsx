@@ -566,7 +566,7 @@ export default function ExtractionPage() {
 
   return (
     <PipelineShell currentStep="extraction">
-      <div className="p-8 max-w-[1600px] mx-auto">
+      <div className="p-8 max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold">Extraction</h1>
           <div className="flex items-center gap-4">
