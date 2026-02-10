@@ -12,15 +12,7 @@
  import { PipelineShell } from "@/components/PipelineShell";
  import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
  import { pickLocale, pickPageId } from "@/lib/metadata";
-
- const formatBytes = (bytes: number) => {
-   if (!Number.isFinite(bytes)) return "—";
-   if (bytes === 0) return "0 B";
-   const units = ["B", "KB", "MB", "GB"];
-   const index = Math.floor(Math.log(bytes) / Math.log(1024));
-   const value = bytes / Math.pow(1024, index);
-   return `${value.toFixed(value > 9 || index === 0 ? 0 : 1)} ${units[index]}`;
- };
+ import { formatBytes } from "../../lib/format";
 
  type Feedback = {
    state: "idle" | "loading" | "success" | "error";
@@ -1405,6 +1397,21 @@ const normalized = source.trim().toUpperCase();
                ? context.statusHistory
                : FALLBACK_HISTORY;
              const currentStatus = statusHistory[statusHistory.length - 1]?.status ?? "WAITING_FOR_RESULTS";
+
+             useEffect(() => {
+                if (!activeId || currentStatus === "ENRICHMENT_COMPLETE" || currentStatus === "ERROR") {
+                  return;
+                }
+
+                const interval = setInterval(() => {
+                  loadContext(activeId, { showSpinner: false }).catch(() => undefined);
+                  if (context?.metadata.cleansedId) {
+                    fetchSummary(context.metadata.cleansedId, false).catch(() => undefined);
+                  }
+                }, 5000);
+
+                return () => clearInterval(interval);
+             }, [activeId, currentStatus, context?.metadata.cleansedId, loadContext]);
              const statusMeta = STATUS_COLORS[currentStatus] ?? {
                className: "text-slate-700",
                dot: "bg-slate-300",
@@ -1420,13 +1427,27 @@ const normalized = source.trim().toUpperCase();
                  "PARTIALLY_ENRICHED",
                  "ENRICHMENT_COMPLETE",
                ];
-               const index = statuses.findIndex((status) => status === currentStatus);
-               if (index >= 0) {
-                 return ((index + 1) / statuses.length) * 100;
+
+               if (currentStatus === "ENRICHMENT_COMPLETE") return 100;
+
+               const statusIndex = statuses.indexOf(currentStatus);
+               const baseProgress = statusIndex >= 0 ? ((statusIndex + 1) / statuses.length) * 100 : 20;
+
+               if (enrichmentResult?.elements && enrichmentResult.elements.length > 0) {
+                 const total = enrichmentResult.elements.length;
+                 const enriched = enrichmentResult.elements.filter(e =>
+                   e.summary || (e.status && !isSkippedStatus(e.status))
+                 ).length;
+
+                 const enrichmentRatio = enriched / total;
+
+                 if (enriched > 0) {
+                    return Math.max(baseProgress, 60 + (enrichmentRatio * 35));
+                 }
                }
-               const derivedIndex = Math.min(statusHistory.length, statuses.length);
-               return (derivedIndex / statuses.length) * 100;
-             }, [currentStatus, statusHistory.length]);
+
+               return baseProgress;
+             }, [currentStatus, enrichmentResult]);
 
              const metrics = enrichmentResult?.metrics ?? {};
              const backendTotalFieldsTagged =

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   clearCleansedContext,
@@ -9,18 +9,9 @@ import {
   type CleansedContext,
 } from "@/lib/extraction-context";
 import { PipelineShell } from "@/components/PipelineShell";
-import { StageHero } from "@/components/StageHero";
 import { pickLocale, pickPageId } from "@/lib/metadata";
 import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
-
-const formatBytes = (bytes: number) => {
-  if (!Number.isFinite(bytes)) return "—";
-  if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB"];
-  const index = Math.floor(Math.log(bytes) / Math.log(1024));
-  const value = bytes / Math.pow(1024, index);
-  return `${value.toFixed(value > 9 || index === 0 ? 0 : 1)} ${units[index]}`;
-};
+import { formatBytes } from "../../lib/format";
 
 const RULES = [
   {

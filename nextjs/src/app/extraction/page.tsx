@@ -6,7 +6,6 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   ExclamationCircleIcon,
-  InboxStackIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -27,17 +26,8 @@ import {
 import type { ExtractionSnapshot } from "@/lib/extraction-snapshot";
 import { readClientSnapshot } from "@/lib/client/snapshot-store";
 import { PipelineShell } from "@/components/PipelineShell";
-import { StageHero } from "@/components/StageHero";
 import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
-
-const formatBytes = (bytes: number) => {
-  if (!Number.isFinite(bytes)) return "—";
-  if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB"];
-  const index = Math.floor(Math.log(bytes) / Math.log(1024));
-  const value = bytes / Math.pow(1024, index);
-  return `${value.toFixed(value > 9 || index === 0 ? 0 : 1)} ${units[index]}`;
-};
+import { formatBytes } from "../../lib/format";
 
 const safeJsonParse = (value: string | undefined) => {
   if (!value) return null;
@@ -742,6 +732,14 @@ export default function ExtractionPage() {
                 <p className="text-sm font-bold text-gray-900">
                   {new Date(context.metadata.uploadedAt).toLocaleString()}
                 </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
+                <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
+                <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
               </div>
            </div>
         </div>

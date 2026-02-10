@@ -33,12 +33,16 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
     <div className="flex min-h-screen bg-[#f9fafb] text-gray-900 font-sans">
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-100 flex flex-col z-40">
-        <div className="p-8 flex items-center gap-4">
+        <div className="p-8 flex items-center gap-3">
            <img
              src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
              alt="CX Studios Logo"
-             className="h-12 w-auto"
+             className="h-10 w-auto object-contain shrink-0"
            />
+           <div className="flex flex-col min-w-0">
+             <span className="text-lg font-black tracking-tight leading-none text-gray-900 truncate">Content Lake</span>
+             <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] leading-none mt-1">Platform</span>
+           </div>
         </div>
 
         <nav className="flex-1 px-6 py-4 space-y-10 overflow-y-auto">
