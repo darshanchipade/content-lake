@@ -107,6 +107,7 @@
    ENRICHMENT_RUNNING: "Enrichment running",
    PARTIALLY_ENRICHED: "Partially enriched",
    ENRICHMENT_COMPLETE: "Enrichment complete",
+   ENRICHED_NO_ITEMS_TO_PROCESS: "No items require enrichment",
    ERROR: "Failed",
  };
 
@@ -127,6 +128,11 @@
      background: "bg-sky-50",
    },
    ENRICHMENT_COMPLETE: {
+     className: "text-primary",
+     dot: "bg-primary",
+     background: "bg-primary-soft",
+   },
+   ENRICHED_NO_ITEMS_TO_PROCESS: {
      className: "text-primary",
      dot: "bg-primary",
      background: "bg-primary-soft",
@@ -1399,7 +1405,12 @@ const normalized = source.trim().toUpperCase();
              const currentStatus = statusHistory[statusHistory.length - 1]?.status ?? "WAITING_FOR_RESULTS";
 
              useEffect(() => {
-                if (!activeId || currentStatus === "ENRICHMENT_COMPLETE" || currentStatus === "ERROR") {
+                if (
+                  !activeId ||
+                  currentStatus === "ENRICHMENT_COMPLETE" ||
+                  currentStatus === "ENRICHED_NO_ITEMS_TO_PROCESS" ||
+                  currentStatus === "ERROR"
+                ) {
                   return;
                 }
 
@@ -1428,7 +1439,7 @@ const normalized = source.trim().toUpperCase();
                  "ENRICHMENT_COMPLETE",
                ];
 
-               if (currentStatus === "ENRICHMENT_COMPLETE") return 100;
+               if (currentStatus === "ENRICHMENT_COMPLETE" || currentStatus === "ENRICHED_NO_ITEMS_TO_PROCESS") return 100;
 
                const statusIndex = statuses.indexOf(currentStatus);
                const baseProgress = statusIndex >= 0 ? ((statusIndex + 1) / statuses.length) * 100 : 20;
@@ -1628,7 +1639,9 @@ const normalized = source.trim().toUpperCase();
                          </div>
                          <div>
                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Current Status</p>
-                           <p className="text-sm font-bold text-gray-900">{STATUS_LABELS[currentStatus] ?? currentStatus}</p>
+                           <p className="text-sm font-bold text-gray-900">
+                             {currentStatus === "ENRICHED_NO_ITEMS_TO_PROCESS" ? currentStatus : (STATUS_LABELS[currentStatus] ?? currentStatus)}
+                           </p>
                          </div>
                       </div>
                    </section>
