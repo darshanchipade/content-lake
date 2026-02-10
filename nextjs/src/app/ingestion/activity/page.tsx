@@ -135,22 +135,20 @@ export default function UploadActivityPage() {
       <div className="p-8 max-w-6xl mx-auto">
         <div className="mb-8"><h1 className="text-2xl font-bold">Activity</h1></div>
 
-      <main className="mx-auto grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-3">
+      <main className="mx-auto grid gap-8 lg:grid-cols-[1fr_400px] items-start">
+        <section className="rounded-2xl border border-gray-200 bg-white shadow-sm flex flex-col min-h-[600px]">
+          <div className="p-6 border-b border-gray-100 flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs uppercase tracking-wide text-slate-400">Upload history</p>
-              <h2 className="text-lg font-semibold text-slate-900">Recent files</h2>
+              <h2 className="text-lg font-bold text-gray-900">Upload History</h2>
+              <p className="text-xs text-gray-500">Recently processed files and datasets</p>
             </div>
-            <div className="flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1 text-xs text-slate-600">
-              <InboxStackIcon className="size-4 text-slate-500" />
-              {uploads.length
-                ? `${Math.min(uploads.length, 25)} tracked`
-                : "No uploads tracked yet"}
+            <div className="flex items-center gap-2 rounded-full bg-gray-50 px-3 py-1 text-xs font-bold text-gray-600 border border-gray-100">
+              <InboxStackIcon className="size-4 text-gray-400" />
+              {uploads.length} tracked
             </div>
           </div>
 
-          <div className="mt-6 space-y-4">
+          <div className="p-6 space-y-4 overflow-y-auto custom-scrollbar max-h-[700px]">
             {uploads.length === 0 && (
               <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
                 Uploads will appear here once you submit files from the ingestion screen.
@@ -226,19 +224,16 @@ export default function UploadActivityPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-400">File metadata</p>
-              <h3 className="text-lg font-semibold text-slate-900">
-                {activeUpload ? activeUpload.name : "Select an upload"}
+        <section className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm sticky top-24">
+          <div className="flex flex-col gap-1 mb-8">
+              <h3 className="text-lg font-bold text-gray-900">
+                {activeUpload ? "File Metadata" : "Select an upload"}
               </h3>
-            </div>
-            {activeUpload && (
-              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-                {activeUpload.source}
-              </span>
-            )}
+              {activeUpload && (
+                <p className="text-xs font-bold text-primary uppercase tracking-widest">
+                  {activeUpload.name}
+                </p>
+              )}
           </div>
 
           {activeUpload ? (
