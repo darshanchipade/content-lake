@@ -451,14 +451,18 @@ export default function CleansingPageClient() {
 
   return (
     <PipelineShell currentStep="cleansing">
-      <StageHero
-        title="Cleansing"
-        description={`Review cleansed output for ${context.metadata.name} before sending it forward.`}
-        actionsSlot={<FeedbackPill feedback={enrichmentFeedback} />}
-      />
+      <div className="p-8 max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold">Cleansing</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Review cleansed output for {context.metadata.name} before sending it forward.
+            </p>
+          </div>
+          <FeedbackPill feedback={enrichmentFeedback} />
+        </div>
 
         <main className="flex flex-col gap-8">
-        {/* File Metadata */}
         <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
            <div className="flex items-center justify-between mb-8">
               <h2 className="text-lg font-bold">File Metadata</h2>
@@ -634,6 +638,7 @@ export default function CleansingPageClient() {
           </div>
         </section>
       </main>
+      </div>
     </PipelineShell>
   );
   }
