@@ -33,7 +33,12 @@ import {
 } from "@/lib/extraction-context";
 import { storeClientSnapshot } from "@/lib/client/snapshot-store";
 import type { ExtractionSnapshot } from "@/lib/extraction-snapshot";
-import { extractLocaleAndPageId, pickLocale, pickPageId } from "@/lib/metadata";
+import {
+  extractLocaleAndPageId,
+  inferLocaleFromFilename,
+  pickLocale,
+  pickPageId,
+} from "@/lib/metadata";
 import { describeSourceLabel, inferSourceType, pickString } from "@/lib/source";
 import {
   readUploadHistory,
@@ -295,14 +300,16 @@ export default function IngestionPage() {
       const parsed = safeJsonParse(text);
       if (parsed) {
         seedPreviewTree(file.name, parsed);
-        const { locale, pageId } = extractLocaleAndPageId(parsed);
-        if (locale || pageId) {
+        const filenameLocale = inferLocaleFromFilename(file.name);
+        const { locale: payloadLocale, pageId } = extractLocaleAndPageId(parsed);
+
+        if (filenameLocale || payloadLocale || pageId) {
           setUploads((previous) =>
             previous.map((upload) =>
               upload.id === uploadId
                 ? {
                     ...upload,
-                    locale: locale ?? upload.locale,
+                    locale: filenameLocale ?? payloadLocale ?? upload.locale,
                     pageId: pageId ?? upload.pageId,
                   }
                 : upload,
@@ -403,7 +410,9 @@ export default function IngestionPage() {
     }
 
     const parsedPayload = localFileText ? safeJsonParse(localFileText) : null;
-    const payloadMetadata = extractLocaleAndPageId(parsedPayload);
+    const filenameLocale = inferLocaleFromFilename(localFile.name);
+    const { locale: payloadLocale, pageId: payloadPageId } =
+      extractLocaleAndPageId(parsedPayload);
 
     try {
       const formData = new FormData();
@@ -430,8 +439,8 @@ export default function IngestionPage() {
                 backendMessage: details.message ?? item.backendMessage,
                 sourceIdentifier,
                 sourceType,
-                locale: payloadMetadata.locale ?? details.locale ?? item.locale,
-                pageId: payloadMetadata.pageId ?? details.pageId ?? item.pageId,
+                locale: filenameLocale ?? details.locale ?? payloadLocale ?? item.locale,
+                pageId: payloadPageId ?? details.pageId ?? item.pageId,
               }
             : item,
         ),
@@ -455,8 +464,8 @@ export default function IngestionPage() {
         uploadedAt: Date.now(),
         sourceIdentifier,
         sourceType,
-        locale: payloadMetadata.locale ?? details.locale,
-        pageId: payloadMetadata.pageId ?? details.pageId,
+        locale: filenameLocale ?? details.locale ?? payloadLocale,
+        pageId: payloadPageId ?? details.pageId,
       };
       const snapshotId = details.cleansedId ?? uploadId;
       let snapshotPersisted = false;

@@ -23,6 +23,22 @@ export const pickPageId = (
   record: Record<string, unknown> | null | undefined,
 ): string | undefined => pickFromRecord(record, PAGE_ID_KEYS);
 
+export const inferLocaleFromFilename = (filename: string): string | undefined => {
+  if (!filename) return undefined;
+  // Look for patterns like _zh_CN, -zh-CN, _zh-CN, etc.
+  // Match 2-letter lang + separator + 2-letter region
+  const match = filename.match(/[_\-]([a-z]{2}[_\-][A-Za-z]{2})(?=\.)/);
+  if (match) {
+    return match[1].replace("_", "-");
+  }
+  // Try simpler 2-letter locale if needed
+  const simpleMatch = filename.match(/[_\-]([a-z]{2})(?=\.)/);
+  if (simpleMatch) {
+    return simpleMatch[1];
+  }
+  return undefined;
+};
+
 export const extractLocaleAndPageId = (
   payload: unknown,
 ): { locale?: string; pageId?: string } => {

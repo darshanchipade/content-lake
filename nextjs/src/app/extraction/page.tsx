@@ -5,6 +5,10 @@ import {
   CheckCircleIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  CircleStackIcon,
+  CodeBracketIcon,
+  CubeIcon,
+  DocumentTextIcon,
   ExclamationCircleIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
@@ -246,8 +250,25 @@ export default function ExtractionPage() {
 
   const hydrateStructure = useCallback(
     (tree?: TreeNode[], rawJson?: string) => {
+      const getRootName = () => {
+        const payload = loadExtractionContext();
+        return payload?.metadata?.name || "Content.JSON";
+      };
+
       if (tree && tree.length) {
-        applyTreeFromNodes(tree);
+        // If it's already wrapped, don't wrap again
+        if (tree.length === 1 && tree[0].id === "root") {
+          applyTreeFromNodes(tree);
+        } else {
+          const rootNode: TreeNode = {
+            id: "root",
+            label: getRootName(),
+            path: "root",
+            type: "object",
+            children: tree,
+          };
+          applyTreeFromNodes([rootNode]);
+        }
         setParsedJson(rawJson ? safeJsonParse(rawJson) : null);
         return;
       }
@@ -256,9 +277,16 @@ export default function ExtractionPage() {
         const parsed = safeJsonParse(rawJson);
         setParsedJson(parsed);
         if (parsed) {
-          const nodes = buildTreeFromJson(parsed, [], { value: 0 });
+          const nodes = buildTreeFromJson(parsed, ["root"], { value: 0 });
           if (nodes.length) {
-            applyTreeFromNodes(nodes);
+            const rootNode: TreeNode = {
+              id: "root",
+              label: getRootName(),
+              path: "root",
+              type: "object",
+              children: nodes,
+            };
+            applyTreeFromNodes([rootNode]);
           } else {
             setTreeNodes([]);
             setNodeMap(new Map<string, TreeNode>());
@@ -396,14 +424,16 @@ export default function ExtractionPage() {
       const hasChildren = Boolean(node.children?.length);
       const expanded = expandedNodes.has(node.id);
       const selected = activeNodeId === node.id;
+      const isRoot = node.id === "root";
 
       return (
         <div key={node.id} className="select-none">
           <div
             className={clsx(
-              "group flex items-center gap-2 py-1 px-2 rounded-md hover:bg-primary-soft/50 cursor-pointer transition-colors",
+              "group flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-primary-soft/30 cursor-pointer transition-colors",
               selected && "bg-primary-soft/70",
-              level > 0 && "ml-4"
+              isRoot && "bg-primary-soft/20 mb-2",
+              level > 0 && !isRoot && "ml-4",
             )}
             onClick={() => {
               setActiveNodeId(node.id);
@@ -411,26 +441,62 @@ export default function ExtractionPage() {
             }}
           >
             {hasChildren ? (
-              <ChevronDownIcon className={clsx("size-3 text-gray-400 transition-transform", !expanded && "-rotate-90")} />
+              <ChevronDownIcon
+                className={clsx(
+                  "size-3 text-gray-400 transition-transform",
+                  !expanded && "-rotate-90",
+                )}
+              />
             ) : (
               <div className="size-3" />
             )}
 
-            <input
-              type="checkbox"
-              className="size-3.5 rounded border-gray-300 text-primary focus:ring-primary"
-              checked={true}
-              readOnly
-              onClick={(e) => e.stopPropagation()}
-            />
+            {isRoot ? (
+              <div className="flex items-center gap-2 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <div className="size-4 rounded bg-green-600 flex items-center justify-center">
+                    <CheckCircleIcon className="size-3 text-white" />
+                  </div>
+                  <div className="p-1 rounded bg-purple-100 text-purple-600">
+                    <CodeBracketIcon className="size-3.5" />
+                  </div>
+                </div>
+                <span className="text-sm font-semibold text-gray-900">{node.label}</span>
+              </div>
+            ) : (
+              <>
+                <input
+                  type="checkbox"
+                  className="size-3.5 rounded border-gray-300 text-primary focus:ring-primary"
+                  checked={true}
+                  readOnly
+                  onClick={(e) => e.stopPropagation()}
+                />
 
-            <span className={clsx("text-sm flex-1", selected ? "text-primary font-bold" : "text-gray-700")}>{node.label}</span>
-            {!hasChildren && (
-              <span className="text-[10px] text-gray-400 font-mono uppercase">string</span>
+                {hasChildren ? (
+                  <CircleStackIcon className="size-4 text-green-600" />
+                ) : (
+                  <CubeIcon className="size-4 text-gray-400" />
+                )}
+
+                <span
+                  className={clsx(
+                    "text-sm flex-1",
+                    selected ? "text-primary font-bold" : "text-gray-700",
+                  )}
+                >
+                  {node.label}
+                </span>
+                {!hasChildren && (
+                  <span className="text-[10px] text-gray-400 font-mono uppercase px-1.5 py-0.5 bg-gray-100 rounded">
+                    string
+                  </span>
+                )}
+              </>
             )}
           </div>
           {hasChildren && expanded && (
-            <div className="mt-0.5 border-l border-gray-100 ml-1.5">
+            <div className={clsx("mt-0.5 border-l border-gray-100", isRoot ? "ml-4" : "ml-1.5")}>
               {renderTree(node.children!, level + 1)}
             </div>
           )}
@@ -572,9 +638,9 @@ export default function ExtractionPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 h-[calc(100vh-250px)] min-h-[600px]">
           {/* File Structure */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[700px]">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
             <div className="p-6 border-b border-gray-100">
               <h2 className="text-lg font-bold mb-4">File Structure</h2>
 
@@ -593,8 +659,8 @@ export default function ExtractionPage() {
               </div>
             </div>
 
-            <div className="p-6 flex-1 flex flex-col">
-              <div className="relative mb-6">
+            <div className="p-6 flex-1 flex flex-col min-h-0">
+              <div className="relative mb-6 flex-shrink-0">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                 <input
                   type="text"
@@ -605,21 +671,23 @@ export default function ExtractionPage() {
                 />
               </div>
 
-              <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                {snapshotLoading && context?.snapshotId && (
-                  <div className="py-10 text-center text-sm text-gray-400">Loading structure...</div>
-                )}
-                {filteredTree.length === 0 ? (
-                  <div className="py-10 text-center text-sm text-gray-400">No structure available</div>
-                ) : (
-                  renderTree(filteredTree)
-                )}
+              <div className="flex-1 overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
+                <div className="min-w-max pb-4">
+                  {snapshotLoading && context?.snapshotId && (
+                    <div className="py-10 text-center text-sm text-gray-400">Loading structure...</div>
+                  )}
+                  {filteredTree.length === 0 ? (
+                    <div className="py-10 text-center text-sm text-gray-400">No structure available</div>
+                  ) : (
+                    renderTree(filteredTree)
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Data Preview */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[700px]">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
               <h2 className="text-lg font-bold">Data Preview</h2>
 
@@ -645,7 +713,7 @@ export default function ExtractionPage() {
               </div>
             </div>
 
-            <div className="p-6 bg-gray-50 flex-1 flex flex-col overflow-hidden">
+            <div className="p-6 bg-gray-50 flex-1 flex flex-col overflow-hidden min-h-0">
               <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-4">
                 <span>{context.metadata.name}</span>
                 {activeNode && (
@@ -656,32 +724,76 @@ export default function ExtractionPage() {
                 )}
               </div>
 
-              <div className="flex-1 bg-white rounded-xl border border-gray-200 p-6 overflow-hidden font-mono text-sm">
+              <div className="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden text-sm min-h-0">
                 <div className="h-full overflow-y-auto custom-scrollbar">
                   {previewMode === "raw" ? (
-                    <pre className="text-gray-800">
-                       {activeValue === undefined
-                        ? "/* Select a field to see its raw value */"
-                        : typeof activeValue === "object"
-                          ? JSON.stringify(activeValue, null, 2)
-                          : String(activeValue)}
-                    </pre>
+                    <div className="p-6 font-mono">
+                      <pre className="text-gray-800">
+                        {activeValue === undefined
+                          ? "/* Select a field to see its raw value */"
+                          : typeof activeValue === "object"
+                            ? JSON.stringify(activeValue, null, 2)
+                            : String(activeValue)}
+                      </pre>
+                    </div>
                   ) : (
-                    <div className="space-y-4">
-                       {activeNode ? (
-                         <div className="border-b border-gray-50 pb-4">
-                           <div className="text-xs text-gray-400 uppercase mb-1 font-sans">{activeNode.label}</div>
-                           <div className="text-sm text-gray-900 font-sans">
-                             {activeValue === undefined
-                                ? "—"
-                                : typeof activeValue === "object"
-                                  ? JSON.stringify(activeValue, null, 2)
-                                  : String(activeValue)}
-                           </div>
-                         </div>
-                       ) : (
-                         <div className="text-gray-400 font-sans italic">Select a field to preview data</div>
-                       )}
+                    <div className="h-full flex flex-col">
+                      {activeNode ? (
+                        <table className="w-full text-left border-collapse">
+                          <thead className="sticky top-0 bg-gray-50 shadow-sm z-10">
+                            <tr>
+                              <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                                Field Name
+                              </th>
+                              <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                                Value
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-50">
+                            {(() => {
+                              const getNodesToDisplay = () => {
+                                if (!activeNode) return [];
+                                if (activeNode.children && activeNode.children.length > 0) {
+                                  return activeNode.children;
+                                }
+                                return [activeNode];
+                              };
+
+                              const nodesToDisplay = getNodesToDisplay();
+
+                              return nodesToDisplay.map((node) => {
+                                const val =
+                                  "value" in node
+                                    ? node.value
+                                    : getValueAtPath(
+                                        parsedJson,
+                                        node.path.replace(/^[^\.]+\.?/, ""),
+                                      );
+
+                                return (
+                                  <tr key={node.id} className="hover:bg-gray-50/50">
+                                    <td className="px-6 py-4 font-medium text-gray-700">
+                                      {node.label}
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-600 break-words max-w-xs">
+                                      {val === undefined
+                                        ? "—"
+                                        : typeof val === "object"
+                                          ? JSON.stringify(val)
+                                          : String(val)}
+                                    </td>
+                                  </tr>
+                                );
+                              });
+                            })()}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div className="flex-1 flex items-center justify-center text-gray-400 italic">
+                          Select a field to preview data
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -746,17 +858,25 @@ export default function ExtractionPage() {
       </div>
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          width: 10px;
+          height: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
+          background: #f3f4f6;
+          border-radius: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #e5e7eb;
-          border-radius: 10px;
+          background: #9ca3af;
+          border-radius: 5px;
+          border: 2px solid #f3f4f6;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #d1d5db;
+          background: #6b7280;
+        }
+        /* Ensure the scrollbar is always visible or at least very obvious */
+        .custom-scrollbar {
+          scrollbar-width: auto;
+          scrollbar-color: #9ca3af #f3f4f6;
         }
       `}</style>
     </PipelineShell>
