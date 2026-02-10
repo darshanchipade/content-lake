@@ -369,19 +369,21 @@ export default function CleansingPageClient() {
       }
 
       const now = Date.now();
+      const initialStatus =
+        typeof payload?.body?.status === "string" ? payload.body.status : "WAITING_FOR_RESULTS";
+
+      const statusHistory =
+        initialStatus === "ENRICHED_NO_ITEMS_TO_PROCESS"
+          ? [{ status: initialStatus, timestamp: now }]
+          : [
+              { status: "ENRICHMENT_TRIGGERED", timestamp: now },
+              { status: initialStatus, timestamp: now },
+            ];
+
       saveEnrichmentContext({
         metadata: context.metadata,
         startedAt: now,
-        statusHistory: [
-          { status: "ENRICHMENT_TRIGGERED", timestamp: now },
-          {
-            status:
-              typeof payload?.body?.status === "string"
-                ? payload.body.status
-                : "WAITING_FOR_RESULTS",
-            timestamp: now,
-          },
-        ],
+        statusHistory,
       });
 
       setEnrichmentFeedback({
