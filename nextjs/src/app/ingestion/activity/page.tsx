@@ -277,17 +277,11 @@ export default function UploadActivityPage() {
                 </div>
                 <div>
                   <dt className="text-xs uppercase tracking-wide text-slate-400">Backend status</dt>
-                  <dd className="text-sm font-semibold text-slate-900">
+                  <dd className="text-sm font-semibold text-slate-900 break-all">
                     {activeUpload.backendStatus ?? "—"}
                   </dd>
                 </div>
               </dl>
-              {activeUpload.backendMessage && (
-                <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-700">
-                  <p className="text-xs uppercase tracking-wide text-slate-400">Backend message</p>
-                  <p className="mt-1">{activeUpload.backendMessage}</p>
-                </div>
-              )}
             </div>
           ) : (
             <div className="mt-10 rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
