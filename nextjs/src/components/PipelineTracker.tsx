@@ -54,8 +54,8 @@ export function PipelineTracker({ current }: { current: StepId }) {
   );
 
   return (
-    <nav className="w-full">
-      <div className="flex items-center justify-between gap-2 lg:gap-4">
+    <nav className="w-full overflow-hidden">
+      <div className="flex items-center justify-between gap-1 sm:gap-2 lg:gap-4">
         {STEPS.map((step, index) => {
           const status =
             index < currentIndex
@@ -75,28 +75,28 @@ export function PipelineTracker({ current }: { current: StepId }) {
                 index < STEPS.length - 1 && "flex-1"
               )}
             >
-              <div className="flex flex-col items-center gap-2 lg:gap-3 relative shrink-0">
+              <div className="flex flex-col items-center gap-1.5 lg:gap-3 relative shrink-0 max-w-[60px] sm:max-w-none">
                 <div
                   className={clsx(
-                    "flex size-9 lg:size-14 items-center justify-center rounded-full border-2 transition-all duration-200 relative",
+                    "flex size-8 sm:size-9 lg:size-14 items-center justify-center rounded-full border-2 transition-all duration-200 relative",
                     styles.circle
                   )}
                 >
-                  <Icon className={clsx("size-4 lg:size-6", styles.iconColor)} />
+                  <Icon className={clsx("size-3.5 sm:size-4 lg:size-6", styles.iconColor)} />
                   {status === "done" && (
                      <div className="absolute -right-1 -bottom-1 bg-white rounded-full p-0.5 border border-primary">
-                        <CheckIcon className="size-3 text-primary stroke-[3px]" />
+                        <CheckIcon className="size-2 sm:size-3 text-primary stroke-[3px]" />
                      </div>
                   )}
                   {status === "current" && (
                      <div className="absolute -right-1 -bottom-1 bg-white rounded-full p-0.5 border border-primary">
-                        <div className="size-3 flex items-center justify-center">
-                           <div className="size-1.5 bg-primary rounded-full animate-pulse" />
+                        <div className="size-2 sm:size-3 flex items-center justify-center">
+                           <div className="size-1 sm:size-1.5 bg-primary rounded-full animate-pulse" />
                         </div>
                      </div>
                   )}
                 </div>
-                <span className={clsx("text-[9px] lg:text-xs whitespace-nowrap font-bold uppercase tracking-tighter lg:tracking-normal", styles.label)}>
+                <span className={clsx("text-[7px] sm:text-[9px] lg:text-xs text-center font-bold uppercase tracking-tighter lg:tracking-normal leading-tight", styles.label)}>
                   {step.label}
                 </span>
               </div>
