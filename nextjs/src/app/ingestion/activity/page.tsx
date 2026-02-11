@@ -124,11 +124,11 @@ export default function UploadActivityPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <div className="p-8 max-w-6xl mx-auto">
-        <div className="mb-8"><h1 className="text-2xl font-bold">Activity</h1></div>
+      <div className="p-4 lg:p-8 max-w-[1440px] mx-auto">
+        <div className="mb-8"><h1 className="text-xl lg:text-2xl font-bold">Activity</h1></div>
 
       <main className="mx-auto grid gap-8 lg:grid-cols-[1fr_400px] items-start">
-        <section className="rounded-2xl border border-gray-200 bg-white shadow-sm flex flex-col min-h-[600px]">
+        <section className="rounded-2xl border border-gray-200 bg-white shadow-sm flex flex-col h-[600px] lg:h-auto lg:min-h-[600px]">
           <div className="p-6 border-b border-gray-100 flex items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold text-gray-900">Upload History</h2>
@@ -216,7 +216,7 @@ export default function UploadActivityPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm sticky top-24">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm sticky top-24">
           <div className="flex flex-col gap-1 mb-8">
               <h3 className="text-lg font-bold text-gray-900">
                 {activeUpload ? "File Metadata" : "Select an upload"}
