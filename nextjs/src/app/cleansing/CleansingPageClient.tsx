@@ -604,7 +604,7 @@ export default function CleansingPageClient() {
                   type="button"
                   onClick={handleSendToEnrichment}
                   disabled={enrichmentFeedback.state === "loading"}
-                  className="rounded-full bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-black disabled:opacity-50 w-full"
+                  className="rounded-full bg-primary py-2.5 text-sm font-semibold text-white transition hover:bg-accent disabled:opacity-50 w-full"
                 >
                   {enrichmentFeedback.state === "loading"
                     ? "Sending..."
