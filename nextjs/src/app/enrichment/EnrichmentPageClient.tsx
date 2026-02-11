@@ -1613,8 +1613,8 @@ export default function EnrichmentPageClient() {
     <PipelineShell currentStep="enrichment">
       <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between text-center lg:text-left">
               <div className="space-y-1 sm:space-y-2">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Enrichment</h1>
                 <p className="text-xs sm:text-sm font-medium text-slate-500 lg:max-w-2xl">
@@ -1625,9 +1625,9 @@ export default function EnrichmentPageClient() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr] items-start">
+        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1.2fr_1fr] items-start">
           <div className="flex flex-col gap-8">
-            <section className="bg-white rounded-3xl border border-slate-200 p-6 lg:p-10 shadow-sm">
+            <section className="bg-white rounded-3xl border border-slate-200 p-6 lg:p-8 shadow-sm">
               <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between mb-8">
                 <div className="flex-1">
                   <p className="text-xs uppercase tracking-wide text-gray-400 font-bold mb-2">Status</p>
@@ -1786,9 +1786,9 @@ export default function EnrichmentPageClient() {
                                           </p>
                                         </div>
 
-                                        <div className="grid gap-4 lg:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                                        <div className="grid gap-4 lg:gap-6 lg:grid-cols-2 xl:grid-cols-3 items-start">
                                           {/* Content Insights Card */}
-                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden h-auto">
                                             <button
                                               type="button"
                                               onClick={() => toggleSubSection(element.id, "insights")}
@@ -2221,7 +2221,7 @@ export default function EnrichmentPageClient() {
             </section>
 
             <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-              <div className="mb-6">
+              <div className="mb-6 text-center sm:text-left">
                 <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Finalize</p>
                 <h2 className="text-lg font-bold text-gray-900">Session complete?</h2>
               </div>
@@ -2232,14 +2232,14 @@ export default function EnrichmentPageClient() {
                     clearEnrichmentContext();
                     router.push("/ingestion");
                   }}
-                  className="rounded-full bg-primary py-3 text-sm font-bold text-white shadow-lg hover:bg-accent transition-all"
+                  className="rounded-full bg-primary py-3 text-sm font-bold text-white shadow-lg hover:bg-accent transition-all text-center flex items-center justify-center"
                 >
                   Finish Session
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push("/cleansing")}
-                  className="text-xs font-bold text-gray-500 hover:text-black transition-colors py-2"
+                  className="text-xs font-bold text-gray-500 hover:text-black transition-colors py-2 text-center"
                 >
                   Back to Cleansing
                 </button>
