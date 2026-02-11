@@ -124,12 +124,17 @@ export default function UploadActivityPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <div className="p-4 lg:p-8 max-w-[1440px] mx-auto">
-        <div className="mb-8"><h1 className="text-xl lg:text-2xl font-bold">Activity</h1></div>
+      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-2xl lg:text-3xl font-bold text-black">Activity</h1>
+          <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
+            Review and manage your recently processed files.
+          </p>
+        </div>
 
-      <main className="mx-auto grid gap-8 lg:grid-cols-[1fr_400px] items-start">
-        <section className="rounded-2xl border border-gray-200 bg-white shadow-sm flex flex-col h-[600px] lg:h-auto lg:min-h-[600px]">
-          <div className="p-6 border-b border-gray-100 flex items-center justify-between gap-3">
+      <main className="mx-auto grid gap-6 lg:gap-8 lg:grid-cols-[1fr_400px] items-start">
+        <section className="rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col h-[500px] lg:h-auto lg:min-h-[600px] overflow-hidden">
+          <div className="p-5 lg:p-6 border-b border-slate-100 flex items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold text-gray-900">Upload History</h2>
               <p className="text-xs text-gray-500">Recently processed files and datasets</p>
@@ -140,7 +145,7 @@ export default function UploadActivityPage() {
             </div>
           </div>
 
-          <div className="p-6 space-y-4 overflow-y-auto custom-scrollbar max-h-[700px]">
+          <div className="p-4 lg:p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
             {uploads.length === 0 && (
               <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
                 Uploads will appear here once you submit files from the ingestion screen.
@@ -216,10 +221,10 @@ export default function UploadActivityPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm sticky top-24">
-          <div className="flex flex-col gap-1 mb-8">
-              <h3 className="text-lg font-bold text-gray-900">
-                {activeUpload ? "File Metadata" : "Select an upload"}
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm lg:sticky lg:top-24">
+          <div className="flex flex-col gap-1 mb-6 lg:mb-8">
+              <h3 className="text-lg lg:text-xl font-bold text-slate-900">
+                {activeUpload ? "File Metadata" : "Details"}
               </h3>
               {activeUpload && (
                 <p className="text-xs font-bold text-primary uppercase tracking-widest">

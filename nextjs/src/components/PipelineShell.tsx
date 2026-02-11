@@ -177,8 +177,8 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
                   Step {STEPS.findIndex(s => s.id === currentStep) + 1} of {STEPS.length}
                 </span>
               </div>
-              <div className="overflow-x-auto scrollbar-none">
-                <div className="min-w-[450px] lg:min-w-0 pb-2">
+              <div className="overflow-x-auto lg:overflow-x-visible scrollbar-none">
+                <div className="min-w-[360px] lg:min-w-0 pb-2">
                   <PipelineTracker current={currentStep} />
                 </div>
               </div>
