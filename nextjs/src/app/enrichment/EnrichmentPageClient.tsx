@@ -1590,12 +1590,12 @@ const normalized = source.trim().toUpperCase();
 
              return (
                <PipelineShell currentStep="enrichment">
-                 <div className="p-8 max-w-6xl mx-auto">
-                   <div className="mb-8"><h1 className="text-2xl font-bold">Enrichment</h1></div>
+                 <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+                   <div className="mb-6 lg:mb-8"><h1 className="text-xl lg:text-2xl font-bold">Enrichment</h1></div>
 
                    <main className="flex flex-col gap-8">
                    {/* File Metadata */}
-                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
                       <div className="flex items-center justify-between mb-8">
                          <h2 className="text-lg font-bold">File Metadata</h2>
                          <button
@@ -1654,8 +1654,8 @@ const normalized = source.trim().toUpperCase();
                       </div>
                    </section>
 
-                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-8">
+                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
+                     <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between mb-8">
                        <div>
                          <p className="text-xs uppercase tracking-wide text-gray-400">Status</p>
                          <div className={`mt-2 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${statusMeta.background} ${statusMeta.className}`}>
@@ -1706,7 +1706,7 @@ const normalized = source.trim().toUpperCase();
                                     </div>
                                   </section>
 
-                                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
                                      <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Status timeline</p>
                                      <h2 className="text-lg font-bold text-gray-900">Pipeline events</h2>
                                      <div className="mt-6 space-y-4 border-l border-gray-100 pl-6">
@@ -1732,7 +1732,7 @@ const normalized = source.trim().toUpperCase();
                                     </div>
                                   </section>
 
-                                   <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
                                      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
                                        <div>
                                          <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Insights</p>
@@ -2348,7 +2348,7 @@ const normalized = source.trim().toUpperCase();
                                                                       )}
                                                                     </section>
 
-                                                                    <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                                                    <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
                                                                       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                                                         <div>
                                                                           <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Next steps</p>

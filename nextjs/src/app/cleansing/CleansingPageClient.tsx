@@ -444,10 +444,10 @@ export default function CleansingPageClient() {
 
   return (
     <PipelineShell currentStep="cleansing">
-      <div className="p-8 max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold">Cleansing</h1>
+            <h1 className="text-xl lg:text-2xl font-bold">Cleansing</h1>
             <p className="text-sm text-gray-500 mt-1">
               Review cleansed output for {context.metadata.name} before sending it forward.
             </p>
@@ -513,7 +513,7 @@ export default function CleansingPageClient() {
            </div>
         </section>
 
-        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+        <section className="bg-white rounded-2xl border border-gray-200 p-4 lg:p-8 shadow-sm">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
             <div>
               <p className="text-xs uppercase tracking-wide text-gray-400">Items</p>
@@ -545,8 +545,8 @@ export default function CleansingPageClient() {
             </div>
           ) : (
             <div className="rounded-2xl border border-gray-100 overflow-hidden">
-              <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
-              <table className="w-full text-left text-sm">
+              <div className="max-h-[600px] overflow-x-auto overflow-y-auto custom-scrollbar">
+              <table className="w-full text-left text-sm min-w-[600px]">
                 <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500 sticky top-0">
                   <tr>
                     <th className="px-6 py-4 font-bold">Field</th>

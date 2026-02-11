@@ -1035,8 +1035,8 @@ export default function IngestionPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <div className="p-8 max-w-[1600px] mx-auto">
-        <h1 className="text-2xl font-bold mb-8">Ingestion</h1>
+      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+        <h1 className="text-xl lg:text-2xl font-bold mb-6 lg:mb-8">Ingestion</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
           <section className="space-y-8">
@@ -1183,7 +1183,7 @@ export default function IngestionPage() {
             </div>
           </section>
 
-          <aside className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm flex flex-col h-[700px] sticky top-24">
+          <aside className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm flex flex-col h-[500px] lg:h-[700px] sticky top-24">
             <h2 className="text-lg font-bold mb-6">Preview Structure</h2>
             <div className="flex-1 overflow-y-auto custom-scrollbar">
               {treeNodes.length === 0 ? (
