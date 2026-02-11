@@ -124,7 +124,7 @@ export default function UploadActivityPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <div className="p-4 lg:p-8 ">
+      <div className="p-4 lg:p-8 max-w-[1440px] mx-auto">
         <div className="mb-8"><h1 className="text-xl lg:text-2xl font-bold">Activity</h1></div>
 
       <main className="mx-auto grid gap-8 lg:grid-cols-[1fr_400px] items-start">

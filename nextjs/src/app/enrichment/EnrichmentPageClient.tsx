@@ -1590,7 +1590,7 @@ const normalized = source.trim().toUpperCase();
 
              return (
                <PipelineShell currentStep="enrichment">
-                 <div className="p-4 lg:p-8 ">
+                 <div className="p-4 lg:p-8 max-w-[1440px] mx-auto">
                    <div className="mb-6 lg:mb-8"><h1 className="text-xl lg:text-2xl font-bold">Enrichment</h1></div>
 
                    <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 items-start">
