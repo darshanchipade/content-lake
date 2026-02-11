@@ -638,9 +638,9 @@ export default function ExtractionPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 h-[calc(100vh-250px)] min-h-[600px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
           {/* File Structure */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-full">
             <div className="p-6 border-b border-gray-100">
               <h2 className="text-lg font-bold mb-4">File Structure</h2>
 
@@ -687,7 +687,7 @@ export default function ExtractionPage() {
           </div>
 
           {/* Data Preview */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-full">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
               <h2 className="text-lg font-bold">Data Preview</h2>
 
