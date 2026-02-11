@@ -178,7 +178,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
                 </span>
               </div>
               <div className="overflow-x-auto lg:overflow-x-visible scrollbar-none">
-                <div className="min-w-[360px] lg:min-w-0 pb-2">
+                <div className="min-w-[280px] lg:min-w-0 pb-2">
                   <PipelineTracker current={currentStep} />
                 </div>
               </div>

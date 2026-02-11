@@ -235,27 +235,27 @@ export default function UploadActivityPage() {
 
           {activeUpload ? (
             <div className="mt-5 space-y-5">
-              <dl className="grid gap-4 sm:grid-cols-2">
+              <dl className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4">
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">Uploaded</dt>
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</dt>
                   <dd className="text-sm font-semibold text-slate-900">
                     {new Date(activeUpload.createdAt).toLocaleString()}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">Size</dt>
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</dt>
                   <dd className="text-sm font-semibold text-slate-900">
                     {formatBytes(activeUpload.size)}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">Source type</dt>
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source type</dt>
                   <dd className="text-sm font-semibold text-slate-900">
                     {activeUpload.sourceType ?? activeUpload.source}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
                     Source identifier
                   </dt>
                   <dd className="text-sm font-semibold text-slate-900 break-all">
@@ -263,25 +263,25 @@ export default function UploadActivityPage() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">Cleansed ID</dt>
-                  <dd className="text-sm font-semibold text-slate-900">
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</dt>
+                  <dd className="text-sm font-semibold text-slate-900 break-all">
                     {activeUpload.cleansedId ?? "—"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">Locale</dt>
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</dt>
                   <dd className="text-sm font-semibold text-slate-900">
                     {activeUpload.locale ?? "—"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">Page ID</dt>
-                  <dd className="text-sm font-semibold text-slate-900">
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</dt>
+                  <dd className="text-sm font-semibold text-slate-900 break-all">
                     {activeUpload.pageId ?? "—"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-400">Backend status</dt>
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Backend status</dt>
                   <dd className="text-sm font-semibold text-slate-900 break-all">
                     {activeUpload.backendStatus ?? "—"}
                   </dd>

@@ -492,7 +492,7 @@ export default function CleansingPageClient() {
                   No cleansed items available yet.
                 </div>
               ) : (
-                <div className="rounded-2xl border border-slate-100 overflow-hidden">
+                <div className="rounded-2xl border border-slate-100 overflow-hidden w-full">
                   <div className="max-h-[800px] overflow-y-auto custom-scrollbar">
                     {/* Desktop Table */}
                     <table className="hidden lg:table w-full text-left text-sm">
@@ -537,11 +537,11 @@ export default function CleansingPageClient() {
                           <div className="grid gap-4">
                             <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
                               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Original</p>
-                              <p className="text-xs text-slate-500 leading-relaxed break-words">{row.original ?? "—"}</p>
+                              <p className="text-xs text-slate-500 leading-relaxed break-all">{row.original ?? "—"}</p>
                             </div>
                             <div className="bg-primary-soft/30 rounded-xl p-3 border border-primary-soft">
                               <p className="text-[9px] font-bold text-primary uppercase tracking-widest mb-2">Cleansed</p>
-                              <p className="text-xs text-slate-900 font-bold leading-relaxed break-words">{row.cleansed ?? "—"}</p>
+                              <p className="text-xs text-slate-900 font-bold leading-relaxed break-all">{row.cleansed ?? "—"}</p>
                             </div>
                           </div>
                         </div>
@@ -582,7 +582,7 @@ export default function CleansingPageClient() {
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
                     <p className="text-sm font-bold text-gray-900">{context.status ?? "Pending"}</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4">
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
                       <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>

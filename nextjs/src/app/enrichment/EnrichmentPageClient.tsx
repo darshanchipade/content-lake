@@ -1776,12 +1776,12 @@ export default function EnrichmentPageClient() {
                                       )}
                                     </button>
                                     {isDetailVisible && (
-                                      <div className="space-y-8 border-t border-slate-100 bg-slate-50/30 p-8">
+                                      <div className="space-y-6 sm:space-y-8 border-t border-slate-100 bg-slate-50/30 p-4 sm:p-8">
                                         <div>
                                           <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black mb-3">
                                             Enriched Copy
                                           </p>
-                                          <p className="text-sm text-slate-700 leading-relaxed">
+                                          <p className="text-sm text-slate-700 leading-relaxed break-words">
                                             {element.copy ?? "No enriched copy provided yet."}
                                           </p>
                                         </div>
@@ -1873,7 +1873,7 @@ export default function EnrichmentPageClient() {
                                                     placeholder="AI Summary"
                                                   />
                                                 ) : (
-                                                  <p className="text-sm text-slate-600 leading-relaxed bg-slate-50/50 rounded-2xl p-4">
+                                                  <p className="text-sm text-slate-600 leading-relaxed bg-slate-50/50 rounded-2xl p-3 sm:p-4 break-words">
                                                     {element.summary ?? "—"}
                                                   </p>
                                                 )}
@@ -2031,7 +2031,7 @@ export default function EnrichmentPageClient() {
                                           </div>
 
                                           {/* Tone & Sentiment Card */}
-                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
                                             <button
                                               type="button"
                                               onClick={() => toggleSubSection(element.id, "tone")}
@@ -2051,16 +2051,18 @@ export default function EnrichmentPageClient() {
                                             </button>
 
                                             <div className={clsx(
-                                              "px-4 pb-4 lg:p-6 lg:pt-0 lg:block",
-                                              isToneOpen ? "block" : "hidden"
+                                              "flex-col px-4 pb-4 lg:px-6 lg:pb-6 lg:flex",
+                                              isToneOpen ? "flex" : "hidden"
                                             )}>
-                                            {element.sentiment ? (
-                                              <div className="inline-flex items-center rounded-2xl bg-primary-soft/50 px-6 py-3 border border-primary-soft">
-                                                <span className="text-sm font-bold text-primary">{element.sentiment.label}</span>
+                                              <div className="flex-1">
+                                                {element.sentiment ? (
+                                                  <div className="inline-flex items-center rounded-2xl bg-primary-soft/50 px-6 py-3 border border-primary-soft">
+                                                    <span className="text-sm font-bold text-primary">{element.sentiment.label}</span>
+                                                  </div>
+                                                ) : (
+                                                  <p className="text-xs text-slate-400 italic">Pending analysis...</p>
+                                                )}
                                               </div>
-                                            ) : (
-                                              <p className="text-xs text-slate-400 italic">Pending analysis...</p>
-                                            )}
                                             </div>
                                           </div>
                                         </div>
@@ -2159,14 +2161,14 @@ export default function EnrichmentPageClient() {
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</p>
                     <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.cleansedId ?? "—"}</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4">
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
                       <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
                     </div>
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
-                      <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
+                      <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.pageId ?? "—"}</p>
                     </div>
                   </div>
                   <div>

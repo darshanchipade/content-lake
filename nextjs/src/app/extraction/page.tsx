@@ -444,7 +444,7 @@ export default function ExtractionPage() {
               "group flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-primary-soft/30 cursor-pointer transition-colors",
               selected && "bg-primary-soft/70",
               isRoot && "bg-primary-soft/20 mb-2",
-              level > 0 && !isRoot && "ml-4",
+              level > 0 && !isRoot && "ml-2 sm:ml-4",
             )}
             onClick={() => {
               setActiveNodeId(node.id);
@@ -507,7 +507,7 @@ export default function ExtractionPage() {
             )}
           </div>
           {hasChildren && expanded && (
-            <div className={clsx("mt-0.5 border-l border-gray-100", isRoot ? "ml-4" : "ml-1.5")}>
+            <div className={clsx("mt-0.5 border-l border-gray-100", isRoot ? "ml-2 sm:ml-4" : "ml-1 sm:ml-1.5")}>
               {renderTree(node.children!, level + 1)}
             </div>
           )}
@@ -830,7 +830,7 @@ export default function ExtractionPage() {
                                     <td className="px-6 py-4 font-medium text-gray-700">
                                       {node.label}
                                     </td>
-                                    <td className="px-6 py-4 text-gray-600 break-words max-w-xs">
+                                    <td className="px-6 py-4 text-gray-600 break-all max-w-xs">
                                       {val === undefined
                                         ? "—"
                                         : typeof val === "object"
@@ -886,7 +886,7 @@ export default function ExtractionPage() {
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Identifier</p>
                 <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4">
                 <div>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
                   <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
@@ -898,7 +898,7 @@ export default function ExtractionPage() {
               </div>
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
-                <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
+                <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.pageId ?? "—"}</p>
               </div>
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
