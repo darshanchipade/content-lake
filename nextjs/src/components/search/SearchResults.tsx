@@ -85,12 +85,12 @@ export function SearchResults({ results, isLoading, onFilter }: SearchResultsPro
               key={resultId}
               className="box-border flex flex-col gap-4 rounded-[12px] bg-white p-4 shadow-[0px_0.5px_2.5px_0px_rgba(0,0,0,0.3)]"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div>
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
                   <p className="text-[10px] font-semibold text-[#737780]">Source</p>
                   <p className="text-[12px] font-medium text-[#111215] break-all">{source}</p>
                 </div>
-                <div className="w-[318px] max-w-full">
+                <div className="w-full sm:w-[318px]">
                   <p className="text-[10px] font-semibold text-[#737780]">Section</p>
                   <p className="text-[12px] font-medium text-[#111215] break-all">{section}</p>
                 </div>

@@ -30,9 +30,24 @@ const workspaceLinks = [
   { label: "Search Finder", href: "/search", icon: MagnifyingGlassIcon },
 ];
 
+import { useMemo } from "react";
+
 export function PipelineShell({ currentStep, showTracker = true, children }: PipelineShellProps) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const pageLabel = useMemo(() => {
+    if (pathname === '/ingestion/activity') return 'Upload Activity';
+    if (pathname === '/search') return 'Search Finder';
+
+    const stepLabels: Record<StepId, string> = {
+      ingestion: 'Ingestion',
+      extraction: 'Extraction',
+      cleansing: 'Cleansing',
+      enrichment: 'Enrichment'
+    };
+    return stepLabels[currentStep] || currentStep;
+  }, [pathname, currentStep]);
 
   // Close sidebar on navigation
   useEffect(() => {
@@ -133,17 +148,18 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
               type="button"
               className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-gray-900 shrink-0"
               onClick={() => setIsSidebarOpen(true)}
+              aria-label="Open sidebar"
             >
               <Bars3Icon className="size-6" />
             </button>
             <div className="flex items-center gap-4 text-sm min-w-0">
               <Squares2X2Icon className="size-5 text-gray-400 shrink-0 hidden sm:block" />
-              <div className="flex items-center gap-2 text-gray-400 truncate">
-                <span className="hidden xs:inline">Workspaces</span>
-                <ChevronRightIcon className="size-3 shrink-0 hidden xs:inline" />
-                <span>Delta</span>
+              <div className="flex items-center gap-2 text-gray-400 truncate font-medium">
+                <Link href="/ingestion" className="hover:text-primary transition-colors shrink-0">
+                  Workspace
+                </Link>
                 <ChevronRightIcon className="size-3 shrink-0" />
-                <span className="text-gray-900 font-semibold truncate">Product</span>
+                <span className="text-gray-900 font-bold truncate">{pageLabel}</span>
               </div>
             </div>
           </div>

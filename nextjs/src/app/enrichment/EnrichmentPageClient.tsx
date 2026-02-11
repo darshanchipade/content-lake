@@ -1765,24 +1765,25 @@ export default function EnrichmentPageClient() {
                                           </p>
                                         </div>
 
-                                        <div className="grid gap-6 xl:grid-cols-3">
+                                        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
                                           {/* Content Insights Card */}
                                           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col">
-                                            <div className="flex items-center justify-between mb-6">
-                                              <div className="space-y-1">
-                                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Content Insights</p>
-                                                <h3 className="text-lg font-bold text-slate-900">Summary</h3>
-                                              </div>
-                                              <div className="flex items-center gap-2">
-                                                {!editState.isEditingInsights ? (
+                                            <div className="flex flex-col gap-4 mb-6">
+                                              <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                                                <div className="space-y-1 min-w-0">
+                                                  <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Content Insights</p>
+                                                  <h3 className="text-lg font-bold text-slate-900 leading-tight truncate">Summary</h3>
+                                                </div>
+                                                {!editState.isEditingInsights && (
                                                   <button
                                                     onClick={() => ensureElementEditState(element, { isEditingInsights: true, error: undefined })}
-                                                    className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
+                                                    className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
                                                   >
                                                     Edit
                                                   </button>
-                                                ) : (
-                                                  <div className="flex items-center gap-2">
+                                                )}
+                                                {editState.isEditingInsights && (
+                                                  <div className="flex flex-wrap items-center gap-2">
                                                     <button
                                                       onClick={() => handleSaveInsights(element)}
                                                       disabled={insightsBusy}
@@ -1869,18 +1870,20 @@ export default function EnrichmentPageClient() {
 
                                           {/* Search Metadata Card */}
                                           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col">
-                                            <div className="flex items-center justify-between mb-6">
-                                              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Search Metadata</p>
-                                              {!editState.isEditingMetadata ? (
-                                                <button
-                                                  onClick={() => ensureElementEditState(element, { isEditingMetadata: true, error: undefined })}
-                                                  className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
-                                                >
-                                                  Edit
-                                                </button>
-                                              ) : (
-                                                <div className="flex items-center gap-2">
-                                                   <button
+                                            <div className="flex flex-col gap-4 mb-6">
+                                              <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Search Metadata</p>
+                                                {!editState.isEditingMetadata && (
+                                                  <button
+                                                    onClick={() => ensureElementEditState(element, { isEditingMetadata: true, error: undefined })}
+                                                    className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
+                                                  >
+                                                    Edit
+                                                  </button>
+                                                )}
+                                                {editState.isEditingMetadata && (
+                                                  <div className="flex flex-wrap items-center gap-2">
+                                                    <button
                                                       onClick={() => handleSaveMetadata(element)}
                                                       disabled={metadataBusy}
                                                       className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-accent transition-colors disabled:opacity-50"
@@ -1893,8 +1896,9 @@ export default function EnrichmentPageClient() {
                                                     >
                                                       Cancel
                                                     </button>
-                                                </div>
-                                              )}
+                                                  </div>
+                                                )}
+                                              </div>
                                             </div>
 
                                             <div className="space-y-6 flex-1">
