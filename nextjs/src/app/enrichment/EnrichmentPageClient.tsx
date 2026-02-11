@@ -940,13 +940,21 @@ const normalized = source.trim().toUpperCase();
                   ? (backendRecord?.["statusHistory"] as { status: string; timestamp: number }[])
                   : null;
 
+                const backendStatus = pickString(backendRecord?.status) ?? pickString(proxyPayload?.status);
+                const derivedHistory =
+                  backendHistory && backendHistory.length
+                    ? backendHistory
+                    : backendStatus
+                      ? [{ status: backendStatus, timestamp: Date.now() }]
+                      : FALLBACK_HISTORY;
+
                 const remoteContext: RemoteEnrichmentContext = {
                   metadata: mergedMetadata,
                   startedAt:
                     pickNumber(backendRecord?.startedAt) ??
                     pickNumber(proxyPayload.startedAt) ??
                     Date.now(),
-                  statusHistory: backendHistory && backendHistory.length ? backendHistory : FALLBACK_HISTORY,
+                  statusHistory: derivedHistory,
                 };
 
                 saveEnrichmentContext(remoteContext);
