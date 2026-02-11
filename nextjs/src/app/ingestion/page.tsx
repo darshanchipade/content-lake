@@ -1289,7 +1289,7 @@ export default function IngestionPage() {
                 type="button"
                 onClick={handleExtractData}
                 disabled={extracting || (!localFile && activeTab === "local")}
-                className="mt-4 w-full rounded-full bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-black disabled:opacity-50"
+                className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-white transition hover:bg-accent disabled:opacity-50"
               >
                 {extracting ? "Extracting..." : "Extract Data"}
               </button>

@@ -637,7 +637,7 @@ export default function ExtractionPage() {
                 <button
                   onClick={sendToCleansing}
                   disabled={sending}
-                  className="rounded-full bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-black flex items-center gap-2"
+                  className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent flex items-center gap-2"
                 >
                   {sending ? "Processing..." : "Continue to Cleansing"}
                   <ChevronRightIcon className="size-4" />

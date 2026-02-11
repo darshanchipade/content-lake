@@ -1755,165 +1755,220 @@ export default function EnrichmentPageClient() {
                                       )}
                                     </button>
                                     {isDetailVisible && (
-                                      <div className="space-y-6 border-t border-slate-100 bg-white p-6">
+                                      <div className="space-y-8 border-t border-slate-100 bg-slate-50/30 p-8">
                                         <div>
-                                          <p className="text-[10px] uppercase tracking-wide text-slate-400 font-bold mb-2">
-                                            Enriched copy
+                                          <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black mb-3">
+                                            Enriched Copy
                                           </p>
-                                          <p className="text-sm text-slate-800 leading-relaxed bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                          <p className="text-sm text-slate-700 leading-relaxed">
                                             {element.copy ?? "No enriched copy provided yet."}
                                           </p>
                                         </div>
 
-                                        <div className="grid gap-6 lg:grid-cols-2">
-                                          <div className="space-y-4">
-                                            <div className="flex items-center justify-between">
-                                              <p className="text-[10px] uppercase tracking-wide text-slate-400 font-bold">Content insights</p>
-                                              <div className="flex gap-2">
+                                        <div className="grid gap-6 xl:grid-cols-3">
+                                          {/* Content Insights Card */}
+                                          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col">
+                                            <div className="flex items-center justify-between mb-6">
+                                              <div className="space-y-1">
+                                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Content Insights</p>
+                                                <h3 className="text-lg font-bold text-slate-900">Summary</h3>
+                                              </div>
+                                              <div className="flex items-center gap-2">
                                                 {!editState.isEditingInsights ? (
                                                   <button
                                                     onClick={() => ensureElementEditState(element, { isEditingInsights: true, error: undefined })}
-                                                    className="text-[10px] font-bold text-primary hover:underline uppercase"
+                                                    className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
                                                   >
                                                     Edit
                                                   </button>
                                                 ) : (
-                                                  <>
+                                                  <div className="flex items-center gap-2">
                                                     <button
                                                       onClick={() => handleSaveInsights(element)}
                                                       disabled={insightsBusy}
-                                                      className="text-[10px] font-bold text-primary hover:underline uppercase"
+                                                      className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-accent transition-colors disabled:opacity-50"
                                                     >
                                                       {editState.isSavingInsights ? "..." : "Save"}
                                                     </button>
                                                     <button
                                                       onClick={() => ensureElementEditState(element, { isEditingInsights: false })}
-                                                      className="text-[10px] font-bold text-slate-400 hover:underline uppercase"
+                                                      className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
                                                     >
                                                       Cancel
                                                     </button>
-                                                  </>
+                                                    <button
+                                                      onClick={() => handleGenerateFields(element, ["summary", "classification"])}
+                                                      disabled={insightsBusy}
+                                                      className="rounded-full bg-primary-soft px-4 py-1.5 text-xs font-bold text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
+                                                    >
+                                                      {editState.isGeneratingInsights ? "..." : "Generate all"}
+                                                    </button>
+                                                  </div>
                                                 )}
                                               </div>
                                             </div>
 
-                                            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                                              {editState.isEditingInsights ? (
-                                                <div className="space-y-4">
+                                            <div className="space-y-6 flex-1">
+                                              <div>
+                                                <div className="flex items-center justify-between mb-2">
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Summary</p>
+                                                  {editState.isEditingInsights && (
+                                                    <button
+                                                      onClick={() => handleGenerateFields(element, ["summary"])}
+                                                      disabled={insightsBusy}
+                                                      className="rounded-lg bg-primary-soft px-2 py-1 text-[10px] font-bold text-primary hover:bg-primary/10 transition-colors"
+                                                    >
+                                                      Generate
+                                                    </button>
+                                                  )}
+                                                </div>
+                                                {editState.isEditingInsights ? (
                                                   <textarea
                                                     value={editState.summary}
                                                     onChange={(e) => ensureElementEditState(element, { summary: e.target.value })}
-                                                    className="w-full text-sm bg-white border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                                    rows={3}
+                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[120px]"
                                                     placeholder="AI Summary"
                                                   />
+                                                ) : (
+                                                  <p className="text-sm text-slate-600 leading-relaxed bg-slate-50/50 rounded-2xl p-4">
+                                                    {element.summary ?? "—"}
+                                                  </p>
+                                                )}
+                                              </div>
+
+                                              <div>
+                                                <div className="flex items-center justify-between mb-2">
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Classification</p>
+                                                  {editState.isEditingInsights && (
+                                                    <button
+                                                      onClick={() => handleGenerateFields(element, ["classification"])}
+                                                      disabled={insightsBusy}
+                                                      className="rounded-lg bg-primary-soft px-2 py-1 text-[10px] font-bold text-primary hover:bg-primary/10 transition-colors"
+                                                    >
+                                                      Generate
+                                                    </button>
+                                                  )}
+                                                </div>
+                                                {editState.isEditingInsights ? (
                                                   <input
                                                     value={editState.classification}
                                                     onChange={(e) => ensureElementEditState(element, { classification: e.target.value })}
-                                                    className="w-full text-sm bg-white border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20"
                                                     placeholder="Classification (comma separated)"
                                                   />
-                                                </div>
-                                              ) : (
-                                                <div className="space-y-4">
-                                                  <div>
-                                                    <p className="text-[11px] text-slate-400 font-bold mb-1">Summary</p>
-                                                    <p className="text-sm text-slate-700 leading-relaxed">{element.summary ?? "—"}</p>
+                                                ) : (
+                                                  <div className="flex flex-wrap gap-2">
+                                                    {element.classification.length ? element.classification.map(c => (
+                                                      <span key={c} className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">{c}</span>
+                                                    )) : <span className="text-xs text-slate-400 italic">None</span>}
                                                   </div>
-                                                  <div>
-                                                    <p className="text-[11px] text-slate-400 font-bold mb-1">Classification</p>
-                                                    {renderChipList(element.classification, "None")}
-                                                  </div>
-                                                </div>
-                                              )}
+                                                )}
+                                              </div>
                                             </div>
                                           </div>
 
-                                          <div className="space-y-4">
-                                            <div className="flex items-center justify-between">
-                                              <p className="text-[10px] uppercase tracking-wide text-slate-400 font-bold">Metadata</p>
-                                              <div className="flex gap-2">
-                                                {!editState.isEditingMetadata ? (
-                                                  <button
-                                                    onClick={() => ensureElementEditState(element, { isEditingMetadata: true, error: undefined })}
-                                                    className="text-[10px] font-bold text-primary hover:underline uppercase"
-                                                  >
-                                                    Edit
-                                                  </button>
-                                                ) : (
-                                                  <>
-                                                    <button
+                                          {/* Search Metadata Card */}
+                                          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col">
+                                            <div className="flex items-center justify-between mb-6">
+                                              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Search Metadata</p>
+                                              {!editState.isEditingMetadata ? (
+                                                <button
+                                                  onClick={() => ensureElementEditState(element, { isEditingMetadata: true, error: undefined })}
+                                                  className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
+                                                >
+                                                  Edit
+                                                </button>
+                                              ) : (
+                                                <div className="flex items-center gap-2">
+                                                   <button
                                                       onClick={() => handleSaveMetadata(element)}
                                                       disabled={metadataBusy}
-                                                      className="text-[10px] font-bold text-primary hover:underline uppercase"
+                                                      className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-accent transition-colors disabled:opacity-50"
                                                     >
                                                       {editState.isSavingMetadata ? "..." : "Save"}
                                                     </button>
                                                     <button
                                                       onClick={() => ensureElementEditState(element, { isEditingMetadata: false })}
-                                                      className="text-[10px] font-bold text-slate-400 hover:underline uppercase"
+                                                      className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
                                                     >
                                                       Cancel
                                                     </button>
-                                                  </>
-                                                )}
-                                              </div>
+                                                </div>
+                                              )}
                                             </div>
 
-                                            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                                              {editState.isEditingMetadata ? (
-                                                <div className="space-y-4">
+                                            <div className="space-y-6 flex-1">
+                                              <div>
+                                                <div className="flex items-center justify-between mb-2">
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Keywords</p>
+                                                  {editState.isEditingMetadata && (
+                                                    <button
+                                                      onClick={() => handleGenerateFields(element, ["keywords"])}
+                                                      disabled={metadataBusy}
+                                                      className="rounded-lg bg-primary-soft px-2 py-1 text-[10px] font-bold text-primary hover:bg-primary/10 transition-colors"
+                                                    >
+                                                      Generate
+                                                    </button>
+                                                  )}
+                                                </div>
+                                                {editState.isEditingMetadata ? (
                                                   <textarea
                                                     value={editState.keywords}
                                                     onChange={(e) => ensureElementEditState(element, { keywords: e.target.value })}
-                                                    className="w-full text-sm bg-white border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                                    rows={2}
+                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[80px]"
                                                     placeholder="Keywords"
                                                   />
+                                                ) : (
+                                                  <div className="flex flex-wrap gap-2">
+                                                    {element.keywords.length ? element.keywords.map(k => (
+                                                      <span key={k} className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">{k}</span>
+                                                    )) : <span className="text-xs text-slate-400 italic">None</span>}
+                                                  </div>
+                                                )}
+                                              </div>
+
+                                              <div>
+                                                <div className="flex items-center justify-between mb-2">
+                                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Content Tags</p>
+                                                  {editState.isEditingMetadata && (
+                                                    <button
+                                                      onClick={() => handleGenerateFields(element, ["tags"])}
+                                                      disabled={metadataBusy}
+                                                      className="rounded-lg bg-primary-soft px-2 py-1 text-[10px] font-bold text-primary hover:bg-primary/10 transition-colors"
+                                                    >
+                                                      Generate
+                                                    </button>
+                                                  )}
+                                                </div>
+                                                {editState.isEditingMetadata ? (
                                                   <textarea
                                                     value={editState.tags}
                                                     onChange={(e) => ensureElementEditState(element, { tags: e.target.value })}
-                                                    className="w-full text-sm bg-white border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                                    rows={2}
+                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[80px]"
                                                     placeholder="Tags"
                                                   />
-                                                </div>
-                                              ) : (
-                                                <div className="space-y-4">
-                                                  <div>
-                                                    <p className="text-[11px] text-slate-400 font-bold mb-1">Keywords</p>
-                                                    {renderChipList(element.keywords, "None")}
+                                                ) : (
+                                                  <div className="flex flex-wrap gap-2">
+                                                    {element.tags.length ? element.tags.map(t => (
+                                                      <span key={t} className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">{t}</span>
+                                                    )) : <span className="text-xs text-slate-400 italic">None</span>}
                                                   </div>
-                                                  <div>
-                                                    <p className="text-[11px] text-slate-400 font-bold mb-1">Tags</p>
-                                                    {renderChipList(element.tags, "None")}
-                                                  </div>
-                                                </div>
-                                              )}
-                                            </div>
-                                          </div>
-                                        </div>
-
-                                        <div className="bg-primary-soft/50 rounded-2xl p-5 border border-primary-soft">
-                                          <div className="flex items-center justify-between mb-4">
-                                            <p className="text-[10px] uppercase tracking-wide text-primary font-bold">Sentiment Analysis</p>
-                                          </div>
-                                          {element.sentiment ? (
-                                            <div className="flex items-center gap-4">
-                                              <div className="bg-white rounded-xl px-4 py-2 border border-primary-soft shadow-sm">
-                                                <p className="text-xs text-primary font-bold uppercase tracking-wider mb-0.5">Tone</p>
-                                                <p className="text-sm font-bold text-black">{element.sentiment.label}</p>
+                                                )}
                                               </div>
-                                              {element.sentiment.score !== undefined && (
-                                                <div className="bg-white rounded-xl px-4 py-2 border border-primary-soft shadow-sm">
-                                                  <p className="text-xs text-primary font-bold uppercase tracking-wider mb-0.5">Score</p>
-                                                  <p className="text-sm font-bold text-black">{(element.sentiment.score * 100).toFixed(0)}%</p>
-                                                </div>
-                                              )}
                                             </div>
-                                          ) : (
-                                            <p className="text-sm text-primary/60 font-medium italic">Pending completion...</p>
-                                          )}
+                                          </div>
+
+                                          {/* Tone & Sentiment Card */}
+                                          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+                                            <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black mb-6">Tone & Sentiment</p>
+                                            {element.sentiment ? (
+                                              <div className="inline-flex items-center rounded-2xl bg-primary-soft/50 px-6 py-3 border border-primary-soft">
+                                                <span className="text-sm font-bold text-primary">{element.sentiment.label}</span>
+                                              </div>
+                                            ) : (
+                                              <p className="text-xs text-slate-400 italic">Pending analysis...</p>
+                                            )}
+                                          </div>
                                         </div>
 
                                         <div className="pt-4 border-t border-slate-100">
@@ -2081,7 +2136,7 @@ export default function EnrichmentPageClient() {
                     clearEnrichmentContext();
                     router.push("/ingestion");
                   }}
-                  className="rounded-full bg-slate-900 py-3 text-sm font-bold text-white shadow-lg hover:bg-black transition-all"
+                  className="rounded-full bg-primary py-3 text-sm font-bold text-white shadow-lg hover:bg-accent transition-all"
                 >
                   Finish Session
                 </button>

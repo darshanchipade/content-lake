@@ -103,8 +103,8 @@ export function SearchResults({ results, isLoading, onFilter }: SearchResultsPro
                   type="button"
                   onClick={() => setActiveTab("raw")}
                   className={clsx(
-                    "mr-[-1px] h-full flex-1 rounded-[5px] text-center text-[13px] leading-[16px] transition-all",
-                    activeTab === "raw" ? "bg-[#111215] text-white" : "bg-transparent text-[#737780] hover:bg-gray-100",
+                    "mr-[-1px] h-full flex-1 rounded-[5px] text-center text-[13px] leading-[16px] transition-all font-bold",
+                    activeTab === "raw" ? "bg-primary text-white" : "bg-transparent text-[#737780] hover:bg-gray-100",
                   )}
                 >
                   Raw
@@ -113,9 +113,9 @@ export function SearchResults({ results, isLoading, onFilter }: SearchResultsPro
                   type="button"
                   onClick={() => setActiveTab("format")}
                   className={clsx(
-                    "mr-[-1px] h-full flex-1 rounded-[5px] text-center text-[13px] leading-[16px] transition-all",
+                    "mr-[-1px] h-full flex-1 rounded-[5px] text-center text-[13px] leading-[16px] transition-all font-bold",
                     activeTab === "format"
-                      ? "bg-[#111215] text-white"
+                      ? "bg-primary text-white"
                       : "bg-transparent text-[#737780] hover:bg-gray-100",
                   )}
                 >
@@ -130,17 +130,17 @@ export function SearchResults({ results, isLoading, onFilter }: SearchResultsPro
                   type="button"
                   onClick={() => copyToClipboard(content, resultId)}
                   className={clsx(
-                    "rounded-[24px] transition-all duration-200",
+                    "relative rounded-[24px] transition-all duration-200",
                     copiedStates[resultId] ? "bg-gray-50" : "bg-white hover:bg-gray-50",
                   )}
                 >
                   <div className="box-border flex items-center gap-1 px-3 py-[3px]">
-                    <CopyIcon className="size-3.5 text-[#111215]" />
-                    <span className="text-[12px] font-medium text-[#111215]">
+                    <CopyIcon className="size-3.5 text-primary" />
+                    <span className="text-[12px] font-bold text-primary">
                       {copiedStates[resultId] ? "Copied" : "Copy"}
                     </span>
                   </div>
-                  <div className="pointer-events-none inset-[-1px] rounded-[25px] border border-black shadow-[0px_1px_2.5px_0px_rgba(0,122,255,0.24),0px_0px_0px_0.5px_rgba(0,122,255,0.12)]" />
+                  <div className="pointer-events-none absolute inset-x-0 -bottom-[1px] h-0.5 bg-primary rounded-full shadow-[0px_1px_4px_rgba(22,163,74,0.3)]" />
                 </button>
               </div>
             </article>
