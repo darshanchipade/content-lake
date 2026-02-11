@@ -1590,157 +1590,48 @@ const normalized = source.trim().toUpperCase();
 
              return (
                <PipelineShell currentStep="enrichment">
-                 <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+                 <div className="p-4 lg:p-8 ">
                    <div className="mb-6 lg:mb-8"><h1 className="text-xl lg:text-2xl font-bold">Enrichment</h1></div>
 
-                   <main className="flex flex-col gap-8">
-                   {/* File Metadata */}
-                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
-                      <div className="flex items-center justify-between mb-8">
-                         <h2 className="text-lg font-bold">File Metadata</h2>
-                         <button
-                           type="button"
-                           onClick={() => {
-                             clearEnrichmentContext();
-                             router.push("/ingestion");
-                           }}
-                           className="text-xs font-bold text-primary hover:underline"
-                         >
-                           Start Over
-                         </button>
-                      </div>
+                   <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 items-start">
+                     <main className="flex flex-col gap-8">
+                       <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
+                         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between mb-8">
+                           <div>
+                             <p className="text-xs uppercase tracking-wide text-gray-400">Status</p>
+                             <div className={`mt-2 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${statusMeta.background} ${statusMeta.className}`}>
+                               <span className={`h-2 w-2 rounded-full ${statusMeta.dot}`} />
+                               {STATUS_LABELS[currentStatus] ?? currentStatus}
+                             </div>
+                           </div>
+                           <div className="w-full max-w-md">
+                             <p className="text-xs uppercase tracking-wide text-gray-400">
+                               Pipeline progress
+                             </p>
+                             <div className="mt-2 h-2 rounded-full bg-gray-100">
+                               <div
+                                 className="h-full rounded-full bg-primary transition-all"
+                                 style={{ width: `${progress}%` }}
+                               />
+                             </div>
+                             <p className="mt-1 text-xs text-gray-500 font-bold">{Math.round(progress)}% complete</p>
+                           </div>
+                           <button
+                             type="button"
+                             onClick={handleRefreshStatus}
+                             className="px-6 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
+                           >
+                             Refresh Status
+                           </button>
+                         </div>
+                       </section>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-12">
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
-                           <p className="text-sm font-bold text-gray-900">{context.metadata.name}</p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
-                           <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Type</p>
-                           <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Identifier</p>
-                           <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</p>
-                           <p className="text-sm font-bold text-gray-900">{context.metadata.cleansedId ?? "—"}</p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Started At</p>
-                           <p className="text-sm font-bold text-gray-900">
-                             {new Date(context.startedAt).toLocaleString()}
-                           </p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
-                           <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
-                           <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
-                         </div>
-                         <div>
-                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Current Status</p>
-                           <p className="text-sm font-bold text-gray-900">
-                             {currentStatus === "ENRICHED_NO_ITEMS_TO_PROCESS" ? currentStatus : (STATUS_LABELS[currentStatus] ?? currentStatus)}
-                           </p>
-                         </div>
-                      </div>
-                   </section>
-
-                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
-                     <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between mb-8">
-                       <div>
-                         <p className="text-xs uppercase tracking-wide text-gray-400">Status</p>
-                         <div className={`mt-2 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${statusMeta.background} ${statusMeta.className}`}>
-                           <span className={`h-2 w-2 rounded-full ${statusMeta.dot}`} />
-                           {STATUS_LABELS[currentStatus] ?? currentStatus}
-                         </div>
-                       </div>
-                       <div className="w-full max-w-md">
-                         <p className="text-xs uppercase tracking-wide text-gray-400">
-                           Pipeline progress
-                         </p>
-                         <div className="mt-2 h-2 rounded-full bg-gray-100">
-                           <div
-                             className="h-full rounded-full bg-primary transition-all"
-                             style={{ width: `${progress}%` }}
-                           />
-                         </div>
-                         <p className="mt-1 text-xs text-gray-500 font-bold">{Math.round(progress)}% complete</p>
-                       </div>
-                       <button
-                         type="button"
-                         onClick={handleRefreshStatus}
-                         className="px-6 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
-                       >
-                         Refresh Status
-                       </button>
-                     </div>
-                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                       <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-6">
-                         <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Total fields tagged</p>
-                         <p className="mt-2 text-2xl font-bold text-gray-900">
-                         {totalFieldsTagged ?? "—"}
-                                        </p>
-                                        {totalFieldsBreakdown ? (
-                                          <p className="text-xs text-gray-500 font-bold mt-1">{totalFieldsBreakdown}</p>
-                                        ) : null}
-                                      </div>
-                                      <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-6">
-                                        <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Readability improved</p>
-                                        <p className="mt-2 text-2xl font-bold text-gray-900">
-                                          {readabilityDisplay ?? "—"}
-                                        </p>
-                                      </div>
-                                      <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-6">
-                                        <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Errors found</p>
-                                        <p className="mt-2 text-2xl font-bold text-gray-900">{errorsDisplay ?? "—"}</p>
-                                      </div>
-                                    </div>
-                                  </section>
-
-                                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
-                                     <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Status timeline</p>
-                                     <h2 className="text-lg font-bold text-gray-900">Pipeline events</h2>
-                                     <div className="mt-6 space-y-4 border-l border-gray-100 pl-6">
-                                      {statusHistory.map((entry) => {
-                                        const meta = STATUS_COLORS[entry.status] ?? {
-                                          className: "text-slate-700",
-                                          dot: "bg-slate-300",
-                                        };
-                                        return (
-                                          <div key={`${entry.status}-${entry.timestamp}`} className="relative">
-                                            <span
-                                              className={`absolute -left-[33px] mt-1 inline-flex h-3 w-3 rounded-full ${meta.dot}`}
-                                            />
-                                            <p className={`text-sm font-semibold ${meta.className}`}>
-                                              {STATUS_LABELS[entry.status] ?? entry.status}
-                                            </p>
-                                            <p className="text-xs text-slate-500">
-                                              {new Date(entry.timestamp).toLocaleString()}
-                                            </p>
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                  </section>
-
-                                   <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
-                                     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+                       <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
+                                     <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
                                        <div>
                                          <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Insights</p>
                                          <h2 className="text-lg font-bold text-gray-900">AI summary preview</h2>
                                        </div>
-                                      <span className="text-xs text-slate-500">
-                                        Review, edit, save, or regenerate enrichment insights and metadata.
-                                      </span>
                                     </div>
                                     {summaryFeedback.state === "loading" ? (
                                       <div className="mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
@@ -2347,36 +2238,130 @@ const normalized = source.trim().toUpperCase();
                                                                         </div>
                                                                       )}
                                                                     </section>
+                                    </main>
 
-                                                                    <section className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 shadow-sm">
-                                                                      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                                                                        <div>
-                                                                          <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Next steps</p>
-                                                                          <h2 className="text-lg font-bold text-gray-900">
-                                                                            Wrap up or keep monitoring
-                                                                          </h2>
-                                                                        </div>
-                                                                        <div className="flex flex-wrap gap-3">
-                                                                          <button
-                                                                            type="button"
-                                                                            onClick={() => router.push("/cleansing")}
-                                                                            className="px-6 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
-                                                                          >
-                                                                            Back to Cleansing
-                                                                          </button>
+                                    <aside className="flex flex-col gap-8">
+                                      <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                         <div className="flex items-center justify-between mb-6">
+                                            <h2 className="text-lg font-bold">Metadata</h2>
                                                                           <button
                                                                             type="button"
                                                                             onClick={() => {
                                                                               clearEnrichmentContext();
                                                                               router.push("/ingestion");
                                                                             }}
-                                                                            className="btn-primary">
-                                                                            Finish Session
+                                              className="text-[10px] font-bold text-primary hover:underline uppercase tracking-wider"
+                                            >
+                                              Reset
                                                                           </button>
+                                         </div>
+
+                                         <div className="space-y-6">
+                                            <div>
+                                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
+                                              <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.name}</p>
+                                            </div>
+                                            <div>
+                                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source</p>
+                                              <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
+                                            </div>
+                                            <div>
+                                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</p>
+                                              <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.cleansedId ?? "—"}</p>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                              <div>
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
+                                                <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+                                              </div>
+                                              <div>
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
+                                                <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
+                                              </div>
+                                            </div>
+                                            <div>
+                                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Started At</p>
+                                              <p className="text-[11px] font-bold text-gray-900">
+                                                {new Date(context.startedAt).toLocaleString()}
+                                              </p>
+                                            </div>
+                                         </div>
+                                      </section>
+
+                                      <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                        <div className="mb-4">
+                                          <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Metrics</p>
+                                          <h2 className="text-lg font-bold text-gray-900">Enrichment stats</h2>
+                                        </div>
+                                        <div className="space-y-4">
+                                          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-4">
+                                            <p className="text-[10px] uppercase tracking-wide text-gray-400 font-bold">Fields tagged</p>
+                                            <p className="text-xl font-bold text-gray-900">{totalFieldsTagged ?? "—"}</p>
+                                          </div>
+                                          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-4">
+                                            <p className="text-[10px] uppercase tracking-wide text-gray-400 font-bold">Readability gain</p>
+                                            <p className="text-xl font-bold text-gray-900">{readabilityDisplay ?? "—"}</p>
+                                          </div>
+                                          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-4">
+                                            <p className="text-[10px] uppercase tracking-wide text-gray-400 font-bold">Errors found</p>
+                                            <p className="text-xl font-bold text-gray-900">{errorsDisplay ?? "—"}</p>
                                                                         </div>
                                                                       </div>
                                                                     </section>
-                                                                  </main>
+
+                                      <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                        <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Status timeline</p>
+                                        <h2 className="text-lg font-bold text-gray-900">Events</h2>
+                                        <div className="mt-6 space-y-4 border-l border-gray-100 pl-4">
+                                         {statusHistory.map((entry) => {
+                                           const meta = STATUS_COLORS[entry.status] ?? {
+                                             className: "text-slate-700",
+                                             dot: "bg-slate-300",
+                                           };
+                                           return (
+                                             <div key={`${entry.status}-${entry.timestamp}`} className="relative">
+                                               <span
+                                                 className={`absolute -left-[25px] mt-1 inline-flex h-2.5 w-2.5 rounded-full ${meta.dot}`}
+                                               />
+                                               <p className={`text-xs font-semibold ${meta.className}`}>
+                                                 {STATUS_LABELS[entry.status] ?? entry.status}
+                                               </p>
+                                               <p className="text-[10px] text-slate-500">
+                                                 {new Date(entry.timestamp).toLocaleString()}
+                                               </p>
+                                             </div>
+                                           );
+                                         })}
+                                       </div>
+                                     </section>
+
+                                      <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                                        <div className="mb-6">
+                                          <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Finalize</p>
+                                          <h2 className="text-lg font-bold text-gray-900">Done?</h2>
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              clearEnrichmentContext();
+                                              router.push("/ingestion");
+                                            }}
+                                            className="btn-primary w-full"
+                                          >
+                                            Finish Session
+                                          </button>
+                                          <button
+                                            type="button"
+                                            onClick={() => router.push("/cleansing")}
+                                            className="text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors py-2"
+                                          >
+                                            Back to Cleansing
+                                          </button>
+                                        </div>
+                                      </section>
+                                    </aside>
+                                  </div>
                  </div>
                </PipelineShell>
                                                               );

@@ -52,8 +52,8 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
       {/* Sidebar */}
       <aside
         className={clsx(
-          "fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-100 flex-col z-50 transition-transform duration-300 lg:translate-x-0",
-          isSidebarOpen ? "translate-x-0 flex" : "-translate-x-full hidden lg:flex"
+          "fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-100 flex flex-col z-50 transition-transform duration-300 lg:translate-x-0 lg:flex",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="p-8 flex items-center justify-between gap-3">
@@ -160,7 +160,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           </div>
         )}
 
-        <main className="flex-1 w-full max-w-7xl mx-auto">
+        <main className="flex-1 w-full px-4 lg:px-8">
           {children}
         </main>
       </div>

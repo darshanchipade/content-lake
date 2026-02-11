@@ -444,7 +444,7 @@ export default function CleansingPageClient() {
 
   return (
     <PipelineShell currentStep="cleansing">
-      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+      <div className="p-4 lg:p-8 ">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-xl lg:text-2xl font-bold">Cleansing</h1>
@@ -455,182 +455,168 @@ export default function CleansingPageClient() {
           <FeedbackPill feedback={enrichmentFeedback} />
         </div>
 
-        <main className="flex flex-col gap-8">
-        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-           <div className="flex items-center justify-between mb-8">
-              <h2 className="text-lg font-bold">File Metadata</h2>
-              <button
-                type="button"
-                onClick={() => {
-                  clearCleansedContext();
-                  router.push("/ingestion");
-                }}
-                className="text-xs font-bold text-primary hover:underline"
-              >
-                Start Over
-              </button>
-           </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_1fr] gap-8 items-start">
+          <main className="flex flex-col gap-8">
+            <section className="bg-white rounded-2xl border border-gray-200 p-4 lg:p-8 shadow-sm">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-gray-400">Items</p>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    Original vs Cleansed values
+                  </h2>
+                </div>
+              </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-12">
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
-                <p className="text-sm font-bold text-gray-900">{context.metadata.name}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
-                <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Type</p>
-                <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source Identifier</p>
-                <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</p>
-                <p className="text-sm font-bold text-gray-900">{context.metadata.cleansedId ?? "—"}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
-                <p className="text-sm font-bold text-gray-900">
-                  {new Date(context.metadata.uploadedAt).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
-                <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
-                <p className="text-sm font-bold text-gray-900">{context.metadata.pageId ?? "—"}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
-                <p className="text-sm font-bold text-gray-900">{context.status ?? "Pending"}</p>
-              </div>
-           </div>
-        </section>
+              {itemsLoading ? (
+                <div className="rounded-2xl border border-gray-100 bg-gray-50 py-10 text-center text-sm text-gray-400">
+                  Fetching latest cleansed rows…
+                </div>
+              ) : itemsError ? (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                  <p className="font-semibold">Unable to load cleansed items.</p>
+                  <p className="mt-1">{itemsError}</p>
+                  <button
+                    type="button"
+                    onClick={() => context.metadata.cleansedId && fetchItems(context.metadata.cleansedId)}
+                    className="mt-3 rounded-full bg-amber-600 px-3 py-1 text-xs font-semibold text-white"
+                  >
+                    Retry fetch
+                  </button>
+                </div>
+              ) : items.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-gray-200 py-10 text-center text-sm text-gray-400">
+                  No cleansed items available yet.
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-gray-100 overflow-hidden">
+                  <div className="max-h-[800px] overflow-x-auto overflow-y-auto custom-scrollbar">
+                  <table className="w-full text-left text-sm min-w-[600px]">
+                    <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500 sticky top-0">
+                      <tr>
+                        <th className="px-6 py-4 font-bold">Field</th>
+                        <th className="px-6 py-4 font-bold">Original value</th>
+                        <th className="px-6 py-4 font-bold">Cleansed value</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 bg-white">
+                      {items.map((row, index) => (
+                        <tr key={row.id ?? `${row.field ?? "row"}-${index}`}>
+                          <td className="px-6 py-4 align-top font-bold text-gray-900">
+                            {row.field}
+                          </td>
+                          <td className="px-6 py-4 align-top text-gray-600">
+                            <pre className="whitespace-pre-wrap text-xs font-mono">
+                              {row.original ?? "—"}
+                            </pre>
+                          </td>
+                          <td className="px-6 py-4 align-top text-gray-600 font-bold">
+                            <pre className="whitespace-pre-wrap text-xs font-mono">
+                              {row.cleansed ?? "—"}
+                            </pre>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+              )}
+            </section>
+          </main>
 
-        <section className="bg-white rounded-2xl border border-gray-200 p-4 lg:p-8 shadow-sm">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-gray-400">Items</p>
-              <h2 className="text-lg font-bold text-gray-900">
-                Original vs Cleansed values
-              </h2>
-            </div>
-          </div>
+          <aside className="flex flex-col gap-8">
+            <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+               <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-bold">Metadata</h2>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearCleansedContext();
+                      router.push("/ingestion");
+                    }}
+                    className="text-[10px] font-bold text-primary hover:underline uppercase tracking-wider"
+                  >
+                    Reset
+                  </button>
+               </div>
 
-          {itemsLoading ? (
-            <div className="rounded-2xl border border-gray-100 bg-gray-50 py-10 text-center text-sm text-gray-400">
-              Fetching latest cleansed rows…
-            </div>
-          ) : itemsError ? (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-              <p className="font-semibold">Unable to load cleansed items.</p>
-              <p className="mt-1">{itemsError}</p>
-              <button
-                type="button"
-                onClick={() => context.metadata.cleansedId && fetchItems(context.metadata.cleansedId)}
-                className="mt-3 rounded-full bg-amber-600 px-3 py-1 text-xs font-semibold text-white"
-              >
-                Retry fetch
-              </button>
-            </div>
-          ) : items.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-gray-200 py-10 text-center text-sm text-gray-400">
-              No cleansed items available yet.
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-gray-100 overflow-hidden">
-              <div className="max-h-[600px] overflow-x-auto overflow-y-auto custom-scrollbar">
-              <table className="w-full text-left text-sm min-w-[600px]">
-                <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500 sticky top-0">
-                  <tr>
-                    <th className="px-6 py-4 font-bold">Field</th>
-                    <th className="px-6 py-4 font-bold">Original value</th>
-                    <th className="px-6 py-4 font-bold">Cleansed value</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100 bg-white">
-                  {items.map((row, index) => (
-                    <tr key={row.id ?? `${row.field ?? "row"}-${index}`}>
-                      <td className="px-6 py-4 align-top font-bold text-gray-900">
-                        {row.field}
-                      </td>
-                      <td className="px-6 py-4 align-top text-gray-600">
-                        <pre className="whitespace-pre-wrap text-xs font-mono">
-                          {row.original ?? "—"}
-                        </pre>
-                      </td>
-                      <td className="px-6 py-4 align-top text-gray-600 font-bold">
-                        <pre className="whitespace-pre-wrap text-xs font-mono">
-                          {row.cleansed ?? "—"}
-                        </pre>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+               <div className="space-y-6">
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
+                    <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source</p>
+                    <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                    <p className="text-sm font-bold text-gray-900">{context.status ?? "Pending"}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
+                      <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
+                      <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
+                    <p className="text-[11px] font-bold text-gray-900">
+                      {new Date(context.metadata.uploadedAt).toLocaleString()}
+                    </p>
+                  </div>
+               </div>
+            </section>
+
+            <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+              <div className="mb-4">
+                <p className="text-xs uppercase tracking-wide text-gray-400">Applied rules</p>
+                <h2 className="text-lg font-bold text-gray-900">Heuristics</h2>
               </div>
-            </div>
-          )}
-        </section>
-
-        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-          <div className="flex flex-col gap-4 mb-6">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-gray-400">Applied rules</p>
-              <h2 className="text-lg font-bold text-gray-900">
-                Cleansing heuristics snapshot
-              </h2>
-            </div>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {RULES.map((rule) => (
-              <div
-                key={rule.title}
-                className="rounded-xl border border-gray-100 bg-gray-50/50 p-4"
-              >
-                <p className="text-sm font-bold text-gray-900">{rule.title}</p>
-                <p className="mt-1 text-xs text-gray-500 leading-relaxed">{rule.description}</p>
+              <div className="space-y-3">
+                {RULES.map((rule) => (
+                  <div
+                    key={rule.title}
+                    className="rounded-xl border border-gray-100 bg-gray-50/50 p-3"
+                  >
+                    <p className="text-xs font-bold text-gray-900">{rule.title}</p>
+                    <p className="mt-1 text-[10px] text-gray-500 leading-relaxed">{rule.description}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
 
-        <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-gray-400">Next steps</p>
-              <h2 className="text-lg font-bold text-gray-900">
-                Ready to send for enrichment?
-              </h2>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => router.push("/extraction")}
-                className="px-6 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
-              >
-                Back to Extraction
-              </button>
-              <button
-                type="button"
-                onClick={handleSendToEnrichment}
-                disabled={enrichmentFeedback.state === "loading"}
-                className="btn-primary"
-              >
-                {enrichmentFeedback.state === "loading"
-                  ? "Sending..."
-                  : "Send to Enrichment"}
-              </button>
-            </div>
-          </div>
-        </section>
-      </main>
+            <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+              <div className="mb-6">
+                <p className="text-xs uppercase tracking-wide text-gray-400">Finalize</p>
+                <h2 className="text-lg font-bold text-gray-900">Continue?</h2>
+              </div>
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={handleSendToEnrichment}
+                  disabled={enrichmentFeedback.state === "loading"}
+                  className="btn-primary w-full"
+                >
+                  {enrichmentFeedback.state === "loading"
+                    ? "Sending..."
+                    : "Send to Enrichment"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push("/extraction")}
+                  className="text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors py-2"
+                >
+                  Back to Extraction
+                </button>
+              </div>
+            </section>
+          </aside>
+        </div>
       </div>
     </PipelineShell>
   );

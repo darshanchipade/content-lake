@@ -1035,10 +1035,10 @@ export default function IngestionPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+      <div className="p-4 lg:p-8 ">
         <h1 className="text-xl lg:text-2xl font-bold mb-6 lg:mb-8">Ingestion</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
           <section className="space-y-8">
             <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
               <div className="flex items-center justify-between mb-6">
