@@ -1275,7 +1275,7 @@ export default function IngestionPage() {
                 <input
                   type="search"
                   placeholder="Search fields..."
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-slate-900 focus:bg-white focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-base lg:text-sm text-slate-900 focus:border-slate-900 focus:bg-white focus:outline-none"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />

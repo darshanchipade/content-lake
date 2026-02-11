@@ -13,13 +13,13 @@ import type { ComponentType, SVGProps } from "react";
 
 export type StepId = "ingestion" | "extraction" | "cleansing" | "enrichment";
 
-type StepMeta = {
+export type StepMeta = {
   id: StepId;
   label: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
-const STEPS: StepMeta[] = [
+export const STEPS: StepMeta[] = [
   { id: "ingestion", label: "Ingestion", icon: ArrowUpTrayIcon },
   { id: "extraction", label: "Extraction", icon: DocumentMagnifyingGlassIcon },
   { id: "cleansing", label: "Cleansing", icon: SparklesIcon },
@@ -55,7 +55,7 @@ export function PipelineTracker({ current }: { current: StepId }) {
 
   return (
     <nav className="w-full">
-      <div className="flex items-center justify-between gap-1 lg:gap-2">
+      <div className="flex items-center justify-between gap-2">
         {STEPS.map((step, index) => {
           const status =
             index < currentIndex
@@ -71,7 +71,7 @@ export function PipelineTracker({ current }: { current: StepId }) {
             <div
               key={step.id}
               className={clsx(
-                "flex items-center gap-2 lg:gap-4",
+                "flex items-center gap-4",
                 index < STEPS.length - 1 && "flex-1"
               )}
             >
@@ -96,7 +96,7 @@ export function PipelineTracker({ current }: { current: StepId }) {
                      </div>
                   )}
                 </div>
-                <span className={clsx("text-xs whitespace-nowrap", styles.label)}>
+                <span className={clsx("text-[10px] lg:text-xs whitespace-nowrap", styles.label)}>
                   {step.label}
                 </span>
               </div>

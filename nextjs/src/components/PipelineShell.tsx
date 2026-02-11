@@ -15,7 +15,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, type ComponentType, type SVGProps, useState, useEffect } from "react";
-import { PipelineTracker, type StepId } from "@/components/PipelineTracker";
+import { PipelineTracker, type StepId, STEPS } from "@/components/PipelineTracker";
 
 type PipelineShellProps = {
   currentStep: StepId;
@@ -167,10 +167,20 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
 
         {/* Pipeline Stepper */}
         {showTracker && (
-          <div className="bg-white border-b border-slate-200 px-4 py-6 lg:px-8 lg:py-10">
-            <div className="max-w-[1600px] mx-auto overflow-x-auto scrollbar-none">
-              <div className="min-w-[600px] lg:min-w-0">
-                <PipelineTracker current={currentStep} />
+          <div className="bg-white border-b border-slate-200 px-4 py-6 lg:px-8 lg:py-8">
+            <div className="max-w-[1600px] mx-auto">
+              <div className="flex items-center justify-between mb-6 lg:mb-8 px-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                  Pipeline
+                </span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                  Step {STEPS.findIndex(s => s.id === currentStep) + 1} of {STEPS.length}
+                </span>
+              </div>
+              <div className="overflow-x-auto scrollbar-none">
+                <div className="min-w-[450px] lg:min-w-0 pb-2">
+                  <PipelineTracker current={currentStep} />
+                </div>
               </div>
             </div>
           </div>
