@@ -446,7 +446,7 @@ export default function CleansingPageClient() {
     <PipelineShell currentStep="cleansing">
       <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-1 sm:space-y-2">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Cleansing</h1>
@@ -459,7 +459,7 @@ export default function CleansingPageClient() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr]">
+        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr] items-start">
           <div className="flex flex-col gap-8">
             <section className="bg-white rounded-3xl border border-slate-200 p-4 lg:p-8 shadow-sm">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
@@ -492,36 +492,61 @@ export default function CleansingPageClient() {
                   No cleansed items available yet.
                 </div>
               ) : (
-                <div className="rounded-2xl border border-gray-100 overflow-hidden">
-                  <div className="max-h-[800px] overflow-x-auto overflow-y-auto custom-scrollbar">
-                  <table className="w-full text-left text-sm min-w-[600px]">
-                    <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500 sticky top-0">
-                      <tr>
-                        <th className="px-6 py-4 font-bold">Field</th>
-                        <th className="px-6 py-4 font-bold">Original value</th>
-                        <th className="px-6 py-4 font-bold">Cleansed value</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 bg-white">
-                      {items.map((row, index) => (
-                        <tr key={row.id ?? `${row.field ?? "row"}-${index}`}>
-                          <td className="px-6 py-4 align-top font-bold text-gray-900">
-                            {row.field}
-                          </td>
-                          <td className="px-6 py-4 align-top text-gray-600">
-                            <pre className="whitespace-pre-wrap text-xs font-mono">
-                              {row.original ?? "—"}
-                            </pre>
-                          </td>
-                          <td className="px-6 py-4 align-top text-gray-600 font-bold">
-                            <pre className="whitespace-pre-wrap text-xs font-mono">
-                              {row.cleansed ?? "—"}
-                            </pre>
-                          </td>
+                <div className="rounded-2xl border border-slate-100 overflow-hidden">
+                  <div className="max-h-[800px] overflow-y-auto custom-scrollbar">
+                    {/* Desktop Table */}
+                    <table className="hidden lg:table w-full text-left text-sm">
+                      <thead className="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 sticky top-0 z-10">
+                        <tr>
+                          <th className="px-6 py-4 font-black">Field</th>
+                          <th className="px-6 py-4 font-black">Original</th>
+                          <th className="px-6 py-4 font-black">Cleansed</th>
                         </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 bg-white">
+                        {items.map((row, index) => (
+                          <tr key={row.id ?? `${row.field ?? "row"}-${index}`} className="hover:bg-slate-50/50 transition-colors">
+                            <td className="px-6 py-4 align-top font-bold text-slate-900 w-1/4">
+                              {row.field}
+                            </td>
+                            <td className="px-6 py-4 align-top text-slate-500 w-3/8">
+                              <pre className="whitespace-pre-wrap text-[11px] font-sans leading-relaxed">
+                                {row.original ?? "—"}
+                              </pre>
+                            </td>
+                            <td className="px-6 py-4 align-top text-slate-900 font-bold w-3/8">
+                              <pre className="whitespace-pre-wrap text-[11px] font-sans leading-relaxed">
+                                {row.cleansed ?? "—"}
+                              </pre>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {/* Mobile Card View */}
+                    <div className="lg:hidden divide-y divide-slate-100">
+                      {items.map((row, index) => (
+                        <div key={row.id ?? `${row.field ?? "row"}-${index}`} className="p-4 space-y-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black text-primary uppercase tracking-widest">
+                              {row.field}
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-300">#{index + 1}</span>
+                          </div>
+                          <div className="grid gap-4">
+                            <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Original</p>
+                              <p className="text-xs text-slate-500 leading-relaxed break-words">{row.original ?? "—"}</p>
+                            </div>
+                            <div className="bg-primary-soft/30 rounded-xl p-3 border border-primary-soft">
+                              <p className="text-[9px] font-bold text-primary uppercase tracking-widest mb-2">Cleansed</p>
+                              <p className="text-xs text-slate-900 font-bold leading-relaxed break-words">{row.cleansed ?? "—"}</p>
+                            </div>
+                          </div>
+                        </div>
                       ))}
-                    </tbody>
-                  </table>
+                    </div>
                   </div>
                 </div>
               )}
@@ -529,7 +554,7 @@ export default function CleansingPageClient() {
           </div>
 
           <aside className="flex flex-col gap-8">
-            <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+            <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm lg:sticky lg:top-24">
                <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold">Metadata</h2>
                   <button

@@ -13,13 +13,13 @@ import type { ComponentType, SVGProps } from "react";
 
 export type StepId = "ingestion" | "extraction" | "cleansing" | "enrichment";
 
-type StepMeta = {
+export type StepMeta = {
   id: StepId;
   label: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
-const STEPS: StepMeta[] = [
+export const STEPS: StepMeta[] = [
   { id: "ingestion", label: "Ingestion", icon: ArrowUpTrayIcon },
   { id: "extraction", label: "Extraction", icon: DocumentMagnifyingGlassIcon },
   { id: "cleansing", label: "Cleansing", icon: SparklesIcon },
@@ -55,7 +55,7 @@ export function PipelineTracker({ current }: { current: StepId }) {
 
   return (
     <nav className="w-full">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2 lg:gap-4">
         {STEPS.map((step, index) => {
           const status =
             index < currentIndex
@@ -71,18 +71,18 @@ export function PipelineTracker({ current }: { current: StepId }) {
             <div
               key={step.id}
               className={clsx(
-                "flex items-center gap-4",
+                "flex items-center gap-2 lg:gap-4",
                 index < STEPS.length - 1 && "flex-1"
               )}
             >
-              <div className="flex flex-col items-center gap-3 relative">
+              <div className="flex flex-col items-center gap-2 lg:gap-3 relative shrink-0">
                 <div
                   className={clsx(
-                    "flex size-14 items-center justify-center rounded-full border-2 transition-all duration-200 relative",
+                    "flex size-9 lg:size-14 items-center justify-center rounded-full border-2 transition-all duration-200 relative",
                     styles.circle
                   )}
                 >
-                  <Icon className={clsx("size-6", styles.iconColor)} />
+                  <Icon className={clsx("size-4 lg:size-6", styles.iconColor)} />
                   {status === "done" && (
                      <div className="absolute -right-1 -bottom-1 bg-white rounded-full p-0.5 border border-primary">
                         <CheckIcon className="size-3 text-primary stroke-[3px]" />
@@ -96,7 +96,7 @@ export function PipelineTracker({ current }: { current: StepId }) {
                      </div>
                   )}
                 </div>
-                <span className={clsx("text-xs whitespace-nowrap", styles.label)}>
+                <span className={clsx("text-[9px] lg:text-xs whitespace-nowrap font-bold uppercase tracking-tighter lg:tracking-normal", styles.label)}>
                   {step.label}
                 </span>
               </div>

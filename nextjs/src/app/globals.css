@@ -59,3 +59,16 @@ body {
     background-clip: content-box;
   }
 }
+
+/* Hide Vercel Toolbar/Next.js Feedback Button */
+#vercel-toolbar,
+.vercel-toolbar,
+[data-vercel-toolbar],
+#nextjs-feedback,
+[data-nextjs-feedback],
+#nextjs-portal,
+.vercel-toolbar-container {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

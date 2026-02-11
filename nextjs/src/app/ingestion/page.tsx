@@ -1046,7 +1046,7 @@ export default function IngestionPage() {
     <PipelineShell currentStep="ingestion">
       <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-1 sm:space-y-2">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Ingestion</h1>
@@ -1059,7 +1059,7 @@ export default function IngestionPage() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr]">
+        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr] items-start">
           <section className="space-y-6 overflow-hidden">
             <div className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm overflow-hidden">
               <div className="flex flex-wrap items-start justify-between gap-4">
@@ -1254,7 +1254,7 @@ export default function IngestionPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sticky top-24 h-fit">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-24 h-fit">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs uppercase tracking-wide text-slate-400 font-bold">Preview</p>
@@ -1275,7 +1275,7 @@ export default function IngestionPage() {
                 <input
                   type="search"
                   placeholder="Search fields..."
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-slate-900 focus:bg-white focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-base lg:text-sm text-slate-900 focus:border-slate-900 focus:bg-white focus:outline-none"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />

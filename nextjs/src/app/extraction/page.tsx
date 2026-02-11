@@ -231,6 +231,17 @@ export default function ExtractionPage() {
   const [snapshotError, setSnapshotError] = useState<string | null>(null);
   const [snapshotVersion, setSnapshotVersion] = useState(0);
 
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set(["structure"]));
+
+  const toggleSection = (section: string) => {
+    setOpenSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(section)) next.delete(section);
+      else next.add(section);
+      return next;
+    });
+  };
+
   useEffect(() => {
     setHydrated(true);
   }, []);
@@ -624,7 +635,7 @@ export default function ExtractionPage() {
     <PipelineShell currentStep="extraction">
       <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-1 sm:space-y-2">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Extraction</h1>
@@ -632,28 +643,45 @@ export default function ExtractionPage() {
                   Inspect the source JSON structure and preview individual field values before proceeding.
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <FeedbackPill feedback={feedback} />
                 <button
                   onClick={sendToCleansing}
                   disabled={sending}
                   className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent flex items-center gap-2"
                 >
-                  {sending ? "Processing..." : "Continue to Cleansing"}
-                  <ChevronRightIcon className="size-4" />
+                  <span className="whitespace-nowrap">{sending ? "Processing..." : "Continue"}</span>
+                  <ChevronRightIcon className="size-4 shrink-0" />
                 </button>
               </div>
             </div>
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1fr_2.2fr_1fr]">
+        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1fr_2.2fr_1fr] items-start">
           {/* File Structure */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
-            <div className="p-6 border-b border-gray-100">
-              <h2 className="text-lg font-bold mb-4">File Structure</h2>
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
+            <button
+              type="button"
+              onClick={() => toggleSection("structure")}
+              className="w-full flex items-center justify-between p-6 text-left lg:pointer-events-none"
+            >
+              <h2 className="text-lg font-bold">File Structure</h2>
+              <div className="lg:hidden">
+                {openSections.has("structure") ? (
+                  <ChevronDownIcon className="size-5 text-slate-400" />
+                ) : (
+                  <ChevronRightIcon className="size-5 text-slate-400" />
+                )}
+              </div>
+            </button>
 
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+            <div className={clsx(
+              "flex-col flex-1 min-h-0",
+              openSections.has("structure") ? "flex" : "hidden lg:flex"
+            )}>
+              <div className="px-6 pb-6 border-b border-slate-100">
+                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-primary/10 rounded-lg">
                     <CheckCircleIcon className="size-6 text-primary" />
@@ -668,13 +696,13 @@ export default function ExtractionPage() {
               </div>
             </div>
 
-            <div className="p-6 flex-1 flex flex-col min-h-0">
+              <div className="p-6 flex-1 flex flex-col min-h-0">
               <div className="relative mb-6 flex-shrink-0">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search fields..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-base lg:text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -696,11 +724,28 @@ export default function ExtractionPage() {
           </div>
 
           {/* Data Preview */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
-            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
+            <button
+              type="button"
+              onClick={() => toggleSection("preview")}
+              className="w-full flex items-center justify-between p-6 text-left lg:pointer-events-none"
+            >
               <h2 className="text-lg font-bold">Data Preview</h2>
+              <div className="lg:hidden">
+                {openSections.has("preview") ? (
+                  <ChevronDownIcon className="size-5 text-slate-400" />
+                ) : (
+                  <ChevronRightIcon className="size-5 text-slate-400" />
+                )}
+              </div>
+            </button>
 
-              <div className="flex p-1 bg-gray-100 rounded-lg">
+            <div className={clsx(
+              "flex-col flex-1 min-h-0",
+              openSections.has("preview") ? "flex" : "hidden lg:flex"
+            )}>
+              <div className="px-6 pb-6 border-b border-slate-100 flex items-center justify-between bg-white">
+                <div className="flex p-1 bg-slate-100 rounded-lg">
                 <button
                   onClick={() => setPreviewMode("structured")}
                   className={clsx(
@@ -722,7 +767,7 @@ export default function ExtractionPage() {
               </div>
             </div>
 
-            <div className="p-6 bg-gray-50 flex-1 flex flex-col overflow-hidden min-h-0">
+              <div className="p-4 lg:p-6 bg-slate-50/50 flex-1 flex flex-col overflow-hidden min-h-0">
               <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-4">
                 <span className="truncate max-w-[150px]">{context.metadata.name}</span>
                 {activeNode && (
@@ -810,8 +855,11 @@ export default function ExtractionPage() {
             </div>
           </div>
 
+            </div>
+          </div>
+
           {/* File Metadata Sidebar */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm sticky top-24">
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm lg:sticky lg:top-24">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold">Metadata</h2>
               <button

@@ -2,6 +2,7 @@
 
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useEffect, useMemo, useState } from "react";
+import clsx from "clsx";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   clearEnrichmentContext,
@@ -909,6 +910,21 @@ export default function EnrichmentPageClient() {
     queryId ?? localSnapshot?.metadata.cleansedId ?? null,
   );
   const [hydrated, setHydrated] = useState(false);
+  const [openSubSections, setOpenSubSections] = useState<Record<string, Set<string>>>({});
+
+  const toggleSubSection = (elementId: string, sectionId: string) => {
+    setOpenSubSections((prev) => {
+      const next = { ...prev };
+      const sections = new Set(prev[elementId] || ["insights"]); // Default insights open
+      if (sections.has(sectionId)) {
+        sections.delete(sectionId);
+      } else {
+        sections.add(sectionId);
+      }
+      next[elementId] = sections;
+      return next;
+    });
+  };
 
   useEffect(() => {
     setHydrated(true);
@@ -1597,7 +1613,7 @@ export default function EnrichmentPageClient() {
     <PipelineShell currentStep="enrichment">
       <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-1 sm:space-y-2">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Enrichment</h1>
@@ -1609,7 +1625,7 @@ export default function EnrichmentPageClient() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr]">
+        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr] items-start">
           <div className="flex flex-col gap-8">
             <section className="bg-white rounded-3xl border border-slate-200 p-6 lg:p-10 shadow-sm">
               <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between mb-8">
@@ -1721,6 +1737,11 @@ export default function EnrichmentPageClient() {
                                   return normalizeRevisionSource(revision.source) === "USER";
                                 })?.id;
 
+                                const currentOpenSections = openSubSections[element.id] || new Set(["insights"]);
+                                const isInsightsOpen = currentOpenSections.has("insights");
+                                const isMetadataOpen = currentOpenSections.has("metadata");
+                                const isToneOpen = currentOpenSections.has("tone");
+
                                 return (
                                   <div
                                     key={element.id}
@@ -1765,51 +1786,72 @@ export default function EnrichmentPageClient() {
                                           </p>
                                         </div>
 
-                                        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                                        <div className="grid gap-4 lg:gap-6 lg:grid-cols-2 xl:grid-cols-3">
                                           {/* Content Insights Card */}
-                                          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col">
-                                            <div className="flex flex-col gap-4 mb-6">
-                                              <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-                                                <div className="space-y-1 min-w-0">
-                                                  <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Content Insights</p>
-                                                  <h3 className="text-lg font-bold text-slate-900 leading-tight truncate">Summary</h3>
-                                                </div>
-                                                {!editState.isEditingInsights && (
-                                                  <button
-                                                    onClick={() => ensureElementEditState(element, { isEditingInsights: true, error: undefined })}
-                                                    className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
-                                                  >
-                                                    Edit
-                                                  </button>
-                                                )}
-                                                {editState.isEditingInsights && (
-                                                  <div className="flex flex-wrap items-center gap-2">
-                                                    <button
-                                                      onClick={() => handleSaveInsights(element)}
-                                                      disabled={insightsBusy}
-                                                      className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-accent transition-colors disabled:opacity-50"
-                                                    >
-                                                      {editState.isSavingInsights ? "..." : "Save"}
-                                                    </button>
-                                                    <button
-                                                      onClick={() => ensureElementEditState(element, { isEditingInsights: false })}
-                                                      className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
-                                                    >
-                                                      Cancel
-                                                    </button>
-                                                    <button
-                                                      onClick={() => handleGenerateFields(element, ["summary", "classification"])}
-                                                      disabled={insightsBusy}
-                                                      className="rounded-full bg-primary-soft px-4 py-1.5 text-xs font-bold text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
-                                                    >
-                                                      {editState.isGeneratingInsights ? "..." : "Generate all"}
-                                                    </button>
-                                                  </div>
+                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                                            <button
+                                              type="button"
+                                              onClick={() => toggleSubSection(element.id, "insights")}
+                                              className="flex w-full items-center justify-between p-4 lg:p-6 lg:pointer-events-none text-left"
+                                            >
+                                              <div className="flex flex-col gap-1">
+                                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Content Insights</p>
+                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight truncate">Summary</h3>
+                                              </div>
+                                              <div className="lg:hidden">
+                                                {isInsightsOpen ? (
+                                                  <ChevronDownIcon className="size-4 text-slate-400" />
+                                                ) : (
+                                                  <ChevronRightIcon className="size-4 text-slate-400" />
                                                 )}
                                               </div>
-                                            </div>
+                                            </button>
 
-                                            <div className="space-y-6 flex-1">
+                                            <div className={clsx(
+                                              "flex-col px-4 pb-4 lg:px-6 lg:pb-6 lg:flex",
+                                              isInsightsOpen ? "flex" : "hidden"
+                                            )}>
+                                              <div className="flex flex-col gap-4 mb-6">
+                                                <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                                                  {!editState.isEditingInsights && (
+                                                    <button
+                                                      onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        ensureElementEditState(element, { isEditingInsights: true, error: undefined });
+                                                      }}
+                                                      className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
+                                                    >
+                                                      Edit
+                                                    </button>
+                                                  )}
+                                                  {editState.isEditingInsights && (
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                      <button
+                                                        onClick={() => handleSaveInsights(element)}
+                                                        disabled={insightsBusy}
+                                                        className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-accent transition-colors disabled:opacity-50"
+                                                      >
+                                                        {editState.isSavingInsights ? "..." : "Save"}
+                                                      </button>
+                                                      <button
+                                                        onClick={() => ensureElementEditState(element, { isEditingInsights: false })}
+                                                        className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
+                                                      >
+                                                        Cancel
+                                                      </button>
+                                                      <button
+                                                        onClick={() => handleGenerateFields(element, ["summary", "classification"])}
+                                                        disabled={insightsBusy}
+                                                        className="rounded-full bg-primary-soft px-4 py-1.5 text-xs font-bold text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
+                                                      >
+                                                        {editState.isGeneratingInsights ? "..." : "Generate all"}
+                                                      </button>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              </div>
+
+                                              <div className="space-y-6 flex-1">
                                               <div>
                                                 <div className="flex items-center justify-between mb-2">
                                                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Summary</p>
@@ -1827,7 +1869,7 @@ export default function EnrichmentPageClient() {
                                                   <textarea
                                                     value={editState.summary}
                                                     onChange={(e) => ensureElementEditState(element, { summary: e.target.value })}
-                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[120px]"
+                                                    className="w-full text-base lg:text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[120px]"
                                                     placeholder="AI Summary"
                                                   />
                                                 ) : (
@@ -1854,7 +1896,7 @@ export default function EnrichmentPageClient() {
                                                   <input
                                                     value={editState.classification}
                                                     onChange={(e) => ensureElementEditState(element, { classification: e.target.value })}
-                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                                    className="w-full text-base lg:text-sm bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20"
                                                     placeholder="Classification (comma separated)"
                                                   />
                                                 ) : (
@@ -1867,41 +1909,66 @@ export default function EnrichmentPageClient() {
                                               </div>
                                             </div>
                                           </div>
+                                          </div>
 
                                           {/* Search Metadata Card */}
-                                          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col">
-                                            <div className="flex flex-col gap-4 mb-6">
-                                              <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                                            <button
+                                              type="button"
+                                              onClick={() => toggleSubSection(element.id, "metadata")}
+                                              className="flex w-full items-center justify-between p-4 lg:p-6 lg:pointer-events-none text-left"
+                                            >
+                                              <div className="flex flex-col gap-1">
                                                 <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Search Metadata</p>
-                                                {!editState.isEditingMetadata && (
-                                                  <button
-                                                    onClick={() => ensureElementEditState(element, { isEditingMetadata: true, error: undefined })}
-                                                    className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
-                                                  >
-                                                    Edit
-                                                  </button>
-                                                )}
-                                                {editState.isEditingMetadata && (
-                                                  <div className="flex flex-wrap items-center gap-2">
-                                                    <button
-                                                      onClick={() => handleSaveMetadata(element)}
-                                                      disabled={metadataBusy}
-                                                      className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-accent transition-colors disabled:opacity-50"
-                                                    >
-                                                      {editState.isSavingMetadata ? "..." : "Save"}
-                                                    </button>
-                                                    <button
-                                                      onClick={() => ensureElementEditState(element, { isEditingMetadata: false })}
-                                                      className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
-                                                    >
-                                                      Cancel
-                                                    </button>
-                                                  </div>
+                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight truncate">Keywords & Tags</h3>
+                                              </div>
+                                              <div className="lg:hidden">
+                                                {isMetadataOpen ? (
+                                                  <ChevronDownIcon className="size-4 text-slate-400" />
+                                                ) : (
+                                                  <ChevronRightIcon className="size-4 text-slate-400" />
                                                 )}
                                               </div>
-                                            </div>
+                                            </button>
 
-                                            <div className="space-y-6 flex-1">
+                                            <div className={clsx(
+                                              "flex-col px-4 pb-4 lg:px-6 lg:pb-6 lg:flex",
+                                              isMetadataOpen ? "flex" : "hidden"
+                                            )}>
+                                              <div className="flex flex-col gap-4 mb-6">
+                                                <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                                                  {!editState.isEditingMetadata && (
+                                                    <button
+                                                      onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        ensureElementEditState(element, { isEditingMetadata: true, error: undefined });
+                                                      }}
+                                                      className="rounded-full px-4 py-1.5 text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
+                                                    >
+                                                      Edit
+                                                    </button>
+                                                  )}
+                                                  {editState.isEditingMetadata && (
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                      <button
+                                                        onClick={() => handleSaveMetadata(element)}
+                                                        disabled={metadataBusy}
+                                                        className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-accent transition-colors disabled:opacity-50"
+                                                      >
+                                                        {editState.isSavingMetadata ? "..." : "Save"}
+                                                      </button>
+                                                      <button
+                                                        onClick={() => ensureElementEditState(element, { isEditingMetadata: false })}
+                                                        className="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
+                                                      >
+                                                        Cancel
+                                                      </button>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              </div>
+
+                                              <div className="space-y-6 flex-1">
                                               <div>
                                                 <div className="flex items-center justify-between mb-2">
                                                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Keywords</p>
@@ -1919,7 +1986,7 @@ export default function EnrichmentPageClient() {
                                                   <textarea
                                                     value={editState.keywords}
                                                     onChange={(e) => ensureElementEditState(element, { keywords: e.target.value })}
-                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[80px]"
+                                                    className="w-full text-base lg:text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[80px]"
                                                     placeholder="Keywords"
                                                   />
                                                 ) : (
@@ -1948,7 +2015,7 @@ export default function EnrichmentPageClient() {
                                                   <textarea
                                                     value={editState.tags}
                                                     onChange={(e) => ensureElementEditState(element, { tags: e.target.value })}
-                                                    className="w-full text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[80px]"
+                                                    className="w-full text-base lg:text-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/20 min-h-[80px]"
                                                     placeholder="Tags"
                                                   />
                                                 ) : (
@@ -1961,10 +2028,32 @@ export default function EnrichmentPageClient() {
                                               </div>
                                             </div>
                                           </div>
+                                          </div>
 
                                           {/* Tone & Sentiment Card */}
-                                          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-                                            <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black mb-6">Tone & Sentiment</p>
+                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                                            <button
+                                              type="button"
+                                              onClick={() => toggleSubSection(element.id, "tone")}
+                                              className="flex w-full items-center justify-between p-4 lg:p-6 lg:pointer-events-none text-left"
+                                            >
+                                              <div className="flex flex-col gap-1">
+                                                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Tone & Sentiment</p>
+                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight truncate">Analysis</h3>
+                                              </div>
+                                              <div className="lg:hidden">
+                                                {isToneOpen ? (
+                                                  <ChevronDownIcon className="size-4 text-slate-400" />
+                                                ) : (
+                                                  <ChevronRightIcon className="size-4 text-slate-400" />
+                                                )}
+                                              </div>
+                                            </button>
+
+                                            <div className={clsx(
+                                              "px-4 pb-4 lg:p-6 lg:pt-0 lg:block",
+                                              isToneOpen ? "block" : "hidden"
+                                            )}>
                                             {element.sentiment ? (
                                               <div className="inline-flex items-center rounded-2xl bg-primary-soft/50 px-6 py-3 border border-primary-soft">
                                                 <span className="text-sm font-bold text-primary">{element.sentiment.label}</span>
@@ -1972,6 +2061,7 @@ export default function EnrichmentPageClient() {
                                             ) : (
                                               <p className="text-xs text-slate-400 italic">Pending analysis...</p>
                                             )}
+                                            </div>
                                           </div>
                                         </div>
 
@@ -2019,12 +2109,12 @@ export default function EnrichmentPageClient() {
                                       </div>
                                     )}
                                   </div>
-                                );
+                                )
                               })}
                             </div>
                           )}
                         </div>
-                      );
+                      )
                     })}
                   </div>
                 </div>
@@ -2040,7 +2130,7 @@ export default function EnrichmentPageClient() {
             </section>
           </div>
 
-          <aside className="flex flex-col gap-8">
+          <aside className="flex flex-col gap-8 lg:sticky lg:top-24">
             <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold">Metadata</h2>
