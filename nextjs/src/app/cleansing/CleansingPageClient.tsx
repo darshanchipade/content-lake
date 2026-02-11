@@ -189,9 +189,9 @@ const FeedbackPill = ({ feedback }: { feedback: Feedback }) => {
   if (feedback.state === "idle") return null;
   const base =
     feedback.state === "loading"
-      ? "bg-indigo-50 text-indigo-600"
+      ? "bg-primary-soft text-primary"
       : feedback.state === "success"
-        ? "bg-emerald-50 text-emerald-700"
+        ? "bg-primary-soft text-primary"
         : "bg-rose-50 text-rose-700";
 
   return (

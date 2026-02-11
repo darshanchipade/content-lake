@@ -47,6 +47,15 @@ import {
   type UploadStatus,
 } from "@/lib/upload-history";
 
+const generateId = () => {
+  try {
+    return crypto.randomUUID();
+  } catch (e) {
+    return Math.random().toString(36).substring(2, 15);
+  }
+};
+
+
 type UploadTab = "local" | "api" | "s3";
 
 type ApiFeedback = {
@@ -279,7 +288,7 @@ export default function IngestionPage() {
     setLocalFile(file);
     setExtractFeedback({ state: "idle" });
 
-     const uploadId = crypto.randomUUID();
+     const uploadId = generateId();
      pendingLocalUploadIdRef.current = uploadId;
      setUploads((previous) => [
        {
@@ -364,7 +373,7 @@ export default function IngestionPage() {
       );
       return;
     }
-    const uploadId = crypto.randomUUID();
+    const uploadId = generateId();
     pendingApiUploadIdRef.current = uploadId;
     setUploads((previous) => [
       {
@@ -382,7 +391,7 @@ export default function IngestionPage() {
 
   const processLocalExtraction = async () => {
     const existingUploadId = pendingLocalUploadIdRef.current;
-    const uploadId = existingUploadId ?? crypto.randomUUID();
+    const uploadId = existingUploadId ?? generateId();
 
     if (!localFile) {
       setExtractFeedback({
@@ -541,7 +550,7 @@ export default function IngestionPage() {
 
     setApiFeedback({ state: "loading" });
     const existingUploadId = pendingApiUploadIdRef.current;
-    const uploadId = existingUploadId ?? crypto.randomUUID();
+    const uploadId = existingUploadId ?? generateId();
     if (!existingUploadId) {
       pendingApiUploadIdRef.current = uploadId;
       setUploads((previous) => [
@@ -688,7 +697,7 @@ export default function IngestionPage() {
     }
 
     setS3Feedback({ state: "loading" });
-    const uploadId = crypto.randomUUID();
+    const uploadId = generateId();
     setUploads((previous) => [
       {
         id: uploadId,
@@ -1089,12 +1098,11 @@ export default function IngestionPage() {
               </div>
 
               {activeTab === "local" && (
-                <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-                  <label
-                    htmlFor="file-upload"
-                    className="flex cursor-pointer flex-col items-center gap-4"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
+                <div
+                  className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center cursor-pointer hover:bg-slate-100 transition-colors"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <div className="flex flex-col items-center gap-4">
                     <ArrowUpTrayIcon className="size-10 text-slate-900" />
                     <div>
                       <p className="text-sm font-semibold text-slate-900">
@@ -1112,11 +1120,12 @@ export default function IngestionPage() {
                       id="file-upload"
                       type="file"
                       ref={fileInputRef}
-                      className="sr-only"
+                      className="hidden"
                       accept=".json,application/json"
                       onChange={(e) => handleLocalFileSelection(e.target.files)}
+                      onClick={(e) => e.stopPropagation()}
                     />
-                  </label>
+                  </div>
                 </div>
               )}
 
@@ -1128,7 +1137,7 @@ export default function IngestionPage() {
                   </div>
                   <textarea
                     rows={8}
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900"
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-mono focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900"
                     placeholder='Paste JSON payload. Example: { "product": { "name": "Vision Pro" } }'
                     value={apiPayload}
                     onChange={(e) => {
@@ -1153,7 +1162,7 @@ export default function IngestionPage() {
                   </div>
                   <input
                     type="text"
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900"
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900"
                     placeholder="s3://my-bucket/path/to/file.json"
                     value={s3Uri}
                     onChange={(e) => setS3Uri(e.target.value)}
@@ -1180,7 +1189,7 @@ export default function IngestionPage() {
                 </div>
               </div>
               <div className="mt-4 max-h-[400px] overflow-auto pr-2 custom-scrollbar">
-                <div className="space-y-4 min-w-[600px] sm:min-w-0">
+                <div className="space-y-4">
                   {uploads.length === 0 ? (
                     <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
                       Uploads will appear here once you submit files from the ingestion screen.
@@ -1189,32 +1198,34 @@ export default function IngestionPage() {
                     uploads.map((upload) => (
                       <div
                         key={upload.id}
-                        className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3"
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="rounded-2xl bg-white p-2 shadow-sm">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="rounded-2xl bg-white p-2 shadow-sm shrink-0">
                             <DocumentTextIcon className="size-5 text-slate-500" />
                           </div>
-                          <div>
-                            <p className="text-sm font-semibold text-slate-900">{upload.name}</p>
-                            <p className="text-xs text-slate-500">
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-slate-900 truncate">{upload.name}</p>
+                            <p className="text-xs text-slate-500 truncate">
                               {new Date(upload.createdAt).toLocaleString()} • {upload.source}
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <code className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-inner">
-                            {upload.cleansedId ? upload.cleansedId.substring(0, 8) + "..." : "pending"}
-                          </code>
-                          <span
-                            className={clsx(
-                              "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold",
-                              statusStyles[upload.status].className
-                            )}
-                          >
-                            <span className={clsx("size-2 rounded-full", statusStyles[upload.status].dot)} />
-                            {statusStyles[upload.status].label}
-                          </span>
+                        <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+                          <div className="flex items-center gap-2">
+                            <code className="rounded-full bg-white px-3 py-1 text-[10px] sm:text-xs font-semibold text-slate-600 shadow-inner">
+                              {upload.cleansedId ? upload.cleansedId.substring(0, 8) + "..." : "pending"}
+                            </code>
+                            <span
+                              className={clsx(
+                                "inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] sm:text-xs font-semibold",
+                                statusStyles[upload.status].className
+                              )}
+                            >
+                              <span className={clsx("size-2 rounded-full", statusStyles[upload.status].dot)} />
+                              {statusStyles[upload.status].label}
+                            </span>
+                          </div>
                           <div className="flex items-center gap-1">
                             <button
                               type="button"

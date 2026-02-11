@@ -46,7 +46,7 @@ export function SearchInterface<TFilter extends SearchFilter>({
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Search..."
-                  className="w-full border-none bg-transparent text-[14px] leading-[20px] text-[#4d4d4d] placeholder-[#9aa0a6] outline-none"
+                  className="w-full border-none bg-transparent text-[16px] leading-[20px] text-[#4d4d4d] placeholder-[#9aa0a6] outline-none"
                 />
               </div>
               {searchQuery && (
