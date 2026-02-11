@@ -444,20 +444,24 @@ export default function CleansingPageClient() {
 
   return (
     <PipelineShell currentStep="cleansing">
-      <div className="p-4 lg:p-8 max-w-[1440px] mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-xl lg:text-2xl font-bold">Cleansing</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Review cleansed output for {context.metadata.name} before sending it forward.
-            </p>
+      <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
+        <section className="border-b border-slate-200 bg-white">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="space-y-1 sm:space-y-2">
+                <h1 className="text-2xl sm:text-3xl font-bold text-black">Cleansing</h1>
+                <p className="text-xs sm:text-sm font-medium text-slate-500 lg:max-w-2xl">
+                  Review cleansed output for {context.metadata.name} before sending it forward.
+                </p>
+              </div>
+              <FeedbackPill feedback={enrichmentFeedback} />
+            </div>
           </div>
-          <FeedbackPill feedback={enrichmentFeedback} />
-        </div>
+        </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_1fr] gap-8 items-start">
-          <main className="flex flex-col gap-8">
-            <section className="bg-white rounded-2xl border border-gray-200 p-4 lg:p-8 shadow-sm">
+        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr]">
+          <div className="flex flex-col gap-8">
+            <section className="bg-white rounded-3xl border border-slate-200 p-4 lg:p-8 shadow-sm">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-400">Items</p>
@@ -522,10 +526,10 @@ export default function CleansingPageClient() {
                 </div>
               )}
             </section>
-          </main>
+          </div>
 
           <aside className="flex flex-col gap-8">
-            <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+            <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold">Metadata</h2>
                   <button
@@ -572,9 +576,9 @@ export default function CleansingPageClient() {
                </div>
             </section>
 
-            <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+            <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
               <div className="mb-4">
-                <p className="text-xs uppercase tracking-wide text-gray-400">Applied rules</p>
+                <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Applied rules</p>
                 <h2 className="text-lg font-bold text-gray-900">Heuristics</h2>
               </div>
               <div className="space-y-3">
@@ -590,9 +594,9 @@ export default function CleansingPageClient() {
               </div>
             </section>
 
-            <section className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+            <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
               <div className="mb-6">
-                <p className="text-xs uppercase tracking-wide text-gray-400">Finalize</p>
+                <p className="text-xs uppercase tracking-wide text-gray-400 font-bold">Finalize</p>
                 <h2 className="text-lg font-bold text-gray-900">Continue?</h2>
               </div>
               <div className="flex flex-col gap-3">
@@ -600,7 +604,7 @@ export default function CleansingPageClient() {
                   type="button"
                   onClick={handleSendToEnrichment}
                   disabled={enrichmentFeedback.state === "loading"}
-                  className="btn-primary w-full"
+                  className="rounded-full bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-black disabled:opacity-50 w-full"
                 >
                   {enrichmentFeedback.state === "loading"
                     ? "Sending..."
@@ -616,8 +620,8 @@ export default function CleansingPageClient() {
               </div>
             </section>
           </aside>
-        </div>
+        </main>
       </div>
     </PipelineShell>
   );
-  }
+}

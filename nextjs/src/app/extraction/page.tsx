@@ -622,25 +622,34 @@ export default function ExtractionPage() {
 
   return (
     <PipelineShell currentStep="extraction">
-      <div className="p-8 max-w-[1440px] mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Extraction</h1>
-          <div className="flex items-center gap-4">
-            <FeedbackPill feedback={feedback} />
-            <button
-              onClick={sendToCleansing}
-              disabled={sending}
-              className="btn-primary flex items-center gap-2"
-            >
-              {sending ? "Processing..." : "Continue to Cleansing"}
-              <ChevronRightIcon className="size-4" />
-            </button>
+      <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
+        <section className="border-b border-slate-200 bg-white">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="space-y-1 sm:space-y-2">
+                <h1 className="text-2xl sm:text-3xl font-bold text-black">Extraction</h1>
+                <p className="text-xs sm:text-sm font-medium text-slate-500 lg:max-w-2xl">
+                  Inspect the source JSON structure and preview individual field values before proceeding.
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <FeedbackPill feedback={feedback} />
+                <button
+                  onClick={sendToCleansing}
+                  disabled={sending}
+                  className="rounded-full bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-black flex items-center gap-2"
+                >
+                  {sending ? "Processing..." : "Continue to Cleansing"}
+                  <ChevronRightIcon className="size-4" />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2.2fr_1fr] gap-8 items-start">
+        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1fr_2.2fr_1fr]">
           {/* File Structure */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
             <div className="p-6 border-b border-gray-100">
               <h2 className="text-lg font-bold mb-4">File Structure</h2>
 
@@ -687,7 +696,7 @@ export default function ExtractionPage() {
           </div>
 
           {/* Data Preview */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px] lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
               <h2 className="text-lg font-bold">Data Preview</h2>
 
@@ -802,7 +811,7 @@ export default function ExtractionPage() {
           </div>
 
           {/* File Metadata Sidebar */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm sticky top-24">
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm sticky top-24">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold">Metadata</h2>
               <button
@@ -851,26 +860,8 @@ export default function ExtractionPage() {
               </div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
-      <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f9fafb;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #d1d5db;
-          border-radius: 10px;
-          border: 2px solid #f9fafb;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #9ca3af;
-        }
-      `}</style>
     </PipelineShell>
   );
 }

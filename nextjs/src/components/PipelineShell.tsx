@@ -151,8 +151,8 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
 
         {/* Pipeline Stepper */}
         {showTracker && (
-          <div className="bg-white border-b border-gray-100 px-4 py-6 lg:px-8 lg:py-10">
-            <div className="max-w-[1200px] mx-auto overflow-x-auto scrollbar-none">
+          <div className="bg-white border-b border-slate-200 px-4 py-6 lg:px-8 lg:py-10">
+            <div className="max-w-[1600px] mx-auto overflow-x-auto scrollbar-none">
               <div className="min-w-[600px] lg:min-w-0">
                 <PipelineTracker current={currentStep} />
               </div>
@@ -160,7 +160,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           </div>
         )}
 
-        <main className="flex-1 w-full px-4 lg:px-8">
+        <main className="flex-1 w-full">
           {children}
         </main>
       </div>
