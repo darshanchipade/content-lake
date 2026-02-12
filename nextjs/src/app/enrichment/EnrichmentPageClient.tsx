@@ -1613,8 +1613,8 @@ export default function EnrichmentPageClient() {
     <PipelineShell currentStep="enrichment">
       <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between text-center lg:text-left">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between text-left">
               <div className="space-y-1 sm:space-y-2 min-w-0">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Enrichment</h1>
                 <p className="text-xs sm:text-sm font-medium text-slate-500 lg:max-w-2xl break-words">

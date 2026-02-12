@@ -216,10 +216,8 @@ export default function SearchPage() {
 
   return (
     <PipelineShell currentStep="ingestion" showTracker={false}>
-      <div className="p-4 lg:p-8 max-w-[1600px] mx-auto">
+      <main className="mx-auto max-w-6xl p-4 lg:p-8">
         <div className="mb-8"><h1 className="text-2xl lg:text-3xl font-bold">Search</h1></div>
-
-      <main className="mx-auto max-w-6xl">
         <div className="card px-4 py-8 lg:px-16 lg:py-12">
           <div className="flex justify-end gap-4 text-sm font-semibold text-primary">
             <a href="/ingestion" className="hover:underline">
@@ -269,7 +267,6 @@ export default function SearchPage() {
           </div>
         </div>
       </main>
-      </div>
     </PipelineShell>
   );
 }
