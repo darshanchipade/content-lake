@@ -19,6 +19,7 @@ import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PipelineShell } from "@/components/PipelineShell";
+import { StageHero } from "@/components/StageHero";
 import {
   TreeNode,
   buildTreeFromJson,
@@ -1268,8 +1269,8 @@ export default function IngestionPage() {
               <span className="text-xs font-semibold text-slate-600">{previewLabel}</span>
             </div>
 
-            <div className="mt-4">
-              <div className="relative">
+            <div className="mt-4 flex-1 flex flex-col min-h-0">
+              <div className="relative shrink-0">
                 <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-2.5 size-4 text-slate-400" />
                 <input
                   type="search"
@@ -1279,7 +1280,7 @@ export default function IngestionPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <div className="mt-4 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+              <div className="mt-4 flex-1 overflow-y-auto custom-scrollbar min-h-0">
                 {treeNodes.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
                     Upload a JSON payload to view its structure.
