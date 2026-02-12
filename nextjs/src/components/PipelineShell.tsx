@@ -4,6 +4,7 @@ import {
   ArrowTrendingUpIcon,
   Bars3Icon,
   ChevronDownIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
   CloudArrowUpIcon,
   HomeModernIcon,
@@ -13,8 +14,9 @@ import {
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { type ReactNode, type ComponentType, type SVGProps, useState, useEffect } from "react";
+import { type ReactNode, type ComponentType, type SVGProps, useState, useEffect, useMemo } from "react";
 import { PipelineTracker, type StepId, STEPS } from "@/components/PipelineTracker";
 
 type PipelineShellProps = {
@@ -30,11 +32,17 @@ const workspaceLinks = [
   { label: "Search Finder", href: "/search", icon: MagnifyingGlassIcon },
 ];
 
-import { useMemo } from "react";
-
 export function PipelineShell({ currentStep, showTracker = true, children }: PipelineShellProps) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  // Auto-hide tracker on specific pages
+  const effectiveShowTracker = useMemo(() => {
+    if (!showTracker) return false;
+    const excludedRoutes = ['/search', '/chatbot', '/ingestion/activity'];
+    return !excludedRoutes.includes(pathname);
+  }, [showTracker, pathname]);
 
   const pageLabel = useMemo(() => {
     if (pathname === '/ingestion/activity') return 'Upload Activity';
@@ -67,25 +75,32 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
       {/* Sidebar */}
       <aside
         className={clsx(
-          "fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-100 flex flex-col z-50 transition-transform duration-300 lg:translate-x-0 lg:flex",
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed inset-y-0 left-0 bg-white border-r border-gray-100 flex flex-col z-50 transition-all duration-300 lg:translate-x-0 lg:flex",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+          isCollapsed ? "w-20" : "w-72"
         )}
       >
-        <div className="p-8 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <img
-              src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
-              alt="CX Studios Logo"
-              className="h-10 w-auto object-contain shrink-0"
-            />
-            <div className="flex flex-col min-w-0">
-              <span className="text-lg font-black tracking-tight leading-none text-gray-900 truncate">
-                Content Lake
-              </span>
-              <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] leading-none mt-1">
-                Platform
-              </span>
+        <div className={clsx("p-8 flex items-center justify-between gap-3", isCollapsed && "px-4")}>
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="shrink-0">
+              <Image
+                src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
+                alt="CX Studios Logo"
+                width={40}
+                height={40}
+                className="h-10 w-auto object-contain"
+              />
             </div>
+            {!isCollapsed && (
+              <div className="flex flex-col min-w-0 transition-opacity duration-300">
+                <span className="text-lg font-black tracking-tight leading-none text-gray-900 truncate">
+                  Content Lake
+                </span>
+                <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] leading-none mt-1">
+                  Platform
+                </span>
+              </div>
+            )}
           </div>
           <button
             type="button"
@@ -96,53 +111,66 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           </button>
         </div>
 
-        <nav className="flex-1 px-6 py-4 space-y-10 overflow-y-auto">
+        <nav className={clsx("flex-1 px-6 py-4 space-y-10 overflow-y-auto custom-scrollbar", isCollapsed && "px-4")}>
           <div>
-            <h3 className="px-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6">
-              Workspace
-            </h3>
+            {!isCollapsed && (
+              <h3 className="px-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6">
+                Workspace
+              </h3>
+            )}
             <div className="space-y-4">
               {workspaceLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
+                  title={isCollapsed ? link.label : undefined}
                   className={clsx(
                     "flex items-center gap-4 px-2 py-2 rounded-lg text-sm font-bold transition-all",
                     pathname === link.href
                       ? "text-primary"
-                      : "text-gray-500 hover:text-gray-900"
+                      : "text-gray-500 hover:text-gray-900",
+                    isCollapsed && "justify-center"
                   )}
                 >
                   <link.icon
                     className={clsx(
-                      "size-5",
+                      "size-5 shrink-0",
                       pathname === link.href ? "text-primary" : "text-gray-400"
                     )}
                   />
-                  {link.label}
+                  {!isCollapsed && (
+                    <span className="truncate">{link.label}</span>
+                  )}
                 </Link>
               ))}
             </div>
           </div>
         </nav>
 
-        <div className="p-4 border-t border-gray-50 bg-gray-50/30">
-          <div className="flex items-center gap-3">
-            <div className="size-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+        <div className={clsx("p-4 border-t border-gray-50 bg-gray-50/30", isCollapsed && "px-4")}>
+          <div className={clsx("flex items-center gap-3", isCollapsed && "justify-center")}>
+            <div className="size-10 shrink-0 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
               T
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold truncate">Taylor</p>
-              <p className="text-[10px] text-gray-500 truncate">Data Analyst</p>
-            </div>
+            {!isCollapsed && (
+              <div className="flex-1 min-w-0 transition-opacity duration-300">
+                <p className="text-sm font-bold truncate">Taylor</p>
+                <p className="text-[10px] text-gray-500 truncate">Data Analyst</p>
+              </div>
+            )}
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="lg:pl-72 flex-1 flex flex-col min-w-0">
+      <div
+        className={clsx(
+          "flex-1 flex flex-col min-w-0 transition-all duration-300",
+          isCollapsed ? "lg:pl-20" : "lg:pl-72"
+        )}
+      >
         {/* Top Header */}
-        <header className="h-16 border-b border-gray-100 bg-white sticky top-0 z-30 flex items-center px-4 lg:px-8 justify-between gap-4">
+        <header className="h-16 border-b border-gray-100 bg-white sticky top-0 z-40 flex items-center px-4 lg:px-8 justify-between gap-4 text-gray-900 font-sans">
           <div className="flex items-center gap-4 overflow-hidden">
             <button
               type="button"
@@ -151,6 +179,15 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
               aria-label="Open sidebar"
             >
               <Bars3Icon className="size-6" />
+            </button>
+            {/* Desktop Toggle Button */}
+            <button
+              type="button"
+              className="hidden lg:flex p-2 -ml-2 text-gray-400 hover:text-gray-900 shrink-0 rounded-lg hover:bg-gray-50 transition-colors"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {isCollapsed ? <ChevronRightIcon className="size-5" /> : <ChevronLeftIcon className="size-5" />}
             </button>
             <div className="flex items-center gap-4 text-sm min-w-0">
               <Squares2X2Icon className="size-5 text-gray-400 shrink-0 hidden sm:block" />
@@ -165,9 +202,9 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           </div>
         </header>
 
-        {/* Pipeline Stepper */}
-        {showTracker && (
-          <div className="bg-white border-b border-slate-200 px-4 py-6 lg:px-8 lg:py-8">
+        {/* Pipeline Stepper - STICKY */}
+        {effectiveShowTracker && (
+          <div className="bg-white border-b border-slate-200 px-4 py-6 lg:px-8 lg:py-8 sticky top-16 z-30 shadow-sm">
             <div className="max-w-[1600px] mx-auto">
               <div className="flex items-center justify-between mb-6 lg:mb-8 px-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
@@ -189,32 +226,6 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
         <main className="flex-1 w-full">
           {children}
         </main>
-      </div>
-    </div>
-  );
-}
-
-type NavLink = {
-  label: string;
-  href: string;
-  icon: ComponentType<SVGProps<SVGSVGElement>>;
-};
-
-function NavSection({ title, links }: { title: string; links: NavLink[] }) {
-  return (
-    <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">{title}</p>
-      <div className="mt-3 space-y-1.5">
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold text-slate-500 transition hover:text-slate-900"
-          >
-            <link.icon className="size-4 text-slate-900" />
-            {link.label}
-          </Link>
-        ))}
       </div>
     </div>
   );

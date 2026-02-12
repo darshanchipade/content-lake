@@ -1059,9 +1059,9 @@ export default function IngestionPage() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.2fr_1fr] items-start">
-          <section className="space-y-6 overflow-hidden">
-            <div className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm overflow-hidden">
+        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-12 items-stretch">
+          <section className="lg:col-span-7 space-y-6 overflow-hidden flex flex-col">
+            <div className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm overflow-hidden flex flex-col">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-slate-400 font-bold">Ingestion</p>
@@ -1175,8 +1175,8 @@ export default function IngestionPage() {
               )}
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex-1 flex flex-col min-h-[400px]">
+              <div className="flex flex-wrap items-center justify-between gap-3 shrink-0">
                 <h3 className="text-lg font-semibold text-slate-900">Upload History</h3>
                 <div className="relative w-full max-w-xs">
                   <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-2.5 size-4 text-slate-400" />
@@ -1188,7 +1188,7 @@ export default function IngestionPage() {
                   />
                 </div>
               </div>
-              <div className="mt-4 max-h-[400px] overflow-auto pr-2 custom-scrollbar">
+              <div className="mt-4 flex-1 overflow-auto pr-2 custom-scrollbar">
                 <div className="space-y-4">
                   {uploads.length === 0 ? (
                     <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
@@ -1254,8 +1254,8 @@ export default function IngestionPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-24 h-fit">
-            <div className="flex items-center justify-between">
+          <section className="lg:col-span-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-[20rem] h-[calc(100vh-24rem)] min-h-[600px] flex flex-col">
+            <div className="flex items-center justify-between shrink-0">
               <div>
                 <p className="text-xs uppercase tracking-wide text-slate-400 font-bold">Preview</p>
                 <h3 className="text-lg font-semibold text-slate-900">Select Items</h3>
@@ -1269,8 +1269,8 @@ export default function IngestionPage() {
               <span className="text-xs font-semibold text-slate-600">{previewLabel}</span>
             </div>
 
-            <div className="mt-4">
-              <div className="relative">
+            <div className="mt-4 flex-1 flex flex-col min-h-0">
+              <div className="relative shrink-0">
                 <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-2.5 size-4 text-slate-400" />
                 <input
                   type="search"
@@ -1280,7 +1280,7 @@ export default function IngestionPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <div className="mt-4 max-h-[420px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="mt-4 flex-1 overflow-y-auto custom-scrollbar min-h-0">
                 {treeNodes.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">
                     Upload a JSON payload to view its structure.
@@ -1291,7 +1291,7 @@ export default function IngestionPage() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-slate-50 p-4">
+            <div className="mt-6 rounded-2xl bg-slate-50 p-4 shrink-0">
               <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
                 <span className="font-semibold text-slate-800 uppercase">Fields:</span>
                 {/* Could map previewLeaves if needed, but the reference shows just the label */}

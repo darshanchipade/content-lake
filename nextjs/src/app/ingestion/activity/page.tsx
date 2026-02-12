@@ -124,7 +124,7 @@ export default function UploadActivityPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+      <div className="p-4 lg:p-8 max-w-[1600px] mx-auto">
         <div className="mb-6 lg:mb-8">
           <h1 className="text-2xl lg:text-3xl font-bold text-black">Activity</h1>
           <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
@@ -132,8 +132,8 @@ export default function UploadActivityPage() {
           </p>
         </div>
 
-      <main className="mx-auto grid gap-6 lg:gap-8 lg:grid-cols-[1fr_400px] items-start">
-        <section className="rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col h-[500px] lg:h-auto lg:min-h-[600px] overflow-hidden">
+      <main className="mx-auto grid gap-6 lg:gap-8 lg:grid-cols-12 items-stretch">
+        <section className="lg:col-span-8 rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col lg:h-[calc(100vh-22rem)] lg:min-h-[600px] overflow-hidden">
           <div className="p-5 lg:p-6 border-b border-slate-100 flex items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold text-gray-900">Upload History</h2>
@@ -221,7 +221,7 @@ export default function UploadActivityPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm lg:sticky lg:top-24">
+        <section className="lg:col-span-4 rounded-3xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm lg:sticky lg:top-[20rem] lg:h-[calc(100vh-24rem)] lg:min-h-[600px] overflow-y-auto custom-scrollbar flex flex-col">
           <div className="flex flex-col gap-1 mb-6 lg:mb-8">
               <h3 className="text-lg lg:text-xl font-bold text-slate-900">
                 {activeUpload ? "File Metadata" : "Details"}

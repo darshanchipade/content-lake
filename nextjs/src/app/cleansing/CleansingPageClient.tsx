@@ -461,9 +461,9 @@ export default function CleansingPageClient() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1.2fr_1fr] items-start">
-          <div className="flex flex-col gap-8">
-            <section className="bg-white rounded-3xl border border-slate-200 p-4 lg:p-8 shadow-sm">
+        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-12 items-stretch">
+          <div className="lg:col-span-8 flex flex-col gap-8">
+            <section className="bg-white rounded-3xl border border-slate-200 p-4 lg:p-8 shadow-sm flex flex-col lg:h-[calc(100vh-22rem)] lg:min-h-[600px]">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-400">Items</p>
@@ -473,6 +473,7 @@ export default function CleansingPageClient() {
                 </div>
               </div>
 
+              <div className="flex-1 min-h-0 flex flex-col">
               {itemsLoading ? (
                 <div className="rounded-2xl border border-gray-100 bg-gray-50 py-10 text-center text-sm text-gray-400">
                   Fetching latest cleansed rows…
@@ -494,8 +495,8 @@ export default function CleansingPageClient() {
                   No cleansed items available yet.
                 </div>
               ) : (
-                <div className="rounded-2xl border border-slate-100 overflow-hidden w-full">
-                  <div className="max-h-[800px] overflow-y-auto custom-scrollbar">
+                <div className="rounded-2xl border border-slate-100 overflow-hidden w-full flex-1 flex flex-col min-h-0">
+                  <div className="flex-1 overflow-y-auto custom-scrollbar">
                     {/* Desktop Table */}
                     <table className="hidden lg:table w-full text-left text-sm">
                       <thead className="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 sticky top-0 z-10">
@@ -552,11 +553,12 @@ export default function CleansingPageClient() {
                   </div>
                 </div>
               )}
+              </div>
             </section>
           </div>
 
-          <aside className="flex flex-col gap-8">
-            <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm lg:sticky lg:top-24">
+          <aside className="lg:col-span-4 flex flex-col gap-8 lg:sticky lg:top-[20rem]">
+            <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm shrink-0">
                <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold">Metadata</h2>
                   <button

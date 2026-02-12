@@ -1625,8 +1625,8 @@ export default function EnrichmentPageClient() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1.5fr_1fr] items-start overflow-x-hidden md:overflow-x-visible">
-          <div className="flex flex-col gap-8 min-w-0">
+        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-12 items-stretch overflow-x-hidden md:overflow-x-visible">
+          <div className="lg:col-span-8 flex flex-col gap-8 min-w-0">
             <section className="bg-white rounded-3xl border border-slate-200 p-6 lg:p-8 shadow-sm">
               <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between mb-8">
                 <div className="flex-1">
@@ -2132,7 +2132,7 @@ export default function EnrichmentPageClient() {
             </section>
           </div>
 
-          <aside className="flex flex-col gap-8 lg:sticky lg:top-24">
+          <aside className="lg:col-span-4 flex flex-col gap-8 lg:sticky lg:top-[20rem]">
             <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold">Metadata</h2>
