@@ -63,7 +63,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
   }, [pathname]);
 
   return (
-    <div className="flex min-h-screen bg-[#f9fafb] text-gray-900 font-sans">
+    <div className="flex min-h-screen bg-background text-foreground font-sans">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div

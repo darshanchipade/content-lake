@@ -140,7 +140,7 @@ export function SearchResults({ results, isLoading, onFilter }: SearchResultsPro
                       {copiedStates[resultId] ? "Copied" : "Copy"}
                     </span>
                   </div>
-                  <div className="pointer-events-none absolute inset-x-0 -bottom-[1px] h-0.5 bg-primary rounded-full shadow-[0px_1px_4px_rgba(22,163,74,0.3)]" />
+                  <div className="pointer-events-none absolute inset-x-0 -bottom-[1px] h-0.5 bg-primary rounded-full shadow-[0px_1px_4px_rgba(0,113,227,0.3)]" />
                 </button>
               </div>
             </article>

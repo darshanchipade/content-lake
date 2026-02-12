@@ -134,7 +134,7 @@ const getFileLabel = (fileName: string) => {
       return { label: "PDF", style: "bg-rose-100 text-rose-700" };
     case "xls":
     case "xlsx":
-      return { label: "XLS", style: "bg-emerald-100 text-emerald-700" };
+      return { label: "XLS", style: "bg-primary-soft text-primary" };
     case "doc":
     case "docx":
       return { label: "DOC", style: "bg-sky-100 text-sky-700" };
@@ -1044,7 +1044,7 @@ export default function IngestionPage() {
 
   return (
     <PipelineShell currentStep="ingestion">
-      <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
+      <div className="min-h-[calc(100vh-4rem)] bg-background">
         <section className="border-b border-slate-200 bg-white">
           <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
