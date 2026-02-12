@@ -1615,9 +1615,9 @@ export default function EnrichmentPageClient() {
         <section className="border-b border-slate-200 bg-white">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between text-center lg:text-left">
-              <div className="space-y-1 sm:space-y-2">
+              <div className="space-y-1 sm:space-y-2 min-w-0">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Enrichment</h1>
-                <p className="text-xs sm:text-sm font-medium text-slate-500 lg:max-w-2xl">
+                <p className="text-xs sm:text-sm font-medium text-slate-500 lg:max-w-2xl break-words">
                   Review AI insights and generated metadata for {context.metadata.name}.
                 </p>
               </div>
@@ -1625,8 +1625,8 @@ export default function EnrichmentPageClient() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1.2fr_1fr] items-start">
-          <div className="flex flex-col gap-8">
+        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1.5fr_1fr] items-start overflow-x-hidden md:overflow-x-visible">
+          <div className="flex flex-col gap-8 min-w-0">
             <section className="bg-white rounded-3xl border border-slate-200 p-6 lg:p-8 shadow-sm">
               <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between mb-8">
                 <div className="flex-1">
@@ -1786,7 +1786,7 @@ export default function EnrichmentPageClient() {
                                           </p>
                                         </div>
 
-                                        <div className="grid gap-4 lg:gap-6 lg:grid-cols-2 xl:grid-cols-3 items-start">
+                                        <div className="grid gap-4 lg:gap-6 lg:grid-cols-1 xl:grid-cols-1 items-start">
                                           {/* Content Insights Card */}
                                           <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden h-auto">
                                             <button
@@ -1796,7 +1796,7 @@ export default function EnrichmentPageClient() {
                                             >
                                               <div className="flex flex-col gap-1">
                                                 <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Content Insights</p>
-                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight truncate">Summary</h3>
+                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight">Summary</h3>
                                               </div>
                                               <div className="lg:hidden">
                                                 {isInsightsOpen ? (
@@ -1912,7 +1912,7 @@ export default function EnrichmentPageClient() {
                                           </div>
 
                                           {/* Search Metadata Card */}
-                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden h-auto">
                                             <button
                                               type="button"
                                               onClick={() => toggleSubSection(element.id, "metadata")}
@@ -1920,7 +1920,7 @@ export default function EnrichmentPageClient() {
                                             >
                                               <div className="flex flex-col gap-1">
                                                 <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Search Metadata</p>
-                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight truncate">Keywords & Tags</h3>
+                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight">Keywords & Tags</h3>
                                               </div>
                                               <div className="lg:hidden">
                                                 {isMetadataOpen ? (
@@ -2031,7 +2031,7 @@ export default function EnrichmentPageClient() {
                                           </div>
 
                                           {/* Tone & Sentiment Card */}
-                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                                          <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-auto">
                                             <button
                                               type="button"
                                               onClick={() => toggleSubSection(element.id, "tone")}
@@ -2039,7 +2039,7 @@ export default function EnrichmentPageClient() {
                                             >
                                               <div className="flex flex-col gap-1">
                                                 <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Tone & Sentiment</p>
-                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight truncate">Analysis</h3>
+                                                <h3 className="text-base lg:text-lg font-bold text-slate-900 leading-tight">Analysis</h3>
                                               </div>
                                               <div className="lg:hidden">
                                                 {isToneOpen ? (
@@ -2161,10 +2161,10 @@ export default function EnrichmentPageClient() {
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cleansed ID</p>
                     <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.cleansedId ?? "—"}</p>
                   </div>
-                  <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
-                      <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+                      <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.locale ?? "—"}</p>
                     </div>
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>

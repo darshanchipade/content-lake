@@ -660,59 +660,8 @@ export default function ExtractionPage() {
 
         <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-12 items-start">
           <div className="lg:col-span-4 flex flex-col gap-6">
-            {/* File Metadata Sidebar */}
-            <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold">Metadata</h2>
-                <button
-                  type="button"
-                  onClick={() => {
-                    clearExtractionContext();
-                    router.push("/ingestion");
-                  }}
-                  className="text-[10px] font-bold text-primary hover:underline uppercase tracking-wider"
-                >
-                  Reset
-                </button>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
-                  <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.name}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source</p>
-                  <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Identifier</p>
-                  <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
-                    <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
-                    <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
-                  <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.pageId ?? "—"}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
-                  <p className="text-[11px] font-bold text-gray-900">
-                    {new Date(context.metadata.uploadedAt).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* File Structure */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-500px)] lg:min-h-[400px]">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-450px)] lg:min-h-[400px] order-1 lg:order-none">
               <button
                 type="button"
                 onClick={() => toggleSection("structure")}
@@ -772,6 +721,57 @@ export default function ExtractionPage() {
                       )}
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* File Metadata Sidebar */}
+            <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm order-2 lg:order-none">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-bold">Metadata</h2>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearExtractionContext();
+                    router.push("/ingestion");
+                  }}
+                  className="text-[10px] font-bold text-primary hover:underline uppercase tracking-wider"
+                >
+                  Reset
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
+                  <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.name}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source</p>
+                  <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Identifier</p>
+                  <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
+                    <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
+                    <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
+                  <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.pageId ?? "—"}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
+                  <p className="text-[11px] font-bold text-gray-900">
+                    {new Date(context.metadata.uploadedAt).toLocaleString()}
+                  </p>
                 </div>
               </div>
             </div>
