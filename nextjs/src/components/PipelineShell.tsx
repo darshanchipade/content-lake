@@ -84,11 +84,11 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="shrink-0">
               <Image
-                src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
-                alt="CX Studios Logo"
+                src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                alt="Apple Logo"
                 width={40}
                 height={40}
-                className="h-10 w-auto object-contain"
+                className="h-8 w-auto object-contain"
               />
             </div>
             {!isCollapsed && (
