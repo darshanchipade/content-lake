@@ -117,10 +117,10 @@ export default function ChatbotPage() {
 
   return (
     <PipelineShell currentStep="ingestion" showTracker={false}>
-      <div className="p-4 lg:p-8 ">
-        <div className="mb-8"><h1 className="text-xl lg:text-2xl font-bold">Chatbot</h1></div>
+      <div className="p-4 lg:p-8 max-w-[1600px] mx-auto">
+        <div className="mb-8"><h1 className="text-2xl lg:text-3xl font-bold">Chatbot</h1></div>
 
-      <main className="mx-auto w-full max-w-5xl">
+      <main className="mx-auto w-full max-w-[1600px]">
         <div className="flex flex-col gap-4 card px-4 py-6 lg:px-8">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-gray-900">Chatbot</h2>

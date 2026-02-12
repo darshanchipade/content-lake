@@ -1613,7 +1613,7 @@ export default function EnrichmentPageClient() {
     <PipelineShell currentStep="enrichment">
       <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between text-center lg:text-left">
               <div className="space-y-1 sm:space-y-2 min-w-0">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Enrichment</h1>
@@ -1625,8 +1625,8 @@ export default function EnrichmentPageClient() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1.5fr_1fr] items-start overflow-x-hidden md:overflow-x-visible">
-          <div className="flex flex-col gap-8 min-w-0">
+        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-12 items-stretch overflow-x-hidden md:overflow-x-visible">
+          <div className="lg:col-span-8 flex flex-col gap-8 min-w-0">
             <section className="bg-white rounded-3xl border border-slate-200 p-6 lg:p-8 shadow-sm">
               <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between mb-8">
                 <div className="flex-1">
@@ -2132,7 +2132,7 @@ export default function EnrichmentPageClient() {
             </section>
           </div>
 
-          <aside className="flex flex-col gap-8 lg:sticky lg:top-24">
+          <aside className="lg:col-span-4 flex flex-col gap-8 overflow-y-auto custom-scrollbar lg:h-[calc(100vh-22rem)] lg:min-h-[600px] lg:sticky lg:top-[20rem]">
             <section className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold">Metadata</h2>

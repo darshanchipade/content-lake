@@ -658,128 +658,75 @@ export default function ExtractionPage() {
           </div>
         </section>
 
-        <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            {/* File Structure */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-450px)] lg:min-h-[400px] order-1 lg:order-none">
-              <button
-                type="button"
-                onClick={() => toggleSection("structure")}
-                className="w-full flex items-center justify-between p-6 text-left lg:pointer-events-none"
-              >
-                <h2 className="text-lg font-bold">File Structure</h2>
-                <div className="lg:hidden">
-                  {openSections.has("structure") ? (
-                    <ChevronDownIcon className="size-5 text-slate-400" />
-                  ) : (
-                    <ChevronRightIcon className="size-5 text-slate-400" />
-                  )}
-                </div>
-              </button>
+        <main className="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-12 items-stretch">
+          {/* File Structure */}
+          <div className="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-22rem)] lg:min-h-[600px]">
+            <button
+              type="button"
+              onClick={() => toggleSection("structure")}
+              className="w-full flex items-center justify-between p-6 text-left lg:pointer-events-none shrink-0"
+            >
+              <h2 className="text-lg font-bold">File Structure</h2>
+              <div className="lg:hidden">
+                {openSections.has("structure") ? (
+                  <ChevronDownIcon className="size-5 text-slate-400" />
+                ) : (
+                  <ChevronRightIcon className="size-5 text-slate-400" />
+                )}
+              </div>
+            </button>
 
-              <div className={clsx(
-                "flex-col flex-1 min-h-0",
-                openSections.has("structure") ? "flex" : "hidden lg:flex"
-              )}>
-                <div className="px-6 pb-6 border-b border-slate-100">
-                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <CheckCircleIcon className="size-6 text-primary" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-semibold text-sm truncate max-w-[100px]">{context.metadata.name}</span>
-                          <CheckCircleIcon className="size-4 text-primary" />
-                        </div>
+            <div className={clsx(
+              "flex-col flex-1 min-h-0",
+              openSections.has("structure") ? "flex" : "hidden lg:flex"
+            )}>
+              <div className="px-6 pb-6 border-b border-slate-100 shrink-0">
+                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <CheckCircleIcon className="size-6 text-primary" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-sm truncate max-w-[100px]">{context.metadata.name}</span>
+                        <CheckCircleIcon className="size-4 text-primary" />
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="p-6 flex-1 flex flex-col min-h-0">
-                  <div className="relative mb-6 flex-shrink-0">
-                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search fields..."
-                      className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-base lg:text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="flex-1 overflow-auto pr-2 custom-scrollbar min-h-0">
-                    <div className="min-w-max pb-4">
-                      {snapshotLoading && context?.snapshotId && (
-                        <div className="py-10 text-center text-sm text-gray-400">Loading structure...</div>
-                      )}
-                      {filteredTree.length === 0 ? (
-                        <div className="py-10 text-center text-sm text-gray-400">No structure available</div>
-                      ) : (
-                        renderTree(filteredTree)
-                      )}
-                    </div>
-                  </div>
-                </div>
               </div>
-            </div>
 
-            {/* File Metadata Sidebar */}
-            <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm order-2 lg:order-none">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold">Metadata</h2>
-                <button
-                  type="button"
-                  onClick={() => {
-                    clearExtractionContext();
-                    router.push("/ingestion");
-                  }}
-                  className="text-[10px] font-bold text-primary hover:underline uppercase tracking-wider"
-                >
-                  Reset
-                </button>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
-                  <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.name}</p>
+              <div className="p-6 flex-1 flex flex-col min-h-0">
+                <div className="relative mb-6 flex-shrink-0">
+                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search fields..."
+                    className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-base lg:text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source</p>
-                  <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Identifier</p>
-                  <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
-                    <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
+
+                <div className="flex-1 overflow-auto pr-2 custom-scrollbar min-h-0">
+                  <div className="min-w-max pb-4">
+                    {snapshotLoading && context?.snapshotId && (
+                      <div className="py-10 text-center text-sm text-gray-400">Loading structure...</div>
+                    )}
+                    {filteredTree.length === 0 ? (
+                      <div className="py-10 text-center text-sm text-gray-400">No structure available</div>
+                    ) : (
+                      renderTree(filteredTree)
+                    )}
                   </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
-                    <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
-                  <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.pageId ?? "—"}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
-                  <p className="text-[11px] font-bold text-gray-900">
-                    {new Date(context.metadata.uploadedAt).toLocaleString()}
-                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-6 flex flex-col">
             {/* Data Preview */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-250px)] lg:min-h-[600px]">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-22rem)] lg:min-h-[600px]">
               <button
                 type="button"
                 onClick={() => toggleSection("preview")}
@@ -908,6 +855,57 @@ export default function ExtractionPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* File Metadata Sidebar */}
+          <div className="lg:col-span-3 bg-white rounded-3xl border border-slate-200 p-6 shadow-sm lg:h-[calc(100vh-22rem)] lg:min-h-[600px] overflow-y-auto custom-scrollbar">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-bold">Metadata</h2>
+              <button
+                type="button"
+                onClick={() => {
+                  clearExtractionContext();
+                  router.push("/ingestion");
+                }}
+                className="text-[10px] font-bold text-primary hover:underline uppercase tracking-wider"
+              >
+                Reset
+              </button>
+            </div>
+            <div className="space-y-6">
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Name</p>
+                <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.name}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Source</p>
+                <p className="text-sm font-bold text-gray-900">{sourceLabel}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Identifier</p>
+                <p className="text-sm font-bold text-gray-900 break-all">{sourceIdentifier}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Size</p>
+                  <p className="text-sm font-bold text-gray-900">{formatBytes(context.metadata.size)}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Locale</p>
+                  <p className="text-sm font-bold text-gray-900">{context.metadata.locale ?? "—"}</p>
+                </div>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Page ID</p>
+                <p className="text-sm font-bold text-gray-900 break-all">{context.metadata.pageId ?? "—"}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Uploaded</p>
+                <p className="text-[11px] font-bold text-gray-900">
+                  {new Date(context.metadata.uploadedAt).toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
