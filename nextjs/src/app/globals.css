@@ -2,11 +2,11 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #1d1d1f;
-  --primary-color: #0071e3;
-  --primary-soft: #f5f5f7;
-  --accent-color: #0077ed;
-  --pipeline-muted: #e5e7eb;
+  --foreground: #111827;
+  --primary-color: #16a34a;
+  --primary-soft: #f0fdf4;
+  --accent-color: #15803d;
+  --pipeline-muted: #f3f4f6;
   --sidebar-width: 280px;
 }
 
