@@ -212,9 +212,9 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
 
         {/* Pipeline Stepper - STICKY */}
         {effectiveShowTracker && (
-          <div className="bg-white border-b border-slate-200 px-4 py-6 lg:px-8 lg:py-8 sticky top-16 z-30 shadow-sm">
+          <div className="bg-white border-b border-slate-200 px-4 pt-3 pb-0 lg:px-8 lg:pt-3 lg:pb-0 sticky top-16 z-30 shadow-sm">
             <div className="max-w-[1600px] mx-auto">
-              <div className="flex items-center justify-between mb-6 lg:mb-8 px-2">
+              <div className="flex items-center justify-between mb-2 lg:mb-2 px-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
                   Pipeline
                 </span>
