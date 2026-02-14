@@ -36,6 +36,14 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [username, setUsername] = useState("Taylor");
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   // Auto-hide tracker on specific pages
   const effectiveShowTracker = useMemo(() => {
@@ -84,11 +92,11 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="shrink-0">
               <Image
-                src="https://ea854xr24n6.exactdn.com/wp-content/uploads/2025/03/CX-Studios-logo-25.png?strip=all"
+                src="/logo.png"
                 alt="CX Studios Logo"
                 width={40}
                 height={40}
-                className="h-10 w-auto object-contain"
+                className="h-10 w-auto object-contain bg-black rounded"
               />
             </div>
             {!isCollapsed && (
@@ -149,12 +157,12 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
 
         <div className={clsx("p-4 border-t border-gray-50 bg-gray-50/30", isCollapsed && "px-4")}>
           <div className={clsx("flex items-center gap-3", isCollapsed && "justify-center")}>
-            <div className="size-10 shrink-0 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
-              T
+            <div className="size-10 shrink-0 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm uppercase">
+              {username.charAt(0)}
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0 transition-opacity duration-300">
-                <p className="text-sm font-bold truncate">Taylor</p>
+                <p className="text-sm font-bold truncate">{username}</p>
                 <p className="text-[10px] text-gray-500 truncate">Data Analyst</p>
               </div>
             )}

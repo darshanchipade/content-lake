@@ -19,7 +19,6 @@ import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PipelineShell } from "@/components/PipelineShell";
-import { StageHero } from "@/components/StageHero";
 import {
   TreeNode,
   buildTreeFromJson,
