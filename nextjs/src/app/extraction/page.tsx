@@ -465,7 +465,7 @@ export default function ExtractionPage() {
             {isRoot ? (
               <div className="flex items-center gap-2 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <div className="size-4 rounded bg-green-600 flex items-center justify-center">
+                  <div className="size-4 rounded bg-primary flex items-center justify-center">
                     <CheckCircleIcon className="size-3 text-white" />
                   </div>
                   <div className="p-1 rounded bg-purple-100 text-purple-600">
@@ -485,7 +485,7 @@ export default function ExtractionPage() {
                 />
 
                 {hasChildren ? (
-                  <CircleStackIcon className="size-4 text-green-600" />
+                  <CircleStackIcon className="size-4 text-primary" />
                 ) : (
                   <CubeIcon className="size-4 text-gray-400" />
                 )}
@@ -633,7 +633,7 @@ export default function ExtractionPage() {
 
   return (
     <PipelineShell currentStep="extraction">
-      <div className="min-h-[calc(100vh-4rem)] bg-[#f9fafb]">
+      <div className="min-h-[calc(100vh-4rem)] bg-background">
         <section className="border-b border-slate-200 bg-white">
           <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between text-left">
@@ -781,10 +781,10 @@ export default function ExtractionPage() {
                   </div>
 
                   <div className="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden text-sm min-h-0">
-                    <div className="h-full overflow-y-auto custom-scrollbar">
+                    <div className="h-full overflow-auto custom-scrollbar">
                       {previewMode === "raw" ? (
-                        <div className="p-6 font-mono">
-                          <pre className="text-gray-800">
+                        <div className="p-6 font-mono min-w-max">
+                          <pre className="text-gray-800 whitespace-pre">
                             {activeValue === undefined
                               ? "/* Select a field to see its raw value */"
                               : typeof activeValue === "object"

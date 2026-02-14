@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f9fafb;
+  --background: #ffffff;
   --foreground: #111827;
   --primary-color: #16a34a;
   --primary-soft: #f0fdf4;
   --accent-color: #15803d;
-  --pipeline-muted: #e5e7eb;
+  --pipeline-muted: #f3f4f6;
   --sidebar-width: 280px;
 }
 
@@ -67,8 +67,12 @@ body {
 #nextjs-feedback,
 [data-nextjs-feedback],
 #nextjs-portal,
-.vercel-toolbar-container {
+.vercel-toolbar-container,
+.nextjs-toast-errors-parent,
+[id^="__next-prerender-indicator"],
+[id^="vercel-toolbar"] {
   display: none !important;
   visibility: hidden !important;
+  opacity: 0 !important;
   pointer-events: none !important;
 }

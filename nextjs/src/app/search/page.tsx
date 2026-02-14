@@ -216,9 +216,9 @@ export default function SearchPage() {
 
   return (
     <PipelineShell currentStep="ingestion" showTracker={false}>
-      <main className="mx-auto max-w-6xl p-4 lg:p-8">
+      <main className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-8"><h1 className="text-2xl lg:text-3xl font-bold">Search</h1></div>
-        <div className="card px-4 py-8 lg:px-16 lg:py-12">
+        <div className="card px-4 py-8 sm:px-12 lg:px-16 lg:py-12">
           <div className="flex justify-end gap-4 text-sm font-semibold text-primary">
             <a href="/ingestion" className="hover:underline">
               Upload JSON

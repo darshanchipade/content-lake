@@ -35,7 +35,7 @@ export function SearchInterface<TFilter extends SearchFilter>({
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
-      <div className="w-full">
+      <div className="w-full flex justify-center">
         <form onSubmit={onFormSubmit} className="flex w-full max-w-3xl flex-col gap-3 md:flex-row md:items-center">
           <div className="relative h-[50px] w-full rounded-[12px] bg-white">
             <div className="box-border flex h-full items-center justify-between overflow-clip px-4 py-3">
