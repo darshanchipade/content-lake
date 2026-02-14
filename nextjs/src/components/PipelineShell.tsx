@@ -212,9 +212,9 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
 
         {/* Pipeline Stepper - STICKY */}
         {effectiveShowTracker && (
-          <div className="bg-white border-b border-slate-200 px-4 pt-1.5 pb-0 lg:px-8 lg:pt-1.5 lg:pb-0 sticky top-16 z-30 shadow-sm">
+          <div className="bg-white border-b border-slate-200 px-4 pt-1 pb-0 lg:px-8 lg:pt-1 lg:pb-0 sticky top-16 z-30 shadow-sm">
             <div className="max-w-[1600px] mx-auto">
-              <div className="flex items-center justify-between mb-1 lg:mb-1 px-2">
+              <div className="flex items-center justify-between mb-0.5 lg:mb-0.5 px-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
                   Pipeline
                 </span>
@@ -223,7 +223,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
                 </span>
               </div>
               <div className="overflow-x-auto lg:overflow-x-visible scrollbar-none">
-                <div className="min-w-[280px] lg:min-w-0 pb-1">
+                <div className="min-w-[280px] lg:min-w-0 pb-0.5">
                   <PipelineTracker current={currentStep} />
                 </div>
               </div>

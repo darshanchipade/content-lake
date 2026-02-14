@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CX Studios - Content Lake",
+  title: "CxStudios Content Lake",
   description: "Transform your raw content into high-performing digital assets with AI-powered ingestion, cleansing, and enrichment.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

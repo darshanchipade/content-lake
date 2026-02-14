@@ -75,14 +75,14 @@ export function PipelineTracker({ current }: { current: StepId }) {
                 index < STEPS.length - 1 && "flex-1"
               )}
             >
-              <div className="flex flex-col items-center gap-1.5 lg:gap-2 relative shrink-0 max-w-[60px] sm:max-w-none">
+              <div className="flex flex-col items-center gap-1 lg:gap-1 relative shrink-0 max-w-[60px] sm:max-w-none">
                 <div
                   className={clsx(
-                    "flex size-8 sm:size-9 lg:size-11 items-center justify-center rounded-full border-2 transition-all duration-200 relative",
+                    "flex size-7 sm:size-8 lg:size-9 items-center justify-center rounded-full border-2 transition-all duration-200 relative",
                     styles.circle
                   )}
                 >
-                  <Icon className={clsx("size-3.5 sm:size-4 lg:size-5", styles.iconColor)} />
+                  <Icon className={clsx("size-3 sm:size-3.5 lg:size-4", styles.iconColor)} />
                   {status === "done" && (
                      <div className="absolute -right-1 -bottom-1 bg-white rounded-full p-0.5 border border-primary">
                         <CheckIcon className="size-2 sm:size-3 text-primary stroke-[3px]" />
