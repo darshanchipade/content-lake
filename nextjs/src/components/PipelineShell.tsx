@@ -38,8 +38,6 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [username, setUsername] = useState("Taylor");
 
-  const showFullSidebar = !isCollapsed || isSidebarOpen;
-
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
@@ -85,13 +83,13 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
       {/* Sidebar */}
       <aside
         className={clsx(
-          "fixed inset-y-0 left-0 bg-white border-r border-gray-100 flex flex-col z-50 transition-all duration-300 w-72 lg:translate-x-0",
+          "fixed inset-y-0 left-0 bg-white border-r border-gray-100 flex flex-col z-50 transition-all duration-300 lg:translate-x-0 lg:flex",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
-          isCollapsed ? "lg:w-20" : "lg:w-72"
+          isCollapsed ? "w-20" : "w-72"
         )}
       >
-        <div className={clsx("p-8 flex items-center justify-between gap-3", isCollapsed && "lg:px-4")}>
-          <div className="flex items-center gap-3">
+        <div className={clsx("p-8 flex items-center justify-between gap-3", isCollapsed && "px-4")}>
+          <div className="flex items-center gap-3 overflow-hidden">
             <div className="shrink-0">
               <Image
                 src="/logo.png"
@@ -101,7 +99,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
                 className="h-10 w-auto object-contain bg-black rounded"
               />
             </div>
-            {showFullSidebar && (
+            {!isCollapsed && (
               <div className="flex flex-col min-w-0 transition-opacity duration-300">
                 <span className="text-lg font-black tracking-tight leading-none text-gray-900 truncate">
                   Content Lake
@@ -121,9 +119,9 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           </button>
         </div>
 
-        <nav className={clsx("flex-1 px-6 py-4 space-y-10 overflow-y-auto custom-scrollbar", isCollapsed && "lg:px-4")}>
+        <nav className={clsx("flex-1 px-6 py-4 space-y-10 overflow-y-auto custom-scrollbar", isCollapsed && "px-4")}>
           <div>
-            {showFullSidebar && (
+            {!isCollapsed && (
               <h3 className="px-2 text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6">
                 Workspace
               </h3>
@@ -148,7 +146,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
                       pathname === link.href ? "text-primary" : "text-gray-400"
                     )}
                   />
-                  {showFullSidebar && (
+                  {!isCollapsed && (
                     <span className="truncate">{link.label}</span>
                   )}
                 </Link>
@@ -157,12 +155,12 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
           </div>
         </nav>
 
-        <div className={clsx("p-4 border-t border-gray-50 bg-gray-50/30", isCollapsed && "lg:px-4")}>
-          <div className={clsx("flex items-center gap-3", isCollapsed && "lg:justify-center")}>
+        <div className={clsx("p-4 border-t border-gray-50 bg-gray-50/30", isCollapsed && "px-4")}>
+          <div className={clsx("flex items-center gap-3", isCollapsed && "justify-center")}>
             <div className="size-10 shrink-0 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm uppercase">
               {username.charAt(0)}
             </div>
-            {showFullSidebar && (
+            {!isCollapsed && (
               <div className="flex-1 min-w-0 transition-opacity duration-300">
                 <p className="text-sm font-bold truncate">{username}</p>
                 <p className="text-[10px] text-gray-500 truncate">Data Analyst</p>
@@ -214,9 +212,9 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
 
         {/* Pipeline Stepper - STICKY */}
         {effectiveShowTracker && (
-          <div className="bg-white border-b border-slate-200 px-4 py-6 lg:px-8 lg:py-8 sticky top-16 z-30 shadow-sm">
+          <div className="bg-white border-b border-slate-200 px-4 pt-1.5 pb-0 lg:px-8 lg:pt-1.5 lg:pb-0 sticky top-16 z-30 shadow-sm">
             <div className="max-w-[1600px] mx-auto">
-              <div className="flex items-center justify-between mb-6 lg:mb-8 px-2">
+              <div className="flex items-center justify-between mb-1 lg:mb-1 px-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
                   Pipeline
                 </span>
@@ -225,7 +223,7 @@ export function PipelineShell({ currentStep, showTracker = true, children }: Pip
                 </span>
               </div>
               <div className="overflow-x-auto lg:overflow-x-visible scrollbar-none">
-                <div className="min-w-[280px] lg:min-w-0 pb-2">
+                <div className="min-w-[280px] lg:min-w-0 pb-1">
                   <PipelineTracker current={currentStep} />
                 </div>
               </div>

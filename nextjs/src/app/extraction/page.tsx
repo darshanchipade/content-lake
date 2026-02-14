@@ -635,7 +635,7 @@ export default function ExtractionPage() {
     <PipelineShell currentStep="extraction">
       <div className="min-h-[calc(100vh-4rem)] bg-background">
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-4 pt-2 pb-2 sm:px-6 sm:pt-3 sm:pb-3 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between text-left">
               <div className="space-y-1 sm:space-y-2">
                 <h1 className="text-2xl sm:text-3xl font-bold text-black">Extraction</h1>
@@ -781,10 +781,10 @@ export default function ExtractionPage() {
                   </div>
 
                   <div className="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden text-sm min-h-0">
-                    <div className="h-full overflow-auto custom-scrollbar">
+                    <div className="h-full overflow-y-auto custom-scrollbar">
                       {previewMode === "raw" ? (
-                        <div className="p-6 font-mono min-w-max">
-                          <pre className="text-gray-800 whitespace-pre">
+                        <div className="p-6 font-mono">
+                          <pre className="text-gray-800">
                             {activeValue === undefined
                               ? "/* Select a field to see its raw value */"
                               : typeof activeValue === "object"
